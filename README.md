@@ -4,6 +4,12 @@
 
 Type safe TypeScript type guard function generator.
 
+## Run
+
+```console
+node --experimental-strip-types src/index.mts example.ts
+```
+
 ## Tools used
 
 - [https://ts-ast-viewer.com/]
