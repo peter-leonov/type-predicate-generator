@@ -1,8 +1,8 @@
-# Checker
+# Boring Type Guardian
 
 ## About
 
-Type safe TypeScript type guard function generator.
+A generator for type safe TypeScript type guard function.
 
 ## Run
 
@@ -18,3 +18,4 @@ node --experimental-strip-types src/index.mts example.ts
 
 - [https://github.com/rhys-vdw/ts-auto-guard]
 - [https://github.com/GoogleFeud/ts-runtime-checks]
+- [https://github.com/samchon/typia]
