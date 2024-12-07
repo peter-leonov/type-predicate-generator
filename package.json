@@ -7,6 +7,12 @@
   },
   "keywords": [],
   "author": "",
-  "description": ""
   "license": "MIT",
+  "description": "",
+  "peerDependencies": {
+    "typescript": ">=4.8.0 <5.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1"
+  }
 }
