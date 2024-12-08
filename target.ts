@@ -7,6 +7,7 @@ type User = {
     street: string;
     main: { enabled: boolean };
   };
+  added?: boolean;
 };
 
 type SafeShallowShape<Type> = {
@@ -50,10 +51,6 @@ function isNestedUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    root
-  );
 
   // SAFETY: It's safe to cast `object` to an object type with all optional `unknown` props.
   const {
@@ -68,72 +65,38 @@ function isNestedUser(root: unknown): root is User {
   if (!(isNestedUser_oneof_1(oneof) || isNestedUser_oneof_2(oneof))) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    oneof
-  );
 
   // Checking `root.name`.
   if (!(typeof name === "string")) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    name
-  );
 
   // Checking `root.age`.
   if (!(typeof age === "number" || age === undefined)) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    age
-  );
 
   // Checking `root.friends`.
   if (!(safeIsArray(friends) && friends.every(isNestedUser))) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    friends
-  );
 
   // Checking `root.address`.
   if (!(typeof address === "object" && address !== null)) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    address
-  );
 
   const { street, main }: SafeShallowShape<User["address"]> = address;
 
   if (!(typeof street === "string")) {
     return false;
   }
-  is_never(
-    // @ts-expect-error: should not be `never`
-    street
-  );
 
   // Checking `root.address.main`.
   if (!(typeof main === "object" && main !== null)) {
     return false;
   }
-  // The pragma below makes sure that the narrowing logic above does not have bugs
-  // that would lead to inferring a `never` type. The `never` type is assignable
-  // to any other type in TypeScript thus the explicit check. In practice,
-  // having a `never` type means that the type guard will reject valid input.
-  // If you ended up here try regenerating the code first,
-  // if this does fix the error below then there is likely a bug in the generator.
-  // Feel free to modify the code to unblock yourself and file an issue!
-  is_never(
-    // @ts-expect-error: should not be `never`
-    main
-  );
+
   // Don't use `as` type case here, it's unsafe: can cast `{}` to any object.
   // Keep using the type derived from the `root` type to catch mismatches when
   // the type gets updated without regenerating the guard.
@@ -143,18 +106,41 @@ function isNestedUser(root: unknown): root is User {
     return false;
   }
 
-  // Notice: the hover types in VS Code do not tell the full truth.
-  // TypeScript cannot narrow the shapes types down eagerly.
-  // But when used in a new object expression the types get infered
-  // correctly anyways. This is (presumably) thanks to how the flow
-  // analysis works by tracing each type's trail back through all the
-  // narrowing expressions.
-  if (age !== undefined) {
-    // SAFETY: this assignment makes sure that all the checked types are
-    // assignable to the target type.
-    // NOTE: having no property acesses here allows esbuild to completely
+  // This block is constructed in a way that it gets removed in runtime.
+  // If unsure, wrap in process.env.NODE_ENV === "neverhood"
+  {
+    // The type assertions below make sure that the narrowing logic above does not have bugs
+    // that would lead to inferring a `never` type. The `never` type is assignable
+    // to any other type in TypeScript thus the explicit check. In practice,
+    // having a `never` type means that the type guard will reject valid input.
+    // If you ended up here try regenerating the code first,
+    // if this does fix the error below then there is likely a bug in the generator.
+    // Feel free to modify the code to unblock yourself and file an issue!
+    is_never(
+      // @ts-expect-error: neighter should be `never`
+      root
+    );
+    is_never(
+      // @ts-expect-error: neighter should be `never`
+      name
+    );
+    is_never(
+      // @ts-expect-error: neighter should be `never`
+      age
+    );
+    is_never(
+      // @ts-expect-error: neighter should be `never`
+      friends
+    );
+    // Notice: the hover types in VS Code do not tell the full truth.
+    // TypeScript cannot narrow the shapes types down eagerly.
+    // But when used in a new object expression the types get infered
+    // correctly anyways. This is (presumably) thanks to how the flow
+    // analysis works by tracing each type's trail back through all the
+    // narrowing expressions.
+    // NOTE: having no property accesses here allows esbuild to completely
     // remove the whole block.
-    const _root_type_assertion: User = {
+    const result = {
       oneof,
       name,
       age,
@@ -164,6 +150,14 @@ function isNestedUser(root: unknown): root is User {
         main: { enabled },
       },
     };
+
+    // SAFETY: this assignment makes sure that all the checked types are
+    // assignable to the target type.
+    const _root_type_assertion: User = result;
+
+    // Testing that the optional properties remain optional.
+    type Result = typeof result;
+    const _1: Result["age"] = undefined;
   }
 
   return true;

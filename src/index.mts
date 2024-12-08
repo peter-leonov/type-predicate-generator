@@ -47,7 +47,7 @@ function predicateFunction(
 
 const is_never = "is_never";
 
-function assertNotNever(target: string): ts.Statement {
+function assertIsNotNever(target: string): ts.Statement {
   const targetID = factory.createIdentifier(target);
   ts.addSyntheticLeadingComment(
     targetID,
@@ -62,6 +62,10 @@ function assertNotNever(target: string): ts.Statement {
       [targetID]
     )
   );
+}
+
+function assertAreNotNever(targets: string[]): ts.Statement[] {
+  return targets.map(assertIsNotNever);
 }
 
 function assertIsObject(target: string): ts.Statement[] {
@@ -99,7 +103,6 @@ function assertIsObject(target: string): ts.Statement[] {
       ),
       undefined
     ),
-    assertNotNever(target),
   ];
 }
 
@@ -146,20 +149,50 @@ function objectSpread(
   ];
 }
 
+function assertPrimitiveType(
+  target: string,
+  type: "string" | "number"
+): ts.Statement[] {
+  return [
+    factory.createIfStatement(
+      factory.createPrefixUnaryExpression(
+        ts.SyntaxKind.ExclamationToken,
+        factory.createParenthesizedExpression(
+          factory.createBinaryExpression(
+            factory.createTypeOfExpression(
+              factory.createIdentifier(target)
+            ),
+            factory.createToken(
+              ts.SyntaxKind.EqualsEqualsEqualsToken
+            ),
+            factory.createStringLiteral(type)
+          )
+        )
+      ),
+      factory.createBlock(
+        [factory.createReturnStatement(factory.createFalse())],
+        true
+      ),
+      undefined
+    ),
+  ];
+}
+
 function typeGuard(
   checker: ts.TypeChecker,
   type: ts.Type
-): ts.Statement[] {
+): ts.Statement {
   const typeName = checker.typeToString(type);
 
   const subject = "root";
 
-  return [
-    predicateFunction(subject, `is${typeName}`, typeName, [
-      ...assertIsObject(subject),
-      ...objectSpread(subject, ["name", "age"], typeName),
-    ]),
-  ];
+  return predicateFunction(subject, `is${typeName}`, typeName, [
+    ...assertIsObject(subject),
+    ...objectSpread(subject, ["name", "age"], typeName),
+    ...assertPrimitiveType("name", "string"),
+    ...assertPrimitiveType("age", "number"),
+    ...assertAreNotNever([subject, "name", "age"]),
+  ]);
   // console.log(type.getProperties());
   // console.log(type.flags & ts.TypeFlags.Object);
 }
@@ -200,7 +233,7 @@ function generateDocumentation(
           /*setParentNodes*/ false,
           ts.ScriptKind.TS
         ),
-        [...guard]
+        [guard]
       );
       console.log(printer.printFile(resultFile));
     });
