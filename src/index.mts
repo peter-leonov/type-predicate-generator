@@ -110,7 +110,7 @@ const SafeShallowShape = "SafeShallowShape";
 
 function objectSpread(
   target: string,
-  properties: string[],
+  properties: AttributeLocal[],
   type: string
 ): ts.Statement[] {
   ok(properties.length != 0);
@@ -124,8 +124,10 @@ function objectSpread(
               properties.map((id) =>
                 factory.createBindingElement(
                   undefined,
-                  undefined,
-                  factory.createIdentifier(id),
+                  id.isSame()
+                    ? undefined
+                    : JSON.stringify(id.attribute_name),
+                  id.local_name,
                   undefined
                 )
               )
@@ -178,26 +180,169 @@ function assertPrimitiveType(
   ];
 }
 
+class AttributeLocal {
+  readonly path: string[];
+  readonly local_name: string;
+  readonly attribute_name: string;
+  constructor(
+    path: string[],
+    original_name: string,
+    local_name: string
+  ) {
+    this.path = path;
+    this.attribute_name = original_name;
+    this.local_name = local_name;
+  }
+
+  isSame(): boolean {
+    return this.attribute_name == this.local_name;
+  }
+}
+
+/**
+ * Convrst a attribute name that is can effectively be any string
+ * to a safe local variable name. For simplicity it ignores Unicode.
+ */
+function objectAttributeToLocalName(attribute: string): string {
+  return attribute
+    .replace(/[^_a-zA-Z0-9]/g, "_")
+    .replace(/^([^_a-zA-Z])/, "_$1");
+}
+
+class Scope {
+  #prefixed_names: Set<string>;
+  #local_names: Set<string>;
+
+  constructor() {
+    this.#prefixed_names = new Set();
+    this.#local_names = new Set();
+  }
+
+  /**
+   * `path` is a list of unique local names of the parent objects.
+   */
+  createAttribute(path: string[], name: string): AttributeLocal {
+    // Use local names are safe to join by "."
+    const prefixed_name = [...path, name].join(".");
+    if (this.#prefixed_names.has(prefixed_name)) {
+      throw new Error(
+        `a local with prefixed name ${JSON.stringify(
+          prefixed_name
+        )} already exists`
+      );
+    }
+
+    const desired_local_name = objectAttributeToLocalName(name);
+    const local_name = this.getNewLocalName(path, desired_local_name);
+    return new AttributeLocal(path, name, local_name);
+  }
+
+  private getNewLocalName(path: string[], name: string): string {
+    if (!this.#local_names.has(name)) {
+      this.#local_names.add(name);
+      return name;
+    }
+
+    for (let i = 0; i < path.length; i++) {
+      const prefixed = [...path.slice(-i - 1), name].join("_");
+      if (!this.#local_names.has(prefixed)) {
+        this.#local_names.add(prefixed);
+        return prefixed;
+      }
+    }
+
+    for (let i = 2; i < 10_000; i++) {
+      const name2 = `${name}_${i}`;
+      if (!this.#local_names.has(name2)) {
+        this.#local_names.add(name2);
+        return name2;
+      }
+    }
+    throw new Error(`too many unique locals of name ${name}`);
+  }
+
+  list(): string[] {
+    return [...this.#local_names.values()];
+  }
+}
+
+type FakeType = "string" | "number" | { [key: string]: FakeType };
+
+function typePathToTypeSelector(path: string[]): string {
+  const [root, ...rest] = path;
+  return `${root}${rest.map((attr) => `[${JSON.stringify(attr)}]`)}`;
+}
+
+function getAssertionsForVar(
+  scope: Scope,
+  target: AttributeLocal,
+  typePath: string[],
+  type: FakeType
+): ts.Statement[] {
+  if (typeof type === "object") {
+    const entries = Object.entries(type).map(
+      ([attr, type]) =>
+        [
+          scope.createAttribute(
+            [...target.path, target.local_name],
+            attr
+          ),
+          type,
+        ] as const
+    );
+    const attrs = entries.map(([local, _]) => local);
+    return [
+      ...assertIsObject(target.local_name),
+      ...objectSpread(
+        target.local_name,
+        attrs,
+        typePathToTypeSelector(typePath)
+      ),
+      ...entries.flatMap(([local, type]) => {
+        return getAssertionsForVar(
+          scope,
+          local,
+          [...typePath, local.attribute_name],
+          type
+        );
+      }),
+    ];
+  } else if (type == "string" || type == "number") {
+    return [...assertPrimitiveType(target.local_name, type)];
+  }
+
+  throw new Error(`not implemented: ${type}`);
+}
+
+const model: FakeType = {
+  name: "string",
+  age: "number",
+  'wicked " prop': "string",
+  nested: {
+    name: "string",
+    b: "number",
+  },
+};
+
 function typeGuard(
   checker: ts.TypeChecker,
   type: ts.Type
 ): ts.Statement {
   const typeName = checker.typeToString(type);
 
-  const subject = "root";
+  const root = "root";
+  const scope = new Scope();
+  const rootLocal = scope.createAttribute([], root);
 
-  return predicateFunction(subject, `is${typeName}`, typeName, [
-    ...assertIsObject(subject),
-    ...objectSpread(subject, ["name", "age"], typeName),
-    ...assertPrimitiveType("name", "string"),
-    ...assertPrimitiveType("age", "number"),
-    ...assertAreNotNever([subject, "name", "age"]),
+  return predicateFunction(root, `is${typeName}`, typeName, [
+    ...getAssertionsForVar(scope, rootLocal, [typeName], model),
+    ...assertAreNotNever(scope.list()),
   ]);
   // console.log(type.getProperties());
   // console.log(type.flags & ts.TypeFlags.Object);
 }
 
-function generateDocumentation(
+function generateTypeGuards(
   fileNames: string[],
   options: ts.CompilerOptions
 ): void {
@@ -240,7 +385,7 @@ function generateDocumentation(
   }
 }
 
-generateDocumentation(process.argv.slice(2), {
+generateTypeGuards(process.argv.slice(2), {
   target: ts.ScriptTarget.ES5,
   module: ts.ModuleKind.CommonJS,
 });
