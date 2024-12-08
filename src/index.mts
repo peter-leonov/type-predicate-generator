@@ -153,7 +153,7 @@ function objectSpread(
 
 function assertPrimitiveType(
   target: string,
-  type: "string" | "number"
+  type: "string" | "number" | "boolean"
 ): ts.Statement[] {
   return [
     factory.createIfStatement(
@@ -266,7 +266,21 @@ class Scope {
   }
 }
 
-type FakeType = "string" | "number" | { [key: string]: FakeType };
+class PrimitiveType {
+  primitive: "string" | "number" | "boolean";
+  constructor(type: typeof this.primitive) {
+    this.primitive = type;
+  }
+}
+
+class ObjectType {
+  object: { [key: string]: FakeType };
+  constructor(object: typeof this.object) {
+    this.object = object;
+  }
+}
+
+type FakeType = PrimitiveType | ObjectType;
 
 function typePathToTypeSelector(path: string[]): string {
   const [root, ...rest] = path;
@@ -279,8 +293,8 @@ function getAssertionsForVar(
   typePath: string[],
   type: FakeType
 ): ts.Statement[] {
-  if (typeof type === "object") {
-    const entries = Object.entries(type).map(
+  if (type instanceof ObjectType) {
+    const entries = Object.entries(type.object).map(
       ([attr, type]) =>
         [
           scope.createAttribute(
@@ -307,22 +321,24 @@ function getAssertionsForVar(
         );
       }),
     ];
-  } else if (type == "string" || type == "number") {
-    return [...assertPrimitiveType(target.local_name, type)];
+  } else if (type instanceof PrimitiveType) {
+    return [
+      ...assertPrimitiveType(target.local_name, type.primitive),
+    ];
   }
 
   throw new Error(`not implemented: ${type}`);
 }
 
-const model: FakeType = {
-  name: "string",
-  age: "number",
-  'wicked " prop': "string",
-  nested: {
-    name: "string",
-    b: "number",
-  },
-};
+const model: FakeType = new ObjectType({
+  name: new PrimitiveType("string"),
+  age: new PrimitiveType("number"),
+  'wicked " prop': new PrimitiveType("string"),
+  nested: new ObjectType({
+    name: new PrimitiveType("string"),
+    b: new PrimitiveType("boolean"),
+  }),
+});
 
 function typeGuard(
   checker: ts.TypeChecker,
