@@ -181,16 +181,10 @@ function assertPrimitiveType(
 }
 
 class AttributeLocal {
-  readonly path: string[];
   readonly local_name: string;
   readonly attribute_name: string;
-  constructor(
-    path: string[],
-    original_name: string,
-    local_name: string
-  ) {
-    this.path = path;
-    this.attribute_name = original_name;
+  constructor(attribute_name: string, local_name: string) {
+    this.attribute_name = attribute_name;
     this.local_name = local_name;
   }
 
@@ -221,17 +215,21 @@ class Scope {
   /**
    * `path` is a list of attributes leading to the value.
    */
-  createAttribute(path: string[], name: string): AttributeLocal {
-    const key = JSON.stringify([...path, name]);
+  createAttribute(
+    path: string[],
+    attribute_name: string
+  ): AttributeLocal {
+    const key = JSON.stringify([...path, attribute_name]);
     if (this.#by_path.has(key)) {
       throw new Error(
         `a local with prefixed name ${key} already exists`
       );
     }
 
-    const desired_local_name = objectAttributeToLocalName(name);
+    const desired_local_name =
+      objectAttributeToLocalName(attribute_name);
     const local_name = this.getNewLocalName(path, desired_local_name);
-    const attr = new AttributeLocal(path, name, local_name);
+    const attr = new AttributeLocal(attribute_name, local_name);
     this.#by_path.set(key, attr);
     return attr;
   }
@@ -243,6 +241,7 @@ class Scope {
     const key = JSON.stringify(path);
     const value = this.#by_path.get(key);
     if (!value) {
+      console.error(this.#by_path);
       throw new Error(
         `a local with prefixed name ${key} does not exist`
       );
@@ -304,20 +303,17 @@ function typePathToTypeSelector(path: string[]): string {
 
 function getAssertionsForLocalVar(
   scope: Scope,
+  path: string[],
   target: AttributeLocal,
   typePath: string[],
   type: FakeType
 ): ts.Statement[] {
+  const targetPath = [...path, target.attribute_name];
+
   if (type instanceof ObjectType) {
     const entries = Object.entries(type.object).map(
       ([attr, type]) =>
-        [
-          scope.createAttribute(
-            [...target.path, target.attribute_name],
-            attr
-          ),
-          type,
-        ] as const
+        [scope.createAttribute(targetPath, attr), type] as const
     );
     const attrs = entries.map(([local, _]) => local);
     return [
@@ -330,6 +326,7 @@ function getAssertionsForLocalVar(
       ...entries.flatMap(([local, type]) => {
         return getAssertionsForLocalVar(
           scope,
+          targetPath,
           local,
           [...typePath, local.attribute_name],
           type
@@ -439,7 +436,13 @@ function typeGuard(
   const rootLocal = scope.createAttribute([], root);
 
   return predicateFunction(root, `is${typeName}`, typeName, [
-    ...getAssertionsForLocalVar(scope, rootLocal, [typeName], model),
+    ...getAssertionsForLocalVar(
+      scope,
+      [],
+      rootLocal,
+      [typeName],
+      model
+    ),
     ...assertAreNotNever(scope.list()),
     ...typeSafeCheckAssembly(scope, [root], typeName, model),
   ]);
