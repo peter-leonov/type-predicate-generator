@@ -10,6 +10,10 @@ function ok(
   }
 }
 
+function unimplemented(message: string = "unimplemented"): never {
+  throw new Error(message);
+}
+
 function predicateFunction(
   argument: string,
   name: string,
@@ -448,8 +452,52 @@ function typeGuard(
     ...assertAreNotNever(scope.list()),
     ...typeSafeCheckAssembly(scope, [root], typeName, model),
   ]);
-  // console.log(type.getProperties());
-  // console.log(type.flags & ts.TypeFlags.Object);
+}
+
+function printType(checker: ts.TypeChecker, type: ts.Type) {
+  if (tsTypeIsObject(type)) {
+    console.log(`- object: ${checker.typeToString(type)}`);
+    for (const attr of checker.getPropertiesOfType(type)) {
+      console.log(`- attr: ${attr.escapedName}`);
+      // console.log(attr);
+      printType(checker, checker.getTypeOfSymbol(attr));
+    }
+  } else if (tsTypeIsPrimitive(type)) {
+    console.log(`- primitive: ${checker.typeToString(type)}`);
+  } else if (tsTypeIsLiteral(type)) {
+    console.log(`- literal: ${checker.typeToString(type)}`);
+  } else if (type.isUnion()) {
+    console.log(`- inion: ${checker.typeToString(type)}`);
+    for (const member of type.types) {
+      console.log(`- member`);
+      printType(checker, member);
+    }
+  } else {
+    console.log(type);
+    unimplemented(checker.typeToString(type));
+  }
+}
+
+function tsTypeIsObject(type: ts.Type): type is ts.ObjectType {
+  return Boolean(type.flags & ts.TypeFlags.Object);
+}
+
+function tsTypeIsPrimitive(type: ts.Type) {
+  return Boolean(
+    type.flags &
+      (ts.TypeFlags.String |
+        ts.TypeFlags.Number |
+        ts.TypeFlags.Boolean)
+  );
+}
+
+function tsTypeIsLiteral(type: ts.Type) {
+  return Boolean(
+    type.flags &
+      (ts.TypeFlags.StringLiteral |
+        ts.TypeFlags.NumberLiteral |
+        ts.TypeFlags.BooleanLiteral)
+  );
 }
 
 function generateTypeGuards(
@@ -478,19 +526,20 @@ function generateTypeGuards(
 
       let symbol = checker.getSymbolAtLocation(node.name);
       ok(symbol);
-      let type = checker.getDeclaredTypeOfSymbol(symbol);
-      const guard = typeGuard(checker, type);
-      const resultFile = factory.updateSourceFile(
-        ts.createSourceFile(
-          "guards.ts",
-          "",
-          ts.ScriptTarget.Latest,
-          /*setParentNodes*/ false,
-          ts.ScriptKind.TS
-        ),
-        [guard]
-      );
-      console.log(printer.printFile(resultFile));
+      printType(checker, checker.getDeclaredTypeOfSymbol(symbol));
+
+      // const guard = typeGuard(checker, type);
+      // const resultFile = factory.updateSourceFile(
+      //   ts.createSourceFile(
+      //     "guards.ts",
+      //     "",
+      //     ts.ScriptTarget.Latest,
+      //     /*setParentNodes*/ false,
+      //     ts.ScriptKind.TS
+      //   ),
+      //   [guard]
+      // );
+      // console.log(printer.printFile(resultFile));
     });
   }
 }
