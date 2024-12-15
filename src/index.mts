@@ -124,7 +124,7 @@ function objectSpread(
               properties.map((id) =>
                 factory.createBindingElement(
                   undefined,
-                  id.isSame()
+                  id.isShorthand()
                     ? undefined
                     : JSON.stringify(id.attribute_name),
                   id.local_name,
@@ -188,7 +188,7 @@ class AttributeLocal {
     this.local_name = local_name;
   }
 
-  isSame(): boolean {
+  isShorthand(): boolean {
     return this.attribute_name == this.local_name;
   }
 }
@@ -203,12 +203,18 @@ function objectAttributeToLocalName(attribute: string): string {
     .replace(/^([^_a-zA-Z])/, "_$1");
 }
 
+/**
+ * A list of the object attribute names leading up to the value
+ * excuding the target attribute.
+ */
+type Path = string[];
+
 class Scope {
-  #by_path: Map<string, AttributeLocal>;
+  #by_full_path: Map<string, AttributeLocal>;
   #local_names: Set<string>;
 
   constructor() {
-    this.#by_path = new Map();
+    this.#by_full_path = new Map();
     this.#local_names = new Set();
   }
 
@@ -216,11 +222,11 @@ class Scope {
    * `path` is a list of attributes leading to the value.
    */
   createAttribute(
-    path: string[],
+    path: Path,
     attribute_name: string
   ): AttributeLocal {
     const key = JSON.stringify([...path, attribute_name]);
-    if (this.#by_path.has(key)) {
+    if (this.#by_full_path.has(key)) {
       throw new Error(
         `a local with prefixed name ${key} already exists`
       );
@@ -230,18 +236,15 @@ class Scope {
       objectAttributeToLocalName(attribute_name);
     const local_name = this.getNewLocalName(path, desired_local_name);
     const attr = new AttributeLocal(attribute_name, local_name);
-    this.#by_path.set(key, attr);
+    this.#by_full_path.set(key, attr);
     return attr;
   }
 
-  /**
-   * `path` is a list of attributes leading to the value.
-   */
-  getByPath(path: string[]): AttributeLocal {
-    const key = JSON.stringify(path);
-    const value = this.#by_path.get(key);
+  getByPath(path: Path, name: string): AttributeLocal {
+    const key = JSON.stringify([...path, name]);
+    const value = this.#by_full_path.get(key);
     if (!value) {
-      console.error(this.#by_path);
+      console.error(this.#by_full_path);
       throw new Error(
         `a local with prefixed name ${key} does not exist`
       );
@@ -249,7 +252,7 @@ class Scope {
     return value;
   }
 
-  private getNewLocalName(path: string[], name: string): string {
+  private getNewLocalName(path: Path, name: string): string {
     if (!this.#local_names.has(name)) {
       this.#local_names.add(name);
       return name;
@@ -296,14 +299,14 @@ class ObjectType {
 
 type FakeType = PrimitiveType | ObjectType;
 
-function typePathToTypeSelector(path: string[]): string {
+function typePathToTypeSelector(path: Path): string {
   const [root, ...rest] = path;
   return `${root}${rest.map((attr) => `[${JSON.stringify(attr)}]`)}`;
 }
 
 function getAssertionsForLocalVar(
   scope: Scope,
-  path: string[],
+  path: Path,
   target: AttributeLocal,
   typePath: string[],
   type: FakeType
@@ -344,20 +347,19 @@ function getAssertionsForLocalVar(
 
 function typeSafeCheckObject(
   scope: Scope,
-  path: string[],
+  path: Path,
   type: ObjectType
 ): ts.Expression {
   const attributes = Object.entries(type.object).map(
     ([attr, type]) => {
-      const attrPath = [...path, attr];
-      const local = scope.getByPath(attrPath);
+      const local = scope.getByPath(path, attr);
       if (type instanceof ObjectType) {
         return factory.createPropertyAssignment(
           factory.createIdentifier(local.local_name),
-          typeSafeCheckObject(scope, attrPath, type)
+          typeSafeCheckObject(scope, [...path, attr], type)
         );
       } else {
-        if (local.isSame()) {
+        if (local.isShorthand()) {
           return factory.createShorthandPropertyAssignment(
             factory.createIdentifier(local.local_name),
             undefined
@@ -377,7 +379,7 @@ function typeSafeCheckObject(
 
 function typeSafeCheckAssembly(
   scope: Scope,
-  path: string[],
+  path: Path,
   typeName: string,
   type: FakeType
 ): ts.Statement[] {
