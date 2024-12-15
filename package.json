@@ -1,5 +1,5 @@
 {
-  "name": "boring-type-guardian",
+  "name": "type-guard-generator",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

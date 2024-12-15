@@ -1,4 +1,4 @@
-# Boring Type Guardian
+# TypeScript Type Guard Generator
 
 ## About
 
