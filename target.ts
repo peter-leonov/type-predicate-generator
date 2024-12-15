@@ -140,7 +140,9 @@ function isNestedUser(root: unknown): root is User {
     // narrowing expressions.
     // NOTE: having no property accesses here allows esbuild to completely
     // remove the whole block.
-    const result = {
+    // SAFETY: this assignment makes sure that all the checked types are
+    // assignable to the target type.
+    const _root_type_assertion: User = {
       oneof,
       name,
       age,
@@ -150,14 +152,7 @@ function isNestedUser(root: unknown): root is User {
         main: { enabled },
       },
     };
-
-    // SAFETY: this assignment makes sure that all the checked types are
-    // assignable to the target type.
-    const _root_type_assertion: User = result;
-
-    // Testing that the optional properties remain optional.
-    type Result = typeof result;
-    const _1: Result["age"] = undefined;
+    // TODO: move more checks to the generated tests
   }
 
   return true;

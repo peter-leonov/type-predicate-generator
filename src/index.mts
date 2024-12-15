@@ -210,31 +210,44 @@ function objectAttributeToLocalName(attribute: string): string {
 }
 
 class Scope {
-  #prefixed_names: Set<string>;
+  #by_path: Map<string, AttributeLocal>;
   #local_names: Set<string>;
 
   constructor() {
-    this.#prefixed_names = new Set();
+    this.#by_path = new Map();
     this.#local_names = new Set();
   }
 
   /**
-   * `path` is a list of unique local names of the parent objects.
+   * `path` is a list of attributes leading to the value.
    */
   createAttribute(path: string[], name: string): AttributeLocal {
-    // Use local names are safe to join by "."
-    const prefixed_name = [...path, name].join(".");
-    if (this.#prefixed_names.has(prefixed_name)) {
+    const key = JSON.stringify([...path, name]);
+    if (this.#by_path.has(key)) {
       throw new Error(
-        `a local with prefixed name ${JSON.stringify(
-          prefixed_name
-        )} already exists`
+        `a local with prefixed name ${key} already exists`
       );
     }
 
     const desired_local_name = objectAttributeToLocalName(name);
     const local_name = this.getNewLocalName(path, desired_local_name);
-    return new AttributeLocal(path, name, local_name);
+    const attr = new AttributeLocal(path, name, local_name);
+    this.#by_path.set(key, attr);
+    return attr;
+  }
+
+  /**
+   * `path` is a list of attributes leading to the value.
+   */
+  getByPath(path: string[]): AttributeLocal {
+    const key = JSON.stringify(path);
+    const value = this.#by_path.get(key);
+    if (!value) {
+      throw new Error(
+        `a local with prefixed name ${key} does not exist`
+      );
+    }
+    return value;
   }
 
   private getNewLocalName(path: string[], name: string): string {
@@ -244,7 +257,9 @@ class Scope {
     }
 
     for (let i = 0; i < path.length; i++) {
-      const prefixed = [...path.slice(-i - 1), name].join("_");
+      const prefixed = [...path.slice(-i - 1), name]
+        .map(objectAttributeToLocalName)
+        .join("_");
       if (!this.#local_names.has(prefixed)) {
         this.#local_names.add(prefixed);
         return prefixed;
@@ -287,7 +302,7 @@ function typePathToTypeSelector(path: string[]): string {
   return `${root}${rest.map((attr) => `[${JSON.stringify(attr)}]`)}`;
 }
 
-function getAssertionsForVar(
+function getAssertionsForLocalVar(
   scope: Scope,
   target: AttributeLocal,
   typePath: string[],
@@ -298,7 +313,7 @@ function getAssertionsForVar(
       ([attr, type]) =>
         [
           scope.createAttribute(
-            [...target.path, target.local_name],
+            [...target.path, target.attribute_name],
             attr
           ),
           type,
@@ -313,7 +328,7 @@ function getAssertionsForVar(
         typePathToTypeSelector(typePath)
       ),
       ...entries.flatMap(([local, type]) => {
-        return getAssertionsForVar(
+        return getAssertionsForLocalVar(
           scope,
           local,
           [...typePath, local.attribute_name],
@@ -330,13 +345,86 @@ function getAssertionsForVar(
   throw new Error(`not implemented: ${type}`);
 }
 
+function typeSafeCheckObject(
+  scope: Scope,
+  path: string[],
+  type: ObjectType
+): ts.Expression {
+  const attributes = Object.entries(type.object).map(
+    ([attr, type]) => {
+      const attrPath = [...path, attr];
+      const local = scope.getByPath(attrPath);
+      if (type instanceof ObjectType) {
+        return factory.createPropertyAssignment(
+          factory.createIdentifier(local.local_name),
+          typeSafeCheckObject(scope, attrPath, type)
+        );
+      } else {
+        if (local.isSame()) {
+          return factory.createShorthandPropertyAssignment(
+            factory.createIdentifier(local.local_name),
+            undefined
+          );
+        } else {
+          return factory.createPropertyAssignment(
+            JSON.stringify(local.attribute_name),
+            factory.createIdentifier(local.local_name)
+          );
+        }
+      }
+    }
+  );
+
+  return factory.createObjectLiteralExpression(attributes, true);
+}
+
+function typeSafeCheckAssembly(
+  scope: Scope,
+  path: string[],
+  typeName: string,
+  type: FakeType
+): ts.Statement[] {
+  const _root_type_assertion = scope.createAttribute(
+    [],
+    "_root_type_assertion"
+  );
+
+  let initializer: ts.Expression;
+
+  if (type instanceof ObjectType) {
+    initializer = typeSafeCheckObject(scope, path, type);
+  } else {
+    throw new Error("not implemented");
+  }
+
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            _root_type_assertion.local_name,
+            undefined,
+            factory.createTypeReferenceNode(
+              factory.createIdentifier(typeName),
+              undefined
+            ),
+            initializer
+          ),
+        ],
+        ts.NodeFlags.Const
+      )
+    ),
+  ];
+}
+
 const model: FakeType = new ObjectType({
   name: new PrimitiveType("string"),
   age: new PrimitiveType("number"),
   'wicked " prop': new PrimitiveType("string"),
   nested: new ObjectType({
     name: new PrimitiveType("string"),
-    b: new PrimitiveType("boolean"),
+    is_ready: new PrimitiveType("boolean"),
   }),
 });
 
@@ -351,8 +439,9 @@ function typeGuard(
   const rootLocal = scope.createAttribute([], root);
 
   return predicateFunction(root, `is${typeName}`, typeName, [
-    ...getAssertionsForVar(scope, rootLocal, [typeName], model),
+    ...getAssertionsForLocalVar(scope, rootLocal, [typeName], model),
     ...assertAreNotNever(scope.list()),
+    ...typeSafeCheckAssembly(scope, [root], typeName, model),
   ]);
   // console.log(type.getProperties());
   // console.log(type.flags & ts.TypeFlags.Object);
