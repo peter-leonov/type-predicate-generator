@@ -180,7 +180,30 @@ function assertPrimitiveType(
   ];
 }
 
-function typePathToTypeSelector(path: Path): string {
+function assertNamedType(
+  target: string,
+  type: string
+): ts.Statement[] {
+  return [
+    factory.createIfStatement(
+      factory.createPrefixUnaryExpression(
+        ts.SyntaxKind.ExclamationToken,
+        factory.createCallExpression(
+          factory.createIdentifier(`is${type}`),
+          undefined,
+          [factory.createIdentifier(target)]
+        )
+      ),
+      factory.createBlock(
+        [factory.createReturnStatement(factory.createFalse())],
+        false
+      ),
+      undefined
+    ),
+  ];
+}
+
+function typePathToTypeSelector(path: string[]): string {
   const [root, ...rest] = path;
   return `${root}${rest.map((attr) => `[${JSON.stringify(attr)}]`)}`;
 }
@@ -199,6 +222,14 @@ class TypeGuardGenerator {
     type: TypeModel
   ): ts.Statement[] {
     const targetPath = [...path, target.attribute_name];
+
+    // for the non-root type
+    if (path.length >= 1) {
+      const { aliasName } = type.options;
+      if (aliasName) {
+        return assertNamedType(target.local_name, aliasName);
+      }
+    }
 
     if (type instanceof ObjectType) {
       const entries = Object.entries(type.attributes).map(
@@ -268,23 +299,26 @@ function typeSafeCheckObject(
   const attributes = Object.entries(type.attributes).map(
     ([attr, type]) => {
       const local = scope.getByPath(path, attr);
-      if (type instanceof ObjectType) {
-        return factory.createPropertyAssignment(
-          factory.createIdentifier(local.local_name),
-          typeSafeCheckObject(scope, [...path, attr], type)
-        );
-      } else {
-        if (local.isShorthand()) {
-          return factory.createShorthandPropertyAssignment(
-            factory.createIdentifier(local.local_name),
-            undefined
-          );
-        } else {
+      const { aliasName } = type.options;
+      if (!aliasName) {
+        if (type instanceof ObjectType) {
           return factory.createPropertyAssignment(
-            JSON.stringify(local.attribute_name),
-            factory.createIdentifier(local.local_name)
+            factory.createIdentifier(local.local_name),
+            typeSafeCheckObject(scope, [...path, attr], type)
           );
         }
+      }
+
+      if (local.isShorthand()) {
+        return factory.createShorthandPropertyAssignment(
+          factory.createIdentifier(local.local_name),
+          undefined
+        );
+      } else {
+        return factory.createPropertyAssignment(
+          JSON.stringify(local.attribute_name),
+          factory.createIdentifier(local.local_name)
+        );
       }
     }
   );
