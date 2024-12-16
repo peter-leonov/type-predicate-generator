@@ -1,3 +1,4 @@
+import { inspect } from "node:util";
 import * as ts from "typescript";
 import { factory } from "typescript";
 
@@ -157,7 +158,7 @@ function objectSpread(
 
 function assertPrimitiveType(
   target: string,
-  type: "string" | "number" | "boolean"
+  type: string
 ): ts.Statement[] {
   return [
     factory.createIfStatement(
@@ -287,21 +288,60 @@ class Scope {
   }
 }
 
+type TypeOptions = {
+  isOptional: boolean;
+  aliasName?: string;
+};
+
+class LiteralType {
+  options: TypeOptions;
+  literal: string;
+  constructor(
+    options: typeof this.options,
+    literal: typeof this.literal
+  ) {
+    this.options = options;
+    this.literal = literal;
+  }
+}
+
 class PrimitiveType {
-  primitive: "string" | "number" | "boolean";
-  constructor(type: typeof this.primitive) {
-    this.primitive = type;
+  options: TypeOptions;
+  primitive: string;
+  constructor(
+    options: typeof this.options,
+    primitive: typeof this.primitive
+  ) {
+    this.options = options;
+    this.primitive = primitive;
   }
 }
 
 class ObjectType {
-  object: { [key: string]: FakeType };
-  constructor(object: typeof this.object) {
-    this.object = object;
+  options: TypeOptions;
+  attributes: { [key: string]: TypeModel };
+  constructor(
+    options: typeof this.options,
+    attributes: typeof this.attributes
+  ) {
+    this.options = options;
+    this.attributes = attributes;
   }
 }
 
-type FakeType = PrimitiveType | ObjectType;
+class UnionType {
+  options: TypeOptions;
+  types: TypeModel[];
+  constructor(
+    options: typeof this.options,
+    types: typeof this.types
+  ) {
+    this.options = options;
+    this.types = types;
+  }
+}
+
+type TypeModel = LiteralType | PrimitiveType | ObjectType | UnionType;
 
 function typePathToTypeSelector(path: Path): string {
   const [root, ...rest] = path;
@@ -313,12 +353,12 @@ function getAssertionsForLocalVar(
   path: Path,
   target: AttributeLocal,
   typePath: string[],
-  type: FakeType
+  type: TypeModel
 ): ts.Statement[] {
   const targetPath = [...path, target.attribute_name];
 
   if (type instanceof ObjectType) {
-    const entries = Object.entries(type.object).map(
+    const entries = Object.entries(type.attributes).map(
       ([attr, type]) =>
         [scope.createAttribute(targetPath, attr), type] as const
     );
@@ -354,7 +394,7 @@ function typeSafeCheckObject(
   path: Path,
   type: ObjectType
 ): ts.Expression {
-  const attributes = Object.entries(type.object).map(
+  const attributes = Object.entries(type.attributes).map(
     ([attr, type]) => {
       const local = scope.getByPath(path, attr);
       if (type instanceof ObjectType) {
@@ -385,7 +425,7 @@ function typeSafeCheckAssembly(
   scope: Scope,
   path: Path,
   typeName: string,
-  type: FakeType
+  type: TypeModel
 ): ts.Statement[] {
   const _root_type_assertion = scope.createAttribute(
     [],
@@ -421,21 +461,9 @@ function typeSafeCheckAssembly(
   ];
 }
 
-const model: FakeType = new ObjectType({
-  name: new PrimitiveType("string"),
-  age: new PrimitiveType("number"),
-  'wicked " prop': new PrimitiveType("string"),
-  nested: new ObjectType({
-    name: new PrimitiveType("string"),
-    is_ready: new PrimitiveType("boolean"),
-  }),
-});
-
-function typeGuard(
-  checker: ts.TypeChecker,
-  type: ts.Type
-): ts.Statement {
-  const typeName = checker.typeToString(type);
+function typeGuard(type: TypeModel): ts.Statement {
+  const typeName = type.options.aliasName;
+  ok(typeName);
 
   const root = "root";
   const scope = new Scope();
@@ -447,35 +475,63 @@ function typeGuard(
       [],
       rootLocal,
       [typeName],
-      model
+      type
     ),
     ...assertAreNotNever(scope.list()),
-    ...typeSafeCheckAssembly(scope, [root], typeName, model),
+    ...typeSafeCheckAssembly(scope, [root], typeName, type),
   ]);
 }
 
-function printType(checker: ts.TypeChecker, type: ts.Type) {
+function typeToModel(
+  checker: ts.TypeChecker,
+  type: ts.Type,
+  isOptional: boolean = false
+): TypeModel {
+  const aliasName = type.aliasSymbol?.escapedName.toString();
   if (tsTypeIsObject(type)) {
-    console.log(`- object: ${checker.typeToString(type)}`);
+    const attributes: Record<string, TypeModel> = {};
+    // console.log(`- object: ${checker.typeToString(type)}`);
+    if (type.aliasSymbol) {
+      // console.log("escapedName", type.aliasSymbol.escapedName);
+    }
     for (const attr of checker.getPropertiesOfType(type)) {
-      console.log(`- attr: ${attr.escapedName}`);
-      // console.log(attr);
-      printType(checker, checker.getTypeOfSymbol(attr));
+      // console.log(`- attr: ${attr.escapedName}`);
+      attributes[String(attr.escapedName)] = typeToModel(
+        checker,
+        checker.getTypeOfSymbol(attr),
+        isSymbolOptional(attr)
+      );
     }
+    return new ObjectType({ isOptional, aliasName }, attributes);
   } else if (tsTypeIsPrimitive(type)) {
-    console.log(`- primitive: ${checker.typeToString(type)}`);
+    // console.log(`- primitive: ${checker.typeToString(type)}`);
+    return new PrimitiveType(
+      { isOptional, aliasName },
+      checker.typeToString(type)
+    );
   } else if (tsTypeIsLiteral(type)) {
-    console.log(`- literal: ${checker.typeToString(type)}`);
+    // console.log(`- literal: ${checker.typeToString(type)}`);
+    return new LiteralType(
+      { isOptional, aliasName },
+      checker.typeToString(type)
+    );
   } else if (type.isUnion()) {
-    console.log(`- inion: ${checker.typeToString(type)}`);
-    for (const member of type.types) {
-      console.log(`- member`);
-      printType(checker, member);
-    }
-  } else {
-    console.log(type);
-    unimplemented(checker.typeToString(type));
+    // console.log(`- inion: ${checker.typeToString(type)}`);
+    return new UnionType(
+      { isOptional, aliasName },
+      type.types.map((member) => {
+        // console.log(`- member`);
+        return typeToModel(checker, member);
+      })
+    );
   }
+
+  console.error(type);
+  unimplemented(checker.typeToString(type));
+}
+
+function isSymbolOptional(s: ts.Symbol) {
+  return Boolean(s.flags & ts.SymbolFlags.Optional);
 }
 
 function tsTypeIsObject(type: ts.Type): type is ts.ObjectType {
@@ -526,7 +582,17 @@ function generateTypeGuards(
 
       let symbol = checker.getSymbolAtLocation(node.name);
       ok(symbol);
-      printType(checker, checker.getDeclaredTypeOfSymbol(symbol));
+      console.log(
+        inspect(
+          typeToModel(
+            checker,
+            checker.getDeclaredTypeOfSymbol(symbol)
+          ),
+          { depth: null }
+        )
+      );
+
+      // printSymbol(symbol);
 
       // const guard = typeGuard(checker, type);
       // const resultFile = factory.updateSourceFile(
