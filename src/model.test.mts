@@ -4,6 +4,7 @@ import {
   ObjectType,
   PrimitiveType,
   LiteralType,
+  UnionType,
 } from "./model.mts";
 import { compile } from "./tests_helpers.mts";
 
@@ -117,6 +118,52 @@ test("object with literal types", () => {
         a: new LiteralType({}, 1),
         b: new LiteralType({}, "foo"),
         c: new LiteralType({}, true),
+      }
+    )
+  );
+});
+
+test("object with a union type", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = {
+          a: 1 | 2
+        }
+      `)
+    )
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new UnionType({}, [
+          new LiteralType({}, 1),
+          new LiteralType({}, 2),
+        ]),
+      }
+    )
+  );
+});
+
+test("object with a complex union type", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = {
+          a: string | 2 | false | { b: string }
+        }
+      `)
+    )
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new UnionType({}, [
+          new PrimitiveType({}, "string"),
+          new LiteralType({}, false),
+          new LiteralType({}, 2),
+          new ObjectType({}, { b: new PrimitiveType({}, "string") }),
+        ]),
       }
     )
   );

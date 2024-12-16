@@ -56,7 +56,7 @@ export class UnionType {
     options: typeof this.options,
     types: typeof this.types
   ) {
-    this.options = options;
+    this.options = normilizeOptions(options);
     this.types = types;
   }
 }
