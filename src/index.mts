@@ -1,6 +1,12 @@
 import { inspect } from "node:util";
 import * as ts from "typescript";
 import { factory } from "typescript";
+import {
+  ObjectType,
+  PrimitiveType,
+  type TypeModel,
+  typeToModel,
+} from "./model.mts";
 
 function ok(
   value: unknown,
@@ -9,10 +15,6 @@ function ok(
   if (!value) {
     throw new Error(message);
   }
-}
-
-function unimplemented(message: string = "unimplemented"): never {
-  throw new Error(message);
 }
 
 function predicateFunction(
@@ -288,105 +290,84 @@ class Scope {
   }
 }
 
-type TypeOptions = {
-  isOptional: boolean;
-  aliasName?: string;
-};
-
-class LiteralType {
-  options: TypeOptions;
-  literal: string;
-  constructor(
-    options: typeof this.options,
-    literal: typeof this.literal
-  ) {
-    this.options = options;
-    this.literal = literal;
-  }
-}
-
-class PrimitiveType {
-  options: TypeOptions;
-  primitive: string;
-  constructor(
-    options: typeof this.options,
-    primitive: typeof this.primitive
-  ) {
-    this.options = options;
-    this.primitive = primitive;
-  }
-}
-
-class ObjectType {
-  options: TypeOptions;
-  attributes: { [key: string]: TypeModel };
-  constructor(
-    options: typeof this.options,
-    attributes: typeof this.attributes
-  ) {
-    this.options = options;
-    this.attributes = attributes;
-  }
-}
-
-class UnionType {
-  options: TypeOptions;
-  types: TypeModel[];
-  constructor(
-    options: typeof this.options,
-    types: typeof this.types
-  ) {
-    this.options = options;
-    this.types = types;
-  }
-}
-
-type TypeModel = LiteralType | PrimitiveType | ObjectType | UnionType;
-
 function typePathToTypeSelector(path: Path): string {
   const [root, ...rest] = path;
   return `${root}${rest.map((attr) => `[${JSON.stringify(attr)}]`)}`;
 }
 
-function getAssertionsForLocalVar(
-  scope: Scope,
-  path: Path,
-  target: AttributeLocal,
-  typePath: string[],
-  type: TypeModel
-): ts.Statement[] {
-  const targetPath = [...path, target.attribute_name];
-
-  if (type instanceof ObjectType) {
-    const entries = Object.entries(type.attributes).map(
-      ([attr, type]) =>
-        [scope.createAttribute(targetPath, attr), type] as const
-    );
-    const attrs = entries.map(([local, _]) => local);
-    return [
-      ...assertIsObject(target.local_name),
-      ...objectSpread(
-        target.local_name,
-        attrs,
-        typePathToTypeSelector(typePath)
-      ),
-      ...entries.flatMap(([local, type]) => {
-        return getAssertionsForLocalVar(
-          scope,
-          targetPath,
-          local,
-          [...typePath, local.attribute_name],
-          type
-        );
-      }),
-    ];
-  } else if (type instanceof PrimitiveType) {
-    return [
-      ...assertPrimitiveType(target.local_name, type.primitive),
-    ];
+class TypeGuardGenerator {
+  guards: ts.Statement[];
+  constructor() {
+    this.guards = [];
   }
 
-  throw new Error(`not implemented: ${type}`);
+  getAssertionsForLocalVar(
+    scope: Scope,
+    path: Path,
+    target: AttributeLocal,
+    typePath: string[],
+    type: TypeModel
+  ): ts.Statement[] {
+    const targetPath = [...path, target.attribute_name];
+
+    if (type instanceof ObjectType) {
+      const entries = Object.entries(type.attributes).map(
+        ([attr, type]) =>
+          [scope.createAttribute(targetPath, attr), type] as const
+      );
+      const attrs = entries.map(([local, _]) => local);
+      return [
+        ...assertIsObject(target.local_name),
+        ...objectSpread(
+          target.local_name,
+          attrs,
+          typePathToTypeSelector(typePath)
+        ),
+        ...entries.flatMap(([local, type]) => {
+          return this.getAssertionsForLocalVar(
+            scope,
+            targetPath,
+            local,
+            [...typePath, local.attribute_name],
+            type
+          );
+        }),
+      ];
+    } else if (type instanceof PrimitiveType) {
+      return [
+        ...assertPrimitiveType(target.local_name, type.primitive),
+      ];
+    }
+
+    throw new Error(`not implemented: ${type}`);
+  }
+
+  addTypeGuard(type: TypeModel): void {
+    const typeName = type.options.aliasName;
+    ok(typeName);
+
+    const root = "root";
+    const scope = new Scope();
+    const rootLocal = scope.createAttribute([], root);
+
+    const guard = predicateFunction(root, `is${typeName}`, typeName, [
+      ...this.getAssertionsForLocalVar(
+        scope,
+        [],
+        rootLocal,
+        [typeName],
+        type
+      ),
+      // ...assertAreNotNever(scope.list()),
+      ...typeSafeCheckAssembly(scope, [root], typeName, type),
+    ]);
+
+    this.guards.push(guard);
+  }
+
+  getGuards(): ts.Statement[] {
+    return this.guards;
+  }
 }
 
 function typeSafeCheckObject(
@@ -461,101 +442,6 @@ function typeSafeCheckAssembly(
   ];
 }
 
-function typeGuard(type: TypeModel): ts.Statement {
-  const typeName = type.options.aliasName;
-  ok(typeName);
-
-  const root = "root";
-  const scope = new Scope();
-  const rootLocal = scope.createAttribute([], root);
-
-  return predicateFunction(root, `is${typeName}`, typeName, [
-    ...getAssertionsForLocalVar(
-      scope,
-      [],
-      rootLocal,
-      [typeName],
-      type
-    ),
-    // ...assertAreNotNever(scope.list()),
-    ...typeSafeCheckAssembly(scope, [root], typeName, type),
-  ]);
-}
-
-function typeToModel(
-  checker: ts.TypeChecker,
-  type: ts.Type,
-  isOptional: boolean = false
-): TypeModel {
-  const aliasName = type.aliasSymbol?.escapedName.toString();
-  if (tsTypeIsObject(type)) {
-    const attributes: Record<string, TypeModel> = {};
-    // console.log(`- object: ${checker.typeToString(type)}`);
-    if (type.aliasSymbol) {
-      // console.log("escapedName", type.aliasSymbol.escapedName);
-    }
-    for (const attr of checker.getPropertiesOfType(type)) {
-      // console.log(`- attr: ${attr.escapedName}`);
-      attributes[String(attr.escapedName)] = typeToModel(
-        checker,
-        checker.getTypeOfSymbol(attr),
-        isSymbolOptional(attr)
-      );
-    }
-    return new ObjectType({ isOptional, aliasName }, attributes);
-  } else if (tsTypeIsPrimitive(type)) {
-    // console.log(`- primitive: ${checker.typeToString(type)}`);
-    return new PrimitiveType(
-      { isOptional, aliasName },
-      checker.typeToString(type)
-    );
-  } else if (tsTypeIsLiteral(type)) {
-    // console.log(`- literal: ${checker.typeToString(type)}`);
-    return new LiteralType(
-      { isOptional, aliasName },
-      checker.typeToString(type)
-    );
-  } else if (type.isUnion()) {
-    // console.log(`- inion: ${checker.typeToString(type)}`);
-    return new UnionType(
-      { isOptional, aliasName },
-      type.types.map((member) => {
-        // console.log(`- member`);
-        return typeToModel(checker, member);
-      })
-    );
-  }
-
-  console.error(type);
-  unimplemented(checker.typeToString(type));
-}
-
-function isSymbolOptional(s: ts.Symbol) {
-  return Boolean(s.flags & ts.SymbolFlags.Optional);
-}
-
-function tsTypeIsObject(type: ts.Type): type is ts.ObjectType {
-  return Boolean(type.flags & ts.TypeFlags.Object);
-}
-
-function tsTypeIsPrimitive(type: ts.Type) {
-  return Boolean(
-    type.flags &
-      (ts.TypeFlags.String |
-        ts.TypeFlags.Number |
-        ts.TypeFlags.Boolean)
-  );
-}
-
-function tsTypeIsLiteral(type: ts.Type) {
-  return Boolean(
-    type.flags &
-      (ts.TypeFlags.StringLiteral |
-        ts.TypeFlags.NumberLiteral |
-        ts.TypeFlags.BooleanLiteral)
-  );
-}
-
 function generateTypeGuards(
   fileNames: string[],
   options: ts.CompilerOptions
@@ -574,6 +460,9 @@ function generateTypeGuards(
     if (sourceFile.isDeclarationFile) {
       continue;
     }
+
+    const generator = new TypeGuardGenerator();
+
     // Walk the tree to search for types
     ts.forEachChild(sourceFile, (node) => {
       if (!ts.isTypeAliasDeclaration(node)) {
@@ -597,19 +486,20 @@ function generateTypeGuards(
         checker.getDeclaredTypeOfSymbol(symbol)
       );
 
-      const guard = typeGuard(model);
-      const resultFile = factory.updateSourceFile(
-        ts.createSourceFile(
-          "guards.ts",
-          "",
-          ts.ScriptTarget.Latest,
-          /*setParentNodes*/ false,
-          ts.ScriptKind.TS
-        ),
-        [guard]
-      );
-      console.log(printer.printFile(resultFile));
+      generator.addTypeGuard(model);
     });
+
+    const resultFile = factory.updateSourceFile(
+      ts.createSourceFile(
+        "guards.ts",
+        "",
+        ts.ScriptTarget.Latest,
+        /*setParentNodes*/ false,
+        ts.ScriptKind.TS
+      ),
+      generator.getGuards()
+    );
+    console.log(printer.printFile(resultFile));
   }
 }
 
