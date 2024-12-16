@@ -1,4 +1,5 @@
 import { inspect } from "node:util";
+import { ok } from "node:assert";
 import * as ts from "typescript";
 import { factory } from "typescript";
 import {
@@ -7,15 +8,6 @@ import {
   type TypeModel,
   typeToModel,
 } from "./model.mts";
-
-function ok(
-  value: unknown,
-  message: string = "assertion failed"
-): asserts value {
-  if (!value) {
-    throw new Error(message);
-  }
-}
 
 function predicateFunction(
   argument: string,
