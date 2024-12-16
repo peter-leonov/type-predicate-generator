@@ -1,4 +1,10 @@
 import { expect, test } from "vitest";
+import {
+  typeToModel,
+  ObjectType,
+  PrimitiveType,
+  LiteralType,
+} from "./model.mts";
 import { compile } from "./tests_helpers.mts";
 
 test("empty object", () => {
@@ -9,34 +15,35 @@ test("empty object", () => {
         }
       `)
     )
-  ).toEqual(
-    new ObjectType({ isOptional: false, aliasName: "X" }, {})
-  );
+  ).toEqual(new ObjectType({ aliasName: "X" }, {}));
 });
 
-test("simple object", () => {
+test("object with optional and non-optional props", () => {
   expect(
     typeToModel(
       ...compile(`
         type X = {
           a: number
+          b?: number
+          c: number
+          d?: number
         }
       `)
     )
   ).toEqual(
     new ObjectType(
-      { isOptional: false, aliasName: "X" },
+      { aliasName: "X" },
       {
-        a: new PrimitiveType(
-          { isOptional: false, aliasName: undefined },
-          "number"
-        ),
+        a: new PrimitiveType({}, "number"),
+        b: new PrimitiveType({ isOptional: true }, "number"),
+        c: new PrimitiveType({}, "number"),
+        d: new PrimitiveType({ isOptional: true }, "number"),
       }
     )
   );
 });
 
-test("non nested object", () => {
+test("object with primitive types", () => {
   expect(
     typeToModel(
       ...compile(`
@@ -49,20 +56,67 @@ test("non nested object", () => {
     )
   ).toEqual(
     new ObjectType(
-      { isOptional: false, aliasName: "X" },
+      { aliasName: "X" },
       {
-        a: new PrimitiveType(
-          { isOptional: false, aliasName: undefined },
-          "number"
+        a: new PrimitiveType({}, "number"),
+        b: new PrimitiveType({}, "string"),
+        c: new PrimitiveType({}, "boolean"),
+      }
+    )
+  );
+});
+
+test("nested object", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = {
+          a: {
+            b: {
+              c: string
+            }
+          }
+        }
+      `)
+    )
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new ObjectType(
+          {},
+          {
+            b: new ObjectType(
+              {},
+              {
+                c: new PrimitiveType({}, "string"),
+              }
+            ),
+          }
         ),
-        b: new PrimitiveType(
-          { isOptional: false, aliasName: undefined },
-          "string"
-        ),
-        c: new PrimitiveType(
-          { isOptional: false, aliasName: undefined },
-          "boolean"
-        ),
+      }
+    )
+  );
+});
+
+test("object with literal types", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = {
+          a: 1
+          b: 'foo'
+          c: true
+        }
+      `)
+    )
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new LiteralType({}, 1),
+        b: new LiteralType({}, "foo"),
+        c: new LiteralType({}, true),
       }
     )
   );

@@ -2,19 +2,26 @@ import ts from "typescript";
 import { unimplemented } from "./helpers.mts";
 
 export type TypeOptions = {
-  isOptional: boolean;
-  aliasName: string | undefined;
+  isOptional?: boolean;
+  aliasName?: string;
 };
+
+function normilizeOptions(options: TypeOptions): TypeOptions {
+  return {
+    isOptional: Boolean(options.isOptional),
+    aliasName: options.aliasName,
+  };
+}
 
 export class LiteralType {
   options: TypeOptions;
-  literal: string;
+  value: string | number | boolean | ts.PseudoBigInt;
   constructor(
     options: typeof this.options,
-    literal: typeof this.literal
+    value: typeof this.value
   ) {
-    this.options = options;
-    this.literal = literal;
+    this.options = normilizeOptions(options);
+    this.value = value;
   }
 }
 
@@ -25,7 +32,7 @@ export class PrimitiveType {
     options: typeof this.options,
     primitive: typeof this.primitive
   ) {
-    this.options = options;
+    this.options = normilizeOptions(options);
     this.primitive = primitive;
   }
 }
@@ -37,7 +44,7 @@ export class ObjectType {
     options: typeof this.options,
     attributes: typeof this.attributes
   ) {
-    this.options = options;
+    this.options = normilizeOptions(options);
     this.attributes = attributes;
   }
 }
@@ -87,11 +94,14 @@ export function typeToModel(
       { isOptional, aliasName },
       checker.typeToString(type)
     );
+  } else if (type.isLiteral()) {
+    // console.log(`- literal: ${checker.typeToString(type)}`);
+    return new LiteralType({ isOptional, aliasName }, type.value);
   } else if (tsTypeIsLiteral(type)) {
     // console.log(`- literal: ${checker.typeToString(type)}`);
     return new LiteralType(
       { isOptional, aliasName },
-      checker.typeToString(type)
+      JSON.parse(type.intrinsicName)
     );
   } else if (type.isUnion()) {
     // console.log(`- inion: ${checker.typeToString(type)}`);
@@ -125,11 +135,18 @@ function tsTypeIsPrimitive(type: ts.Type) {
   );
 }
 
-function tsTypeIsLiteral(type: ts.Type) {
+function tsTypeIsLiteral(type: ts.Type): type is IntrinsicType {
   return Boolean(
     type.flags &
       (ts.TypeFlags.StringLiteral |
         ts.TypeFlags.NumberLiteral |
         ts.TypeFlags.BooleanLiteral)
   );
+}
+
+// Stolen from TS sources
+interface IntrinsicType extends ts.Type {
+  intrinsicName: string; // Name of intrinsic type
+  debugIntrinsicName: string | undefined;
+  objectFlags: ts.ObjectFlags;
 }
