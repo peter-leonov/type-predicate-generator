@@ -9,6 +9,7 @@ import {
   typeToModel,
 } from "./model.mts";
 import { AttributeLocal, type Path, Scope } from "./scope.mts";
+import { unimplemented } from "./helpers.mts";
 
 function predicateFunction(
   argument: string,
@@ -260,10 +261,10 @@ class TypeGuardGenerator {
       ];
     }
 
-    throw new Error(`not implemented: ${type}`);
+    unimplemented(`${type}`);
   }
 
-  addTypeGuard(type: TypeModel): void {
+  addTypeGuardFor(type: TypeModel): void {
     const typeName = type.options.aliasName;
     ok(typeName);
 
@@ -342,7 +343,7 @@ function typeSafeCheckAssembly(
   if (type instanceof ObjectType) {
     initializer = typeSafeCheckObject(scope, path, type);
   } else {
-    throw new Error("not implemented");
+    unimplemented();
   }
 
   return [
@@ -410,7 +411,7 @@ function generateTypeGuards(
         checker.getDeclaredTypeOfSymbol(symbol)
       );
 
-      generator.addTypeGuard(model);
+      generator.addTypeGuardFor(model);
     });
 
     const resultFile = factory.updateSourceFile(

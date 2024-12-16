@@ -35,6 +35,7 @@ export class Scope {
   ): AttributeLocal {
     const key = JSON.stringify([...path, attribute_name]);
     if (this.#by_full_path.has(key)) {
+      console.error(this.#by_full_path);
       throw new Error(
         `a local with prefixed name ${key} already exists`
       );
@@ -83,7 +84,9 @@ export class Scope {
         return name2;
       }
     }
-    throw new Error(`too many unique locals of name ${name}`);
+    throw new Error(
+      `too many unique locals of name ${JSON.stringify(name)}`
+    );
   }
 
   list(): string[] {
