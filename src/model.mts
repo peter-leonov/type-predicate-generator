@@ -15,7 +15,13 @@ function normilizeOptions(options: TypeOptions): TypeOptions {
 
 export class LiteralType {
   options: TypeOptions;
-  value: string | number | boolean | ts.PseudoBigInt;
+  value:
+    | undefined
+    | null
+    | string
+    | number
+    | boolean
+    | ts.PseudoBigInt;
   constructor(
     options: typeof this.options,
     value: typeof this.value
@@ -101,7 +107,9 @@ export function typeToModel(
     // console.log(`- literal: ${checker.typeToString(type)}`);
     return new LiteralType(
       { isOptional, aliasName },
-      JSON.parse(type.intrinsicName)
+      type.intrinsicName === "undefined"
+        ? undefined
+        : JSON.parse(type.intrinsicName)
     );
   } else if (type.isUnion()) {
     // console.log(`- inion: ${checker.typeToString(type)}`);
@@ -140,7 +148,9 @@ function tsTypeIsLiteral(type: ts.Type): type is IntrinsicType {
     type.flags &
       (ts.TypeFlags.StringLiteral |
         ts.TypeFlags.NumberLiteral |
-        ts.TypeFlags.BooleanLiteral)
+        ts.TypeFlags.BooleanLiteral |
+        ts.TypeFlags.Null |
+        ts.TypeFlags.Undefined)
   );
 }
 

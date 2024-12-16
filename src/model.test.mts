@@ -52,6 +52,8 @@ test("object with primitive types", () => {
           a: number
           b: string
           c: boolean
+          d: null
+          e: undefined
         }
       `)
     )
@@ -62,6 +64,8 @@ test("object with primitive types", () => {
         a: new PrimitiveType({}, "number"),
         b: new PrimitiveType({}, "string"),
         c: new PrimitiveType({}, "boolean"),
+        d: new LiteralType({}, null),
+        e: new LiteralType({}, undefined),
       }
     )
   );
