@@ -1,9 +1,9 @@
-import * as ts from "typescript";
+import ts from "typescript";
 import { unimplemented } from "./helpers.mts";
 
 export type TypeOptions = {
   isOptional: boolean;
-  aliasName?: string;
+  aliasName: string | undefined;
 };
 
 export class LiteralType {

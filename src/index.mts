@@ -1,6 +1,5 @@
-import { inspect } from "node:util";
 import { ok } from "node:assert";
-import * as ts from "typescript";
+import ts from "typescript";
 import { factory } from "typescript";
 import {
   ObjectType,
@@ -376,10 +375,6 @@ function generateTypeGuards(
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();
 
-  const printer = ts.createPrinter({
-    newLine: ts.NewLineKind.LineFeed,
-  });
-
   // Visit every sourceFile in the program
   for (const sourceFile of program.getSourceFiles()) {
     if (sourceFile.isDeclarationFile) {
@@ -396,16 +391,6 @@ function generateTypeGuards(
 
       let symbol = checker.getSymbolAtLocation(node.name);
       ok(symbol);
-      // console.log(
-      //   inspect(
-      //     typeToModel(
-      //       checker,
-      //       checker.getDeclaredTypeOfSymbol(symbol)
-      //     ),
-      //     { depth: null }
-      //   )
-      // );
-
       const model = typeToModel(
         checker,
         checker.getDeclaredTypeOfSymbol(symbol)
@@ -424,11 +409,15 @@ function generateTypeGuards(
       ),
       generator.getGuards()
     );
+
+    const printer = ts.createPrinter({
+      newLine: ts.NewLineKind.LineFeed,
+    });
     console.log(printer.printFile(resultFile));
   }
 }
 
 generateTypeGuards(process.argv.slice(2), {
-  target: ts.ScriptTarget.ES5,
-  module: ts.ModuleKind.CommonJS,
+  target: ts.ScriptTarget.ESNext,
+  module: ts.ModuleKind.ESNext,
 });
