@@ -8,6 +8,96 @@ import {
 } from "./model.mts";
 import { compile } from "./tests_helpers.mts";
 
+test("undefined", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = undefined
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, undefined));
+});
+
+test("null", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = null
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, null));
+});
+
+test("true", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = true
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, true));
+});
+
+test("false", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = false
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, false));
+});
+
+test("1", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = 1
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, 1));
+});
+
+test('"foo"', () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = "foo"
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, "foo"));
+});
+
+test("number", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = number
+      `)
+    )
+  ).toEqual(new PrimitiveType({ aliasName: "X" }, "number"));
+});
+
+test("string", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = string
+      `)
+    )
+  ).toEqual(new PrimitiveType({ aliasName: "X" }, "string"));
+});
+
+test("boolean", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = boolean
+      `)
+    )
+  ).toEqual(new PrimitiveType({ aliasName: "X" }, "boolean"));
+});
+
 test("empty object", () => {
   expect(
     typeToModel(

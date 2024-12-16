@@ -76,21 +76,29 @@ export type TypeModel =
 export function typeToModel(
   checker: ts.TypeChecker,
   type: ts.Type,
-  isOptional: boolean = false
+  symbol: ts.Symbol | null
 ): TypeModel {
-  const aliasName = type.aliasSymbol?.escapedName.toString();
+  const isOptional = symbol ? isSymbolOptional(symbol) : false;
+  // const type = tsSymbolIsTypeAlias(symbol) ? checker.getDeclaredTypeOfSymbol(symbol) : checker.getTypeOfSymbol(symbol)
+
+  // Unf. `type.aliasSymbol` is not defined for common types like `undefined`.
+  // Monkey patching does not work as the same type object is reused.
+  // So, passing the defining symbol with the defined type.
+  const aliasName = symbol
+    ? tsSymbolIsTypeAlias(symbol)
+      ? symbol.escapedName.toString()
+      : undefined
+    : undefined;
+
   if (tsTypeIsObject(type)) {
     const attributes: Record<string, TypeModel> = {};
     // console.log(`- object: ${checker.typeToString(type)}`);
-    if (type.aliasSymbol) {
-      // console.log("escapedName", type.aliasSymbol.escapedName);
-    }
     for (const attr of checker.getPropertiesOfType(type)) {
       // console.log(`- attr: ${attr.escapedName}`);
       attributes[String(attr.escapedName)] = typeToModel(
         checker,
         checker.getTypeOfSymbol(attr),
-        isSymbolOptional(attr)
+        attr
       );
     }
     return new ObjectType({ isOptional, aliasName }, attributes);
@@ -117,7 +125,7 @@ export function typeToModel(
       { isOptional, aliasName },
       type.types.map((member) => {
         // console.log(`- member`);
-        return typeToModel(checker, member);
+        return typeToModel(checker, member, null);
       })
     );
   }
@@ -159,4 +167,8 @@ interface IntrinsicType extends ts.Type {
   intrinsicName: string; // Name of intrinsic type
   debugIntrinsicName: string | undefined;
   objectFlags: ts.ObjectFlags;
+}
+
+function tsSymbolIsTypeAlias(s: ts.Symbol) {
+  return Boolean(s.flags & ts.SymbolFlags.TypeAlias);
 }

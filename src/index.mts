@@ -393,7 +393,8 @@ function generateTypeGuards(
       ok(symbol);
       const model = typeToModel(
         checker,
-        checker.getDeclaredTypeOfSymbol(symbol)
+        checker.getDeclaredTypeOfSymbol(symbol),
+        symbol
       );
 
       generator.addTypeGuardFor(model);

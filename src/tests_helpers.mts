@@ -2,9 +2,9 @@ import ts from "typescript";
 import { unimplemented } from "./helpers.mts";
 import { ok } from "assert";
 
-type Compiled = [ts.TypeChecker, ts.Type];
-
-export function compile(source: string): Compiled {
+export function compile(
+  source: string
+): [ts.TypeChecker, ts.Type, ts.Symbol] {
   const file_name = "/source.ts";
   const file = ts.createSourceFile(
     file_name,
@@ -44,17 +44,19 @@ export function compile(source: string): Compiled {
 
   const checker = program.getTypeChecker();
 
-  let type: ts.Type | null = null;
+  let type: ts.Type | undefined;
+  let symbol: ts.Symbol | undefined;
   ts.forEachChild(sourceFile, (node) => {
     if (!ts.isTypeAliasDeclaration(node)) {
       return;
     }
 
-    const symbol = checker.getSymbolAtLocation(node.name);
+    symbol = checker.getSymbolAtLocation(node.name);
     ok(symbol);
     type = checker.getDeclaredTypeOfSymbol(symbol);
   });
 
   ok(type);
-  return [checker, type];
+  ok(symbol);
+  return [checker, type, symbol];
 }
