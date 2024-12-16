@@ -477,7 +477,7 @@ function typeGuard(type: TypeModel): ts.Statement {
       [typeName],
       type
     ),
-    ...assertAreNotNever(scope.list()),
+    // ...assertAreNotNever(scope.list()),
     ...typeSafeCheckAssembly(scope, [root], typeName, type),
   ]);
 }
@@ -582,30 +582,33 @@ function generateTypeGuards(
 
       let symbol = checker.getSymbolAtLocation(node.name);
       ok(symbol);
-      console.log(
-        inspect(
-          typeToModel(
-            checker,
-            checker.getDeclaredTypeOfSymbol(symbol)
-          ),
-          { depth: null }
-        )
+      // console.log(
+      //   inspect(
+      //     typeToModel(
+      //       checker,
+      //       checker.getDeclaredTypeOfSymbol(symbol)
+      //     ),
+      //     { depth: null }
+      //   )
+      // );
+
+      const model = typeToModel(
+        checker,
+        checker.getDeclaredTypeOfSymbol(symbol)
       );
 
-      // printSymbol(symbol);
-
-      // const guard = typeGuard(checker, type);
-      // const resultFile = factory.updateSourceFile(
-      //   ts.createSourceFile(
-      //     "guards.ts",
-      //     "",
-      //     ts.ScriptTarget.Latest,
-      //     /*setParentNodes*/ false,
-      //     ts.ScriptKind.TS
-      //   ),
-      //   [guard]
-      // );
-      // console.log(printer.printFile(resultFile));
+      const guard = typeGuard(model);
+      const resultFile = factory.updateSourceFile(
+        ts.createSourceFile(
+          "guards.ts",
+          "",
+          ts.ScriptTarget.Latest,
+          /*setParentNodes*/ false,
+          ts.ScriptKind.TS
+        ),
+        [guard]
+      );
+      console.log(printer.printFile(resultFile));
     });
   }
 }

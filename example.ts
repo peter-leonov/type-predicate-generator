@@ -4,7 +4,7 @@ type Car = {
 
 type MyUser = {
   optional?: number;
-  either: number | boolean;
+  // either: number | boolean;
   nested: {
     foo: string;
   };
