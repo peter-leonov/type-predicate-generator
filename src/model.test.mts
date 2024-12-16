@@ -98,6 +98,71 @@ test("boolean", () => {
   ).toEqual(new PrimitiveType({ aliasName: "X" }, "boolean"));
 });
 
+test("union of primitive types", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = number | string
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new PrimitiveType({}, "string"),
+      new PrimitiveType({}, "number"),
+    ])
+  );
+});
+
+test("union of different object types", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = { a: string } | { b: number }
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new ObjectType(
+        {},
+        {
+          a: new PrimitiveType({}, "string"),
+        }
+      ),
+      new ObjectType(
+        {},
+        {
+          b: new PrimitiveType({}, "number"),
+        }
+      ),
+    ])
+  );
+});
+
+test("union of same object types", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = { a: string } | { a: string }
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new ObjectType(
+        {},
+        {
+          a: new PrimitiveType({}, "string"),
+        }
+      ),
+      new ObjectType(
+        {},
+        {
+          a: new PrimitiveType({}, "string"),
+        }
+      ),
+    ])
+  );
+});
+
 test("empty object", () => {
   expect(
     typeToModel(
