@@ -3,6 +3,12 @@ import { TypeGuardGenerator } from "./generator.mts";
 import { LiteralType, ObjectType, PrimitiveType } from "./model.mts";
 import { printNodes } from "./tests_helpers.mts";
 
+test("null", () => {
+  const tgg = new TypeGuardGenerator();
+  tgg.addTypeGuardFor(new LiteralType({ aliasName: "X" }, null));
+  expect(printNodes(tgg.getGuards())).toMatchSnapshot();
+});
+
 test("object with primitive types", () => {
   const tgg = new TypeGuardGenerator();
   tgg.addTypeGuardFor(

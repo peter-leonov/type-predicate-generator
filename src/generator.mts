@@ -2,6 +2,7 @@ import ts from "typescript";
 import { factory } from "typescript";
 import { AttributeLocal, type Path, Scope } from "./scope.mts";
 import {
+  LiteralType,
   ObjectType,
   PrimitiveType,
   type TypeModel,
@@ -59,6 +60,10 @@ export class TypeGuardGenerator {
       return [
         ...assertPrimitiveType(target.local_name, type.primitive),
       ];
+    } else if (type instanceof LiteralType) {
+      return [
+        ...assertPrimitiveType(target.local_name, "type.primitive"),
+      ];
     }
 
     unimplemented(`${type}`);
@@ -84,7 +89,7 @@ export class TypeGuardGenerator {
         type
       ),
       // ...assertAreNotNever(scope.list()),
-      ...typeSafeCheckAssembly(scope, [root], typeName, type),
+      ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
     ]);
 
     this.guards.push(guard);
@@ -249,6 +254,7 @@ function typeSafeCheckObject(
 
 function typeSafeCheckAssembly(
   scope: Scope,
+  target: string,
   path: Path,
   typeName: string,
   type: TypeModel
@@ -263,7 +269,7 @@ function typeSafeCheckAssembly(
   if (type instanceof ObjectType) {
     initializer = typeSafeCheckObject(scope, path, type);
   } else {
-    unimplemented();
+    initializer = factory.createIdentifier(target);
   }
 
   return [

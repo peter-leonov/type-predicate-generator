@@ -1,5 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`null 1`] = `
+"function isX(root: unknown): root is X {
+    if (!(typeof root === "type.primitive")) {
+        return false;
+    }
+    const _root_type_assertion: X = root;
+}
+"
+`;
+
 exports[`object with primitive types 1`] = `
 "function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
