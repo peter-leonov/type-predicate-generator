@@ -1,25 +1,36 @@
 import { expect, test } from "vitest";
 import { TypeGuardGenerator } from "./generator.mts";
-import { LiteralType, ObjectType, PrimitiveType } from "./model.mts";
+import {
+  LiteralType,
+  ObjectType,
+  PrimitiveType,
+  TypeModel,
+} from "./model.mts";
 import { printNodes } from "./tests_helpers.mts";
 
-test("null", () => {
+export function generate(model: TypeModel): string {
   const tgg = new TypeGuardGenerator();
-  tgg.addTypeGuardFor(new LiteralType({ aliasName: "X" }, null));
-  expect(printNodes(tgg.getGuards())).toMatchSnapshot();
+  tgg.addTypeGuardFor(model);
+  return printNodes(tgg.getGuards());
+}
+
+test("null", () => {
+  expect(
+    generate(new LiteralType({ aliasName: "X" }, null))
+  ).toMatchSnapshot();
 });
 
 test("object with primitive types", () => {
-  const tgg = new TypeGuardGenerator();
-  tgg.addTypeGuardFor(
-    new ObjectType(
-      { aliasName: "X" },
-      {
-        a: new PrimitiveType({}, "number"),
-        b: new PrimitiveType({}, "string"),
-        c: new PrimitiveType({}, "boolean"),
-      }
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          a: new PrimitiveType({}, "number"),
+          b: new PrimitiveType({}, "string"),
+          c: new PrimitiveType({}, "boolean"),
+        }
+      )
     )
-  );
-  expect(printNodes(tgg.getGuards())).toMatchSnapshot();
+  ).toMatchSnapshot();
 });
