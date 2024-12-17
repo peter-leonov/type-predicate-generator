@@ -113,6 +113,23 @@ test("union of primitive types", () => {
   );
 });
 
+test.only("a nested union", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = 1 | (2 | (3 | 4))
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new LiteralType({}, 1),
+      new LiteralType({}, 2),
+      new LiteralType({}, 3),
+      new LiteralType({}, 4),
+    ])
+  );
+});
+
 test("union of different object types", () => {
   expect(
     typeToModel(
