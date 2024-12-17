@@ -20,6 +20,8 @@ What this tool does in its own way is using an intermediate type representation 
 
 Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 
+Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces extra code for `X` where it would be just a shared guard function like `const isX = isY` or `function isX(…) { return isY() }`.
+
 ## Tools used
 
 - Foundational [ts-ast-viewer.com](https://ts-ast-viewer.com/)

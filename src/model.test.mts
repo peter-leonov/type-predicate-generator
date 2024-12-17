@@ -5,6 +5,7 @@ import {
   PrimitiveType,
   LiteralType,
   UnionType,
+  ReferenceType,
 } from "./model.mts";
 import { compile } from "./tests_helpers.mts";
 
@@ -362,6 +363,55 @@ test("object with a complex union type", () => {
           new LiteralType({}, 2),
           new ObjectType({}, { b: new PrimitiveType({}, "string") }),
         ]),
+      }
+    )
+  );
+});
+
+test("trivial existing type alias", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type Y = 1
+        type X = Y
+      `)
+    )
+  ).toEqual(new LiteralType({ aliasName: "X" }, 1));
+});
+
+test("reference type in a union", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type A = { a: 1 }
+        type X = number | A
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new PrimitiveType({}, "number"),
+      new ReferenceType({ aliasName: "A" }, "A"),
+    ])
+  );
+});
+
+test("reference type in an object", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type A = { a: 1 }
+        type X = {
+          a: A,
+          b: B
+        }
+      `)
+    )
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new ReferenceType({ aliasName: "A" }, "A"),
+        b: new ReferenceType({ aliasName: "B" }, "B"),
       }
     )
   );

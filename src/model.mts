@@ -67,28 +67,65 @@ export class UnionType {
   }
 }
 
+export class ReferenceType {
+  options: TypeOptions;
+  name: string;
+  constructor(options: typeof this.options, name: typeof this.name) {
+    this.options = normilizeOptions(options);
+    this.name = name;
+  }
+}
+
 export type TypeModel =
   | LiteralType
   | PrimitiveType
   | ObjectType
-  | UnionType;
+  | UnionType
+  | ReferenceType;
 
 export function typeToModel(
   checker: ts.TypeChecker,
   type: ts.Type,
-  symbol: ts.Symbol | null
+  symbol: ts.Symbol | null,
+  depth: number = 0
 ): TypeModel {
   const isOptional = symbol ? isSymbolOptional(symbol) : false;
-  // const type = tsSymbolIsTypeAlias(symbol) ? checker.getDeclaredTypeOfSymbol(symbol) : checker.getTypeOfSymbol(symbol)
+  // const type = tsSymbolIsTypeAlias(symbol)
+  //   ? checker.getDeclaredTypeOfSymbol(symbol)
+  //   : checker.getTypeOfSymbol(symbol);
 
-  // Unf. `type.aliasSymbol` is not defined for common types like `undefined`.
-  // Monkey patching does not work as the same type object is reused.
-  // So, passing the defining symbol with the defined type.
-  const aliasName = symbol
-    ? tsSymbolIsTypeAlias(symbol)
-      ? symbol.escapedName.toString()
-      : undefined
-    : undefined;
+  // The `type.aliasSymbol` is not defined for common types like `undefined`.
+  // Monkey patching does not work as the same type object is reused everywhere.
+  // This is not an issue for nested types as using a dedicated guard for
+  // a primitive type like `null` is not desired.
+  // For example for:
+  //   type A = null
+  //   type X = { a: A }
+  // we don't want to use `isA(a)` where a simple `a === null` could do.
+
+  // The issue with `type.aliasSymbol` being undefined arises only when
+  // this is the root type as this way we're loosing the actual type name.
+  // For example in:
+  //   type X = null
+  // the `type.aliasSymbol` is missing in type of `X`. So for the root type
+  // we're also manually passing the defining symbol around.
+
+  if (depth >= 1) {
+    // For nested references
+    const { aliasSymbol } = type;
+    if (aliasSymbol) {
+      const aliasName = aliasSymbol.escapedName.toString();
+      return new ReferenceType({ isOptional, aliasName }, aliasName);
+    }
+  }
+
+  let aliasName: string | undefined = undefined;
+  // For the root
+  if (depth == 0) {
+    aliasName = symbol?.escapedName.toString();
+  }
+
+  // const aliasName = type.aliasSymbol?.escapedName.toString();
 
   if (tsTypeIsObject(type)) {
     const attributes: Record<string, TypeModel> = {};
@@ -98,7 +135,8 @@ export function typeToModel(
       attributes[String(attr.escapedName)] = typeToModel(
         checker,
         checker.getTypeOfSymbol(attr),
-        attr
+        attr,
+        depth + 1
       );
     }
     return new ObjectType({ isOptional, aliasName }, attributes);
@@ -125,7 +163,7 @@ export function typeToModel(
       { isOptional, aliasName },
       type.types.map((member) => {
         // console.log(`- member`);
-        return typeToModel(checker, member, null);
+        return typeToModel(checker, member, null, depth + 1);
       })
     );
   }

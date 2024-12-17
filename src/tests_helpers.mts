@@ -42,6 +42,7 @@ export function compile(
 
   const checker = program.getTypeChecker();
 
+  // This finds the LAST type definition in the source.
   let symbol: ts.Symbol | undefined;
   ts.forEachChild(sourceFile, (node) => {
     if (!ts.isTypeAliasDeclaration(node)) {
@@ -49,7 +50,6 @@ export function compile(
     }
 
     symbol = checker.getSymbolAtLocation(node.name);
-    ok(symbol);
   });
 
   ok(symbol);
