@@ -16,6 +16,10 @@ This tool is simple if not trivial. The code generator uses the TypeScript publi
 
 What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type). The parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed into the generator to actually produce the resulting TS code. This way both subsystems can be developed and tested independently. This resembles very much the `ViewModel` approach from the MVC web frameworks.
 
+## Limitations
+
+Expects `strict: true`, otherwise every type is nullable which defends the purpose.
+
 ## Tools used
 
 - Foundational [ts-ast-viewer.com](https://ts-ast-viewer.com/)

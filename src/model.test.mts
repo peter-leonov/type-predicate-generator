@@ -113,7 +113,7 @@ test("union of primitive types", () => {
   );
 });
 
-test.only("a nested union", () => {
+test("a nested union", () => {
   expect(
     typeToModel(
       ...compile(`
@@ -126,6 +126,22 @@ test.only("a nested union", () => {
       new LiteralType({}, 2),
       new LiteralType({}, 3),
       new LiteralType({}, 4),
+    ])
+  );
+});
+
+test("nullable string", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = string | null | undefined
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new LiteralType({}, undefined),
+      new LiteralType({}, null),
+      new PrimitiveType({}, "string"),
     ])
   );
 });
@@ -208,9 +224,15 @@ test("object with optional and non-optional props", () => {
       { aliasName: "X" },
       {
         a: new PrimitiveType({}, "number"),
-        b: new PrimitiveType({ isOptional: true }, "number"),
+        b: new UnionType({ isOptional: true }, [
+          new LiteralType({}, undefined),
+          new PrimitiveType({}, "number"),
+        ]),
         c: new PrimitiveType({}, "number"),
-        d: new PrimitiveType({ isOptional: true }, "number"),
+        d: new UnionType({ isOptional: true }, [
+          new LiteralType({}, undefined),
+          new PrimitiveType({}, "number"),
+        ]),
       }
     )
   );

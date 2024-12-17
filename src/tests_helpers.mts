@@ -32,6 +32,7 @@ export function compile(
     {
       target: ts.ScriptTarget.ESNext,
       module: ts.ModuleKind.ESNext,
+      strict: true,
     },
     compilerHost
   );
