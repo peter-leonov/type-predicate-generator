@@ -58,11 +58,13 @@ export class TypeGuardGenerator {
         }),
       ];
     } else if (type instanceof PrimitiveType) {
-      return [
-        ...assertPrimitiveType(target.local_name, type.primitive),
-      ];
+      return ifNotReturnFalse(
+        assertionConditionForType(target.local_name, type)
+      );
     } else if (type instanceof LiteralType) {
-      return [...assertLiteralType(target.local_name, type.value)];
+      return ifNotReturnFalse(
+        assertionConditionForType(target.local_name, type)
+      );
     } else if (type instanceof UnionType) {
       // A union is a set of at least two types.
       assert(type.types.length >= 2);
@@ -279,35 +281,6 @@ function objectSpread(
   ];
 }
 
-function assertPrimitiveType(
-  target: string,
-  type: string
-): ts.Statement[] {
-  return [
-    factory.createIfStatement(
-      factory.createPrefixUnaryExpression(
-        ts.SyntaxKind.ExclamationToken,
-        factory.createParenthesizedExpression(
-          factory.createBinaryExpression(
-            factory.createTypeOfExpression(
-              factory.createIdentifier(target)
-            ),
-            factory.createToken(
-              ts.SyntaxKind.EqualsEqualsEqualsToken
-            ),
-            factory.createStringLiteral(type)
-          )
-        )
-      ),
-      factory.createBlock(
-        [factory.createReturnStatement(factory.createFalse())],
-        true
-      ),
-      undefined
-    ),
-  ];
-}
-
 type LiteralValue =
   | undefined
   | null
@@ -325,33 +298,6 @@ function valueToNode(value: LiteralValue): ts.Expression {
   }
 
   unimplemented();
-}
-
-function assertLiteralType(
-  target: string,
-  value: LiteralValue
-): ts.Statement[] {
-  return [
-    factory.createIfStatement(
-      factory.createPrefixUnaryExpression(
-        ts.SyntaxKind.ExclamationToken,
-        factory.createParenthesizedExpression(
-          factory.createBinaryExpression(
-            factory.createIdentifier(target),
-            factory.createToken(
-              ts.SyntaxKind.EqualsEqualsEqualsToken
-            ),
-            valueToNode(value)
-          )
-        )
-      ),
-      factory.createBlock(
-        [factory.createReturnStatement(factory.createFalse())],
-        true
-      ),
-      undefined
-    ),
-  ];
 }
 
 function typePathToTypeSelector(path: string[]): string {
