@@ -2,7 +2,7 @@
 
 exports[`null 1`] = `
 "function isX(root: unknown): root is X {
-    if (!(typeof root === "type.primitive")) {
+    if (!(root === null)) {
         return false;
     }
     const _root_type_assertion: X = root;
@@ -30,6 +30,16 @@ exports[`object with primitive types 1`] = `
         b,
         c
     };
+}
+"
+`;
+
+exports[`undefined 1`] = `
+"function isX(root: unknown): root is X {
+    if (!(root === undefined)) {
+        return false;
+    }
+    const _root_type_assertion: X = root;
 }
 "
 `;

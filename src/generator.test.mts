@@ -14,6 +14,12 @@ export function generate(model: TypeModel): string {
   return printNodes(tgg.getGuards());
 }
 
+test("undefined", () => {
+  expect(
+    generate(new LiteralType({ aliasName: "X" }, undefined))
+  ).toMatchSnapshot();
+});
+
 test("null", () => {
   expect(
     generate(new LiteralType({ aliasName: "X" }, null))

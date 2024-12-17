@@ -61,9 +61,7 @@ export class TypeGuardGenerator {
         ...assertPrimitiveType(target.local_name, type.primitive),
       ];
     } else if (type instanceof LiteralType) {
-      return [
-        ...assertPrimitiveType(target.local_name, "type.primitive"),
-      ];
+      return [...assertLiteralType(target.local_name, type.value)];
     }
 
     unimplemented(`${type}`);
@@ -200,6 +198,52 @@ function assertPrimitiveType(
               ts.SyntaxKind.EqualsEqualsEqualsToken
             ),
             factory.createStringLiteral(type)
+          )
+        )
+      ),
+      factory.createBlock(
+        [factory.createReturnStatement(factory.createFalse())],
+        true
+      ),
+      undefined
+    ),
+  ];
+}
+
+type LiteralValue =
+  | undefined
+  | null
+  | string
+  | number
+  | boolean
+  | ts.PseudoBigInt;
+
+function valueToNode(value: LiteralValue): ts.Expression {
+  if (value === null) {
+    return factory.createNull();
+  }
+  if (value === undefined) {
+    return factory.createIdentifier("undefined");
+  }
+
+  unimplemented();
+}
+
+function assertLiteralType(
+  target: string,
+  value: LiteralValue
+): ts.Statement[] {
+  return [
+    factory.createIfStatement(
+      factory.createPrefixUnaryExpression(
+        ts.SyntaxKind.ExclamationToken,
+        factory.createParenthesizedExpression(
+          factory.createBinaryExpression(
+            factory.createIdentifier(target),
+            factory.createToken(
+              ts.SyntaxKind.EqualsEqualsEqualsToken
+            ),
+            valueToNode(value)
           )
         )
       ),
