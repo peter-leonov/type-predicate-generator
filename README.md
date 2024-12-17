@@ -18,10 +18,11 @@ What this tool does in its own way is using an intermediate type representation 
 
 ## Tools used
 
-- [https://ts-ast-viewer.com/]
+- Foundational [ts-ast-viewer.com](https://ts-ast-viewer.com/)
+- Useful [esbuild minifier](https://esbuild.github.io/try/)
 
 ## Prior art
 
-- [https://github.com/rhys-vdw/ts-auto-guard]
-- [https://github.com/GoogleFeud/ts-runtime-checks]
-- [https://github.com/samchon/typia]
+- Inspiring [ts-auto-guard](https://github.com/rhys-vdw/ts-auto-guard)
+- Groundbreaking [ts-runtime-checks](https://github.com/GoogleFeud/ts-runtime-checks)
+- Impressive [typia](https://github.com/samchon/typia)
