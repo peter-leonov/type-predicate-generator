@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`object with primitive types 1`] = `
+"function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    const { a, b, c }: SafeShallowShape<X> = root;
+    if (!(typeof a === "number")) {
+        return false;
+    }
+    if (!(typeof b === "string")) {
+        return false;
+    }
+    if (!(typeof c === "boolean")) {
+        return false;
+    }
+    const _root_type_assertion: X = {
+        a,
+        b,
+        c
+    };
+}
+"
+`;

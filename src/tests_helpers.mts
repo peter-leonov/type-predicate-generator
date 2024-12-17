@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { factory } from "typescript";
 import { unimplemented } from "./helpers.mts";
 import { ok } from "assert";
 
@@ -53,4 +54,22 @@ export function compile(
   ok(symbol);
   const type = checker.getDeclaredTypeOfSymbol(symbol);
   return [checker, type, symbol];
+}
+
+export function printNodes(nodes: ts.Statement[]): string {
+  const resultFile = factory.updateSourceFile(
+    ts.createSourceFile(
+      "guards.ts",
+      "",
+      ts.ScriptTarget.Latest,
+      /*setParentNodes*/ false,
+      ts.ScriptKind.TS
+    ),
+    nodes
+  );
+
+  const printer = ts.createPrinter({
+    newLine: ts.NewLineKind.LineFeed,
+  });
+  return printer.printFile(resultFile);
 }

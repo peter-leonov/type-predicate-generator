@@ -64,6 +64,9 @@ export class TypeGuardGenerator {
     unimplemented(`${type}`);
   }
 
+  /**
+   * It's a method because it's suppored to call itself for referenced types.
+   */
   addTypeGuardFor(type: TypeModel): void {
     const typeName = type.options.aliasName;
     ok(typeName);
