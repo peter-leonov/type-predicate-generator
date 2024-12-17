@@ -43,3 +43,13 @@ exports[`undefined 1`] = `
 }
 "
 `;
+
+exports[`union of primitive and literal types 1`] = `
+"function isUnion(root: unknown): root is Union {
+    if (!((typeof root === "string") || (typeof root === "number") || (root === null))) {
+        return false;
+    }
+    const _root_type_assertion: Union = root;
+}
+"
+`;

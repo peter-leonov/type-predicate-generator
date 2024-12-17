@@ -5,6 +5,7 @@ import {
   ObjectType,
   PrimitiveType,
   TypeModel,
+  UnionType,
 } from "./model.mts";
 import { printNodes } from "./tests_helpers.mts";
 
@@ -23,6 +24,18 @@ test("undefined", () => {
 test("null", () => {
   expect(
     generate(new LiteralType({ aliasName: "X" }, null))
+  ).toMatchSnapshot();
+});
+
+test("union of primitive and literal types", () => {
+  expect(
+    generate(
+      new UnionType({ aliasName: "Union" }, [
+        new PrimitiveType({}, "string"),
+        new PrimitiveType({}, "number"),
+        new LiteralType({ aliasName: "X" }, null),
+      ])
+    )
   ).toMatchSnapshot();
 });
 

@@ -5,9 +5,10 @@ import {
   LiteralType,
   ObjectType,
   PrimitiveType,
+  UnionType,
   type TypeModel,
 } from "./model.mts";
-import { ok } from "node:assert";
+import assert, { ok } from "node:assert";
 import { unimplemented } from "./helpers.mts";
 
 export class TypeGuardGenerator {
@@ -62,9 +63,20 @@ export class TypeGuardGenerator {
       ];
     } else if (type instanceof LiteralType) {
       return [...assertLiteralType(target.local_name, type.value)];
+    } else if (type instanceof UnionType) {
+      // A union is a set of at least two types.
+      assert(type.types.length >= 2);
+      // Nested unions look like an error and are not supported.
+      assert(!type.types.some((t) => t instanceof UnionType));
+      const ors = wrapListInOr(
+        type.types.map((t) =>
+          assertionConditionForType(target.local_name, t)
+        )
+      );
+      return ifNotReturnFalse(ors);
     }
 
-    unimplemented(`${type}`);
+    unimplemented(`${(type as Object)?.constructor.name}`);
   }
 
   /**
@@ -96,6 +108,92 @@ export class TypeGuardGenerator {
   getGuards(): ts.Statement[] {
     return this.guards;
   }
+}
+
+function assertionConditionForType(
+  target: string,
+  type: TypeModel
+): ts.Expression {
+  if (type instanceof PrimitiveType) {
+    return factory.createBinaryExpression(
+      factory.createTypeOfExpression(
+        factory.createIdentifier(target)
+      ),
+      factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+      factory.createStringLiteral(type.primitive)
+    );
+  }
+
+  if (type instanceof LiteralType) {
+    return factory.createBinaryExpression(
+      factory.createIdentifier(target),
+      factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+      valueToNode(type.value)
+    );
+  }
+
+  if (type instanceof UnionType) {
+    throw new TypeError(`${type.constructor.name} is invalid here`);
+  }
+
+  if (type instanceof ObjectType) {
+    throw new TypeError(`${type.constructor.name} is invalid here`);
+  }
+
+  unimplemented(`${(type as Object).constructor.name}`);
+}
+
+function ifNotReturnFalse(
+  negatedCondition: ts.Expression
+): ts.Statement[] {
+  return [
+    factory.createIfStatement(
+      factory.createPrefixUnaryExpression(
+        ts.SyntaxKind.ExclamationToken,
+        factory.createParenthesizedExpression(negatedCondition)
+      ),
+      factory.createBlock(
+        [factory.createReturnStatement(factory.createFalse())],
+        true
+      ),
+      undefined
+    ),
+  ];
+}
+
+function or(
+  left: ts.Expression,
+  right: ts.Expression
+): ts.Expression {
+  return factory.createBinaryExpression(
+    left,
+    factory.createToken(ts.SyntaxKind.BarBarToken),
+    right
+  );
+}
+
+function wrapRestInOr(head: ts.Expression, list: ts.Expression[]) {
+  if (list.length == 0) {
+    return head;
+  }
+
+  const [next, ...rest] = list;
+  ok(next);
+  return wrapRestInOr(or(head, parens(next)), rest);
+}
+
+function wrapListInOr(list: ts.Expression[]) {
+  assert(list.length >= 2);
+  const [first, second, ...rest] = list;
+  ok(first);
+  ok(second);
+
+  const head = or(parens(first), parens(second));
+  return wrapRestInOr(head, rest);
+}
+
+function parens(e: ts.Expression): ts.Expression {
+  return factory.createParenthesizedExpression(e);
 }
 
 function assertIsObject(target: string): ts.Statement[] {
