@@ -66,16 +66,9 @@ export class TypeGuardGenerator {
         assertionConditionForType(target.local_name, type)
       );
     } else if (type instanceof UnionType) {
-      // A union is a set of at least two types.
-      assert(type.types.length >= 2);
-      // Nested unions look like an error and are not supported.
-      assert(!type.types.some((t) => t instanceof UnionType));
-      const ors = wrapListInOr(
-        type.types.map((t) =>
-          assertionConditionForType(target.local_name, t)
-        )
+      return ifNotReturnFalse(
+        assertionConditionForType(target.local_name, type)
       );
-      return ifNotReturnFalse(ors);
     }
 
     unimplemented(`${(type as Object)?.constructor.name}`);
@@ -135,7 +128,13 @@ function assertionConditionForType(
   }
 
   if (type instanceof UnionType) {
-    throw new TypeError(`${type.constructor.name} is invalid here`);
+    // A union is a set of at least two types.
+    assert(type.types.length >= 2);
+    // Nested unions look like an error and are not supported.
+    assert(!type.types.some((t) => t instanceof UnionType));
+    return wrapListInOr(
+      type.types.map((t) => assertionConditionForType(target, t))
+    );
   }
 
   if (type instanceof ObjectType) {
