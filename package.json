@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "generate": "NODE_NO_WARNINGS=1 node --experimental-strip-types src/index.mts example.ts"
   },
   "keywords": [],
   "author": "",

@@ -10,12 +10,47 @@ import {
 import { AttributeLocal, type Path, Scope } from "./scope.mts";
 import { TypeGuardGenerator } from "./generator.mts";
 
-function generateTypeGuards(
-  fileNames: string[],
-  options: ts.CompilerOptions
-): void {
+function generateTypeGuards(fileNames: string[]): boolean {
   // Build a program using the set of root file names in fileNames
-  let program = ts.createProgram(fileNames, options);
+  const program = ts.createProgram(fileNames, {
+    target: ts.ScriptTarget.ESNext,
+    module: ts.ModuleKind.ESNext,
+    strict: true,
+    noEmit: true,
+    isolatedModules: true,
+    // don't autoload all the types from the node_modules/@types
+    types: [],
+    // lib: ["lib.esnext.d.ts"],
+  });
+
+  const allDiagnostics = ts.getPreEmitDiagnostics(program);
+  if (allDiagnostics.length != 0) {
+    allDiagnostics.forEach((diagnostic) => {
+      var message = ts.flattenDiagnosticMessageText(
+        diagnostic.messageText,
+        "\n"
+      );
+      if (!diagnostic.file) {
+        console.log(message);
+        return;
+      }
+      var { line, character } =
+        diagnostic.file.getLineAndCharacterOfPosition(
+          diagnostic.start!
+        );
+      console.log(
+        `${diagnostic.file.fileName} (${line + 1},${
+          character + 1
+        }): ${message}`
+      );
+    });
+
+    console.error(
+      "ts.getPreEmitDiagnostics() found some issues listed above"
+    );
+    return false;
+  }
+
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();
 
@@ -60,9 +95,10 @@ function generateTypeGuards(
     });
     console.log(printer.printFile(resultFile));
   }
+
+  return true;
 }
 
-generateTypeGuards(process.argv.slice(2), {
-  target: ts.ScriptTarget.ESNext,
-  module: ts.ModuleKind.ESNext,
-});
+if (!generateTypeGuards(process.argv.slice(2))) {
+  process.exit(1);
+}

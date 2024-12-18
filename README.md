@@ -9,7 +9,7 @@ A generator for type safe TypeScript type guard function.
 ```console
 nvm install 22
 npm i
-node --experimental-strip-types src/index.mts example.ts
+npm run --silent generate
 ```
 
 ## Architecture
