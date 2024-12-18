@@ -1,8 +1,8 @@
-type Car = {
+export type Car = {
   brand: string;
 };
 
-type MyUser = {
+export type MyUser = {
   optional?: number;
   // either: number | boolean;
   nested: {

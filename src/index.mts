@@ -1,18 +1,12 @@
 import { ok } from "node:assert";
 import ts from "typescript";
 import { factory } from "typescript";
-import {
-  ObjectType,
-  PrimitiveType,
-  type TypeModel,
-  typeToModel,
-} from "./model.mts";
-import { AttributeLocal, type Path, Scope } from "./scope.mts";
+import { typeToModel } from "./model.mts";
 import { TypeGuardGenerator } from "./generator.mts";
 
-function generateTypeGuards(fileNames: string[]): boolean {
+function generateTypeGuards(fileName: string): boolean {
   // Build a program using the set of root file names in fileNames
-  const program = ts.createProgram(fileNames, {
+  const program = ts.createProgram([fileName], {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.ESNext,
     strict: true,
@@ -81,13 +75,13 @@ function generateTypeGuards(fileNames: string[]): boolean {
 
     const resultFile = factory.updateSourceFile(
       ts.createSourceFile(
-        "guards.ts",
+        `guards.ts`,
         "",
         ts.ScriptTarget.Latest,
         /*setParentNodes*/ false,
         ts.ScriptKind.TS
       ),
-      generator.getGuards()
+      generator.getFullFileBody(fileName)
     );
 
     const printer = ts.createPrinter({
@@ -99,6 +93,13 @@ function generateTypeGuards(fileNames: string[]): boolean {
   return true;
 }
 
-if (!generateTypeGuards(process.argv.slice(2))) {
+const fileName = process.argv.slice(2)[0];
+
+if (!fileName) {
+  console.error(`Usage: generator source.ts`);
   process.exit(1);
+} else {
+  if (!generateTypeGuards(fileName)) {
+    process.exit(1);
+  }
 }

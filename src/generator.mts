@@ -13,9 +13,9 @@ import assert, { ok } from "node:assert";
 import { unimplemented } from "./helpers.mts";
 
 export class TypeGuardGenerator {
-  guards: ts.Statement[];
+  guards: Map<string, ts.Statement>;
   constructor() {
-    this.guards = [];
+    this.guards = new Map();
   }
 
   getAssertionsForLocalVar(
@@ -92,14 +92,97 @@ export class TypeGuardGenerator {
       ),
       // ...assertAreNotNever(scope.list()),
       ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
+      returnTrue(),
     ]);
 
-    this.guards.push(guard);
+    this.guards.set(typeName, guard);
   }
 
   getGuards(): ts.Statement[] {
-    return this.guards;
+    return [...this.guards.values()];
   }
+
+  getTypeImports(sourceFileName: string): ts.Statement[] {
+    return [
+      factory.createImportDeclaration(
+        undefined,
+        factory.createImportClause(
+          false,
+          undefined,
+
+          factory.createNamedImports(
+            [...this.guards.keys()].map((className) => {
+              return factory.createImportSpecifier(
+                true,
+                undefined,
+                factory.createIdentifier(className)
+              );
+            })
+          )
+        ),
+        factory.createStringLiteral(sourceFileName),
+        undefined
+      ),
+    ];
+  }
+
+  getFullFileBody(sourceFileName: string): ts.Statement[] {
+    return [
+      ...this.getTypeImports(sourceFileName),
+      ...typeSafeShallowShape(),
+      ...this.getGuards(),
+    ];
+  }
+}
+
+function returnTrue(): ts.Statement {
+  return factory.createReturnStatement(factory.createTrue());
+}
+
+const SafeShallowShape = "SafeShallowShape";
+
+/**
+ * Returns:
+ * ```
+ * type SafeShallowShape<Type> = {
+ *  [_ in keyof Type]?: unknown;
+ * };
+ * ```
+ */
+function typeSafeShallowShape(): ts.Statement[] {
+  return [
+    factory.createTypeAliasDeclaration(
+      undefined,
+      factory.createIdentifier(SafeShallowShape),
+      [
+        factory.createTypeParameterDeclaration(
+          undefined,
+          factory.createIdentifier("Type"),
+          undefined,
+          undefined
+        ),
+      ],
+      factory.createMappedTypeNode(
+        undefined,
+        factory.createTypeParameterDeclaration(
+          undefined,
+          factory.createIdentifier("_"),
+          factory.createTypeOperatorNode(
+            ts.SyntaxKind.KeyOfKeyword,
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("Type"),
+              undefined
+            )
+          ),
+          undefined
+        ),
+        undefined,
+        factory.createToken(ts.SyntaxKind.QuestionToken),
+        factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+        undefined
+      )
+    ),
+  ];
 }
 
 function assertionConditionForType(
@@ -239,8 +322,6 @@ function assertIsObject(target: string): ts.Statement[] {
     ),
   ];
 }
-
-const SafeShallowShape = "SafeShallowShape";
 
 function objectSpread(
   target: string,
@@ -414,10 +495,8 @@ function predicateFunction(
   returnType: string,
   body: ts.Statement[]
 ): ts.Statement {
-  // createTempVariable
-
   return factory.createFunctionDeclaration(
-    undefined,
+    [factory.createToken(ts.SyntaxKind.ExportKeyword)],
     undefined,
     factory.createIdentifier(name),
     undefined,

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "generate": "NODE_NO_WARNINGS=1 node --experimental-strip-types src/index.mts example.ts"
+    "generate": "NODE_NO_WARNINGS=1 node --experimental-strip-types src/index.mts"
   },
   "keywords": [],
   "author": "",
