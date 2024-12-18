@@ -4,6 +4,7 @@ import {
   LiteralType,
   ObjectType,
   PrimitiveType,
+  ReferenceType,
   TypeModel,
   UnionType,
 } from "./model.mts";
@@ -33,7 +34,7 @@ test("union of primitive and literal types", () => {
       new UnionType({ aliasName: "Union" }, [
         new PrimitiveType({}, "string"),
         new PrimitiveType({}, "number"),
-        new LiteralType({ aliasName: "X" }, null),
+        new LiteralType({}, null),
       ])
     )
   ).toMatchSnapshot();
@@ -50,6 +51,31 @@ test("object with primitive types", () => {
           c: new PrimitiveType({}, "boolean"),
         }
       )
+    )
+  ).toMatchSnapshot();
+});
+
+test("reference type in an object", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          a: new ReferenceType({ aliasName: "A" }, "A"),
+          b: new ReferenceType({ aliasName: "B" }, "B"),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});
+
+test("reference type in a union", () => {
+  expect(
+    generate(
+      new UnionType({ aliasName: "X" }, [
+        new PrimitiveType({}, "number"),
+        new ReferenceType({ aliasName: "A" }, "A"),
+      ])
     )
   ).toMatchSnapshot();
 });

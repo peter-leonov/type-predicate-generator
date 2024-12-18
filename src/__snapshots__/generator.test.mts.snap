@@ -34,6 +34,36 @@ exports[`object with primitive types 1`] = `
 "
 `;
 
+exports[`reference type in a union 1`] = `
+"function isX(root: unknown): root is X {
+    if (!((typeof root === "number") || (isA(root)))) {
+        return false;
+    }
+    const _root_type_assertion: X = root;
+}
+"
+`;
+
+exports[`reference type in an object 1`] = `
+"function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    const { a, b }: SafeShallowShape<X> = root;
+    if (!(isA(a))) {
+        return false;
+    }
+    if (!(isB(b))) {
+        return false;
+    }
+    const _root_type_assertion: X = {
+        a,
+        b
+    };
+}
+"
+`;
+
 exports[`undefined 1`] = `
 "function isX(root: unknown): root is X {
     if (!(root === undefined)) {

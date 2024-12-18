@@ -5,6 +5,7 @@ import {
   LiteralType,
   ObjectType,
   PrimitiveType,
+  ReferenceType,
   UnionType,
   type TypeModel,
 } from "./model.mts";
@@ -26,15 +27,11 @@ export class TypeGuardGenerator {
   ): ts.Statement[] {
     const targetPath = [...path, target.attribute_name];
 
-    // for the non-root type
-    if (path.length >= 1) {
-      const { aliasName } = type.options;
-      if (aliasName) {
-        return assertNamedType(target.local_name, aliasName);
-      }
-    }
-
-    if (type instanceof ObjectType) {
+    if (type instanceof ReferenceType) {
+      return ifNotReturnFalse(
+        assertionConditionForType(target.local_name, type)
+      );
+    } else if (type instanceof ObjectType) {
       const entries = Object.entries(type.attributes).map(
         ([attr, type]) =>
           [scope.createAttribute(targetPath, attr), type] as const
@@ -109,6 +106,14 @@ function assertionConditionForType(
   target: string,
   type: TypeModel
 ): ts.Expression {
+  if (type instanceof ReferenceType) {
+    return factory.createCallExpression(
+      factory.createIdentifier(`is${type.name}`),
+      undefined,
+      [factory.createIdentifier(target)]
+    );
+  }
+
   if (type instanceof PrimitiveType) {
     return factory.createBinaryExpression(
       factory.createTypeOfExpression(
@@ -436,27 +441,4 @@ function predicateFunction(
     ),
     factory.createBlock(body, true)
   );
-}
-
-function assertNamedType(
-  target: string,
-  type: string
-): ts.Statement[] {
-  return [
-    factory.createIfStatement(
-      factory.createPrefixUnaryExpression(
-        ts.SyntaxKind.ExclamationToken,
-        factory.createCallExpression(
-          factory.createIdentifier(`is${type}`),
-          undefined,
-          [factory.createIdentifier(target)]
-        )
-      ),
-      factory.createBlock(
-        [factory.createReturnStatement(factory.createFalse())],
-        false
-      ),
-      undefined
-    ),
-  ];
 }
