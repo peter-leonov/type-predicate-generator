@@ -7,6 +7,8 @@ A generator for type safe TypeScript type guard function.
 ## Run
 
 ```console
+nvm install 22
+npm i
 node --experimental-strip-types src/index.mts example.ts
 ```
 
