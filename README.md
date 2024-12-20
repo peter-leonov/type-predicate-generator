@@ -18,20 +18,21 @@ The file with the types:
 
 ```ts
 // example.ts
-
-export type Car = {
-  brand: string;
+export type User = {
+  id: number;
+  login: string;
+  bio: {
+    first: string;
+    last: string;
+  };
 };
 
-export type MyUser = {
-  optional?: number;
-  // either: number | boolean;
-  nested: {
-    foo: string;
-  };
-  name: string;
-  age: number;
-  car: Car;
+export type Post = {
+  title: string;
+  text: string;
+  link?: string;
+  published: boolean;
+  author: User;
 };
 ```
 
@@ -45,67 +46,77 @@ This is the output with a readable and strictly type safe TS guard:
 
 ```ts
 // example.guard.ts
-
-import { type Car, type MyUser } from "./example.ts";
-
+import { type User, type Post } from "./example.ts";
 type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
 
 function ensureType<T>(_: T) {}
 
-export function isCar(root: unknown): root is Car {
+export function isUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  const { brand }: SafeShallowShape<Car> = root;
-  if (!(typeof brand === "string")) {
+  const { id, login, bio }: SafeShallowShape<User> = root;
+  if (!(typeof id === "number")) {
     return false;
   }
-  ensureType<Car>({
-    brand,
+  if (!(typeof login === "string")) {
+    return false;
+  }
+  if (!(typeof bio === "object" && bio !== null)) {
+    return false;
+  }
+  const { first, last }: SafeShallowShape<User["bio"]> = bio;
+  if (!(typeof first === "string")) {
+    return false;
+  }
+  if (!(typeof last === "string")) {
+    return false;
+  }
+  ensureType<User>({
+    id,
+    login,
+    bio: {
+      first,
+      last,
+    },
   });
   return true;
 }
 
-export function isMyUser(root: unknown): root is MyUser {
+export function isPost(root: unknown): root is Post {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
   const {
-    optional,
-    nested,
-    name,
-    age,
-    car,
-  }: SafeShallowShape<MyUser> = root;
-  if (!(optional === undefined || typeof optional === "number")) {
+    title,
+    text,
+    link,
+    published,
+    author,
+  }: SafeShallowShape<Post> = root;
+  if (!(typeof title === "string")) {
     return false;
   }
-  if (!(typeof nested === "object" && nested !== null)) {
+  if (!(typeof text === "string")) {
     return false;
   }
-  const { foo }: SafeShallowShape<MyUser["nested"]> = nested;
-  if (!(typeof foo === "string")) {
+  if (!(link === undefined || typeof link === "string")) {
     return false;
   }
-  if (!(typeof name === "string")) {
+  if (!(typeof published === "boolean")) {
     return false;
   }
-  if (!(typeof age === "number")) {
+  if (!isUser(author)) {
     return false;
   }
-  if (!isCar(car)) {
-    return false;
-  }
-  ensureType<MyUser>({
-    optional,
-    nested: {
-      foo,
-    },
-    name,
-    age,
-    car,
+  ensureType<Post>({
+    title,
+    text,
+    link,
+    published,
+    author,
   });
   return true;
 }
@@ -115,26 +126,27 @@ And this is what `esbuild` minifies it into (formatted for readability):
 
 ```js
 // example.guard.min.js
-
-function u(e) {}
-export function isCar(e) {
+function i(e) {}
+export function isUser(e) {
   if (!(typeof e == "object" && e !== null)) return !1;
-  const { brand: n } = e;
-  return typeof n != "string" ? !1 : !0;
-}
-export function isMyUser(e) {
-  if (!(typeof e == "object" && e !== null)) return !1;
-  const { optional: n, nested: r, name: t, age: f, car: a } = e;
+  const { id: n, login: r, bio: t } = e;
   if (
-    !(n === void 0 || typeof n == "number") ||
-    !(typeof r == "object" && r !== null)
+    typeof n != "number" ||
+    typeof r != "string" ||
+    !(typeof t == "object" && t !== null)
   )
     return !1;
-  const { foo: o } = r;
-  return typeof o != "string" ||
-    typeof t != "string" ||
-    typeof f != "number" ||
-    !isCar(a)
+  const { first: f, last: o } = t;
+  return typeof f != "string" || typeof o != "string" ? !1 : !0;
+}
+export function isPost(e) {
+  if (!(typeof e == "object" && e !== null)) return !1;
+  const { title: n, text: r, link: t, published: f, author: o } = e;
+  return typeof n != "string" ||
+    typeof r != "string" ||
+    !(t === void 0 || typeof t == "string") ||
+    typeof f != "boolean" ||
+    !isUser(o)
     ? !1
     : !0;
 }

@@ -1,14 +1,16 @@
-export type Car = {
-  brand: string;
+export type User = {
+  id: number;
+  login: string;
+  bio: {
+    first: string;
+    last: string;
+  };
 };
 
-export type MyUser = {
-  optional?: number;
-  // either: number | boolean;
-  nested: {
-    foo: string;
-  };
-  name: string;
-  age: number;
-  car: Car;
+export type Post = {
+  title: string;
+  text: string;
+  link?: string;
+  published: boolean;
+  author: User;
 };

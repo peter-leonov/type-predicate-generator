@@ -1,59 +1,66 @@
-import { type Car, type MyUser } from "./example.ts";
+import { type User, type Post } from "./example.ts";
 type SafeShallowShape<Type> = {
-  [_ in keyof Type]?: unknown;
+    [_ in keyof Type]?: unknown;
 };
-function ensureType<T>(_: T) {}
-export function isCar(root: unknown): root is Car {
-  if (!(typeof root === "object" && root !== null)) {
-    return false;
-  }
-  const { brand }: SafeShallowShape<Car> = root;
-  if (!(typeof brand === "string")) {
-    return false;
-  }
-  ensureType<Car>({
-    brand,
-  });
-  return true;
+function ensureType<T>(_: T) { }
+export function isUser(root: unknown): root is User {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    const { id, login, bio }: SafeShallowShape<User> = root;
+    if (!(typeof id === "number")) {
+        return false;
+    }
+    if (!(typeof login === "string")) {
+        return false;
+    }
+    if (!(typeof bio === "object" && bio !== null)) {
+        return false;
+    }
+    const { first, last }: SafeShallowShape<User["bio"]> = bio;
+    if (!(typeof first === "string")) {
+        return false;
+    }
+    if (!(typeof last === "string")) {
+        return false;
+    }
+    ensureType<User>({
+        id,
+        login,
+        bio: {
+            first,
+            last
+        }
+    });
+    return true;
 }
-export function isMyUser(root: unknown): root is MyUser {
-  if (!(typeof root === "object" && root !== null)) {
-    return false;
-  }
-  const {
-    optional,
-    nested,
-    name,
-    age,
-    car,
-  }: SafeShallowShape<MyUser> = root;
-  if (!(optional === undefined || typeof optional === "number")) {
-    return false;
-  }
-  if (!(typeof nested === "object" && nested !== null)) {
-    return false;
-  }
-  const { foo }: SafeShallowShape<MyUser["nested"]> = nested;
-  if (!(typeof foo === "string")) {
-    return false;
-  }
-  if (!(typeof name === "string")) {
-    return false;
-  }
-  if (!(typeof age === "number")) {
-    return false;
-  }
-  if (!isCar(car)) {
-    return false;
-  }
-  ensureType<MyUser>({
-    optional,
-    nested: {
-      foo,
-    },
-    name,
-    age,
-    car,
-  });
-  return true;
+export function isPost(root: unknown): root is Post {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    const { title, text, link, published, author }: SafeShallowShape<Post> = root;
+    if (!(typeof title === "string")) {
+        return false;
+    }
+    if (!(typeof text === "string")) {
+        return false;
+    }
+    if (!((link === undefined) || (typeof link === "string"))) {
+        return false;
+    }
+    if (!(typeof published === "boolean")) {
+        return false;
+    }
+    if (!(isUser(author))) {
+        return false;
+    }
+    ensureType<Post>({
+        title,
+        text,
+        link,
+        published,
+        author
+    });
+    return true;
 }
+
