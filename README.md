@@ -20,7 +20,7 @@ Experience shows that many teams can remain hesitant to introduce a runtime type
 
 To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if manually written and minifies really well. This all is heavily inspired by code generators from other languages.
 
-A list of pros first:
+## Pros
 
 1. The produced code is type safe
 1. The produced code is as fast as it gets
@@ -35,12 +35,14 @@ A list of pros first:
 1. Easy to debug: the stacktrace points exactly at where the bug is (if any)
 1. No vendor lock-in: any tool that works with TS can be used instead
 
-And a list of cons:
+Cons
+
+These are by desing, fixing them would affect the pros:
 
 1. Compared to `tsc` plugins it requires a separate build step
 1. Compared to `tsc` plugins it reads a dedicated file and produces a file
 
-A list of current non-by-design temporary limitations:
+These are temporary limitations:
 
 1. Does not support extended schema verification: mostly to stay simple and fast to evolve while in beta. It's trivial to add more value checkers with the current design.
 1. Does not produce error messages. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema chacker on error.
@@ -188,25 +190,56 @@ export function isPost(e) {
 
 As you can see, esbuild nicely merges all the `if`s for the same set of properties into just one combined check.
 
-## Architecture
-
-This tool is simple if not trivial. The code generator uses the TypeScript public API to emit the valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
-
-What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type). The parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed into the generator to actually produce the resulting TS code. This way both subsystems can be developed and tested independently. This resembles very much the `ViewModel` approach from the MVC web frameworks.
-
-## Limitations
+## Known low level limitations
 
 Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 
 Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces extra code for `X` where it would be just a shared guard function like `const isX = isY` or `function isX(…) { return isY() }`.
-
-## Tools used
-
-- Foundational [ts-ast-viewer.com](https://ts-ast-viewer.com/)
-- Useful [esbuild minifier](https://esbuild.github.io/try/)
 
 ## Prior art
 
 - Inspiring [ts-auto-guard](https://github.com/rhys-vdw/ts-auto-guard)
 - Groundbreaking [ts-runtime-checks](https://github.com/GoogleFeud/ts-runtime-checks)
 - Impressive [typia](https://github.com/samchon/typia)
+
+## Contributing
+
+### TODO
+
+1. Support lists
+1. Implement installing as a CLI
+1. Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
+
+### Architecture
+
+This tool is simple if not trivial. The code generator uses the TypeScript public API to emit the valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
+
+What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type). The parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed into the generator to actually produce the resulting TS code. This way both subsystems can be developed and tested independently. This resembles very much the `ViewModel` approach from the MVC web frameworks.
+
+### Design
+
+Moto: check JSON data from APIs 100% type safe and at blazing speed.
+
+Non-goals:
+
+- Cover non-serializable types: at this stage of TS adoption most of the codebases that care about type safety have developed a safe "bubble" that only lets in checked values. This mainly means that the values get into the "bubble" throught a call to `JSON.parse()` that produces plain old data objects, this is where the 99% of type checking is required.
+- Cover a sophisticated schema verification protocol. While possible, the idea is to get an `unknown` type and turn it first into something type safe (safely assignable to a given type). The resulting value can get safely verified against a more sophisticated schema as a second step. Still, for simple checks the doors are open, but any non context free checks should be implemneted using a higher level schema verification generator that is not TypeScript specific.
+- Cover complex computed types or expensive JS values, except for generics (generics are neat and easy to cover in the current architecture).
+
+Guiding principles:
+
+- Type safety and correctness first.
+- Performance second.
+- The generated code should be readable and easy to modify by hand if needed.
+- Common minifiers should be able to produce efficient and compact code
+- KISS the generator to address the bugs and TypeScript updates quicker
+- Use monomorphised functions to keep the JIT happy
+
+Nice to haves:
+
+- Languare server plugin / VS Code extension that "just" generates the guard next to the type.
+
+### Tools used
+
+- Foundational [ts-ast-viewer.com](https://ts-ast-viewer.com/)
+- Useful [esbuild minifier](https://esbuild.github.io/try/)
