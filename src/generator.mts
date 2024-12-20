@@ -130,6 +130,7 @@ export class TypeGuardGenerator {
     return [
       ...this.getTypeImports(sourceFileName),
       ...typeSafeShallowShape(),
+      ...functionEnsureType(),
       ...this.getGuards(),
     ];
   }
@@ -137,6 +138,41 @@ export class TypeGuardGenerator {
 
 function returnTrue(): ts.Statement {
   return factory.createReturnStatement(factory.createTrue());
+}
+
+const ensureType = "ensureType";
+
+function functionEnsureType(): ts.Statement[] {
+  return [
+    factory.createFunctionDeclaration(
+      undefined,
+      undefined,
+      factory.createIdentifier(ensureType),
+      [
+        factory.createTypeParameterDeclaration(
+          undefined,
+          factory.createIdentifier("T"),
+          undefined,
+          undefined
+        ),
+      ],
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          factory.createIdentifier("_"),
+          undefined,
+          factory.createTypeReferenceNode(
+            factory.createIdentifier("T"),
+            undefined
+          ),
+          undefined
+        ),
+      ],
+      undefined,
+      factory.createBlock([], false)
+    ),
+  ];
 }
 
 const SafeShallowShape = "SafeShallowShape";
@@ -432,35 +468,25 @@ function typeSafeCheckAssembly(
   typeName: string,
   type: TypeModel
 ): ts.Statement[] {
-  const _root_type_assertion = scope.createAttribute(
-    [],
-    "_root_type_assertion"
-  );
-
-  let initializer: ts.Expression;
+  let value: ts.Expression;
 
   if (type instanceof ObjectType) {
-    initializer = typeSafeCheckObject(scope, path, type);
+    value = typeSafeCheckObject(scope, path, type);
   } else {
-    initializer = factory.createIdentifier(target);
+    value = factory.createIdentifier(target);
   }
 
   return [
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
+    factory.createExpressionStatement(
+      factory.createCallExpression(
+        factory.createIdentifier(ensureType),
         [
-          factory.createVariableDeclaration(
-            _root_type_assertion.local_name,
-            undefined,
-            factory.createTypeReferenceNode(
-              factory.createIdentifier(typeName),
-              undefined
-            ),
-            initializer
+          factory.createTypeReferenceNode(
+            factory.createIdentifier(typeName),
+            undefined
           ),
         ],
-        ts.NodeFlags.Const
+        [value]
       )
     ),
   ];
