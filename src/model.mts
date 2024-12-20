@@ -103,6 +103,14 @@ export function typeToModel(
   symbol: ts.Symbol | null,
   depth: number = 0
 ): TypeModel {
+  if (depth >= 100) {
+    throw new Error(
+      `recursion depth reached >= 100 at type ${checker.typeToString(
+        type
+      )}, there must be a bug, please report with the minimal type example`
+    );
+  }
+
   const isOptional = symbol ? isSymbolOptional(symbol) : false;
   // const type = tsSymbolIsTypeAlias(symbol)
   //   ? checker.getDeclaredTypeOfSymbol(symbol)
