@@ -2,7 +2,7 @@
 
 ## About
 
-A TypeScript guard functions generator that produces strictly type safe readable TypeScript code.
+A TypeScript guard functions generator that produces strictly type safe readable and extremely fast TypeScript code.
 
 ## Run
 
@@ -11,6 +11,40 @@ nvm install 22
 npm i
 npm run --silent generate -- "./example.ts" > "example.guard.ts"
 ```
+
+## Why
+
+It's a simple, easy to integrate tool that does only one thing and does it well: generates type safe and fast code ready to use right away. The implmentation is near trivial, it uses minimal TypeScript public API surface thus is easy to update to keep up with changes in TS itself.
+
+Experience shows that many teams can remain hesitant to introduce a runtime type checker because of many reasons. The main two have been speed (some checkers bring a whole runtime engine with them) and reliability (the produced code is invisible and hard to fix).
+
+To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if manually written and minifies really well. This all is heavily inspired by code generators from other languages.
+
+A list of pros first:
+
+1. The produced code is type safe
+1. The produced code is as fast as it gets
+1. The produced code is readable and easy to modify in case you need to
+1. Does not require any runtime or compile time dependencies
+1. It's bundler agnostic as it outputs plain TS and does not rely on `tsc` plugins
+1. The bundle size cost is 100% predictable
+1. Zero performance cost in development: run once and forget, no recompilations
+1. Safe to upgrade: if the produced code changes you'll see it in the PR
+1. Virtually cannot break as the produced code is checked into your repository
+1. Reliable: the tool rejects the types it cannot cover 100%
+1. Easy to debug: the stacktrace points exactly at where the bug is (if any)
+1. No vendor lock-in: any tool that works with TS can be used instead
+
+And a list of cons:
+
+1. Compared to `tsc` plugins it requires a separate build step
+1. Compared to `tsc` plugins it reads a dedicated file and produces a file
+
+A list of current non-by-design temporary limitations:
+
+1. Does not support extended schema verification: mostly to stay simple and fast to evolve while in beta. It's trivial to add more value checkers with the current design.
+1. Does not produce error messages. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema chacker on error.
+1. Does not support generics atm, but designed with them in mind, so coming soon.
 
 ## Example
 
