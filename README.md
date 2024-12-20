@@ -2,15 +2,145 @@
 
 ## About
 
-A generator for type safe TypeScript type guard function.
+A TypeScript guard functions generator that produces strictly type safe readable TypeScript code.
 
 ## Run
 
-```console
+```bash
 nvm install 22
 npm i
-npm run --silent generate -- ./example.ts > example.guard.ts
+npm run --silent generate -- "./example.ts" > "example.guard.ts"
 ```
+
+## Example
+
+The file with the types:
+
+```ts
+// example.ts
+
+export type Car = {
+  brand: string;
+};
+
+export type MyUser = {
+  optional?: number;
+  // either: number | boolean;
+  nested: {
+    foo: string;
+  };
+  name: string;
+  age: number;
+  car: Car;
+};
+```
+
+Running the generator on it:
+
+```bash
+npm run --silent generate -- "./example.ts" > "example.guard.ts"
+```
+
+This is the output with a readable and strictly type safe TS guard:
+
+```ts
+// example.guard.ts
+
+import { type Car, type MyUser } from "./example.ts";
+
+type SafeShallowShape<Type> = {
+  [_ in keyof Type]?: unknown;
+};
+
+function ensureType<T>(_: T) {}
+
+export function isCar(root: unknown): root is Car {
+  if (!(typeof root === "object" && root !== null)) {
+    return false;
+  }
+  const { brand }: SafeShallowShape<Car> = root;
+  if (!(typeof brand === "string")) {
+    return false;
+  }
+  ensureType<Car>({
+    brand,
+  });
+  return true;
+}
+
+export function isMyUser(root: unknown): root is MyUser {
+  if (!(typeof root === "object" && root !== null)) {
+    return false;
+  }
+  const {
+    optional,
+    nested,
+    name,
+    age,
+    car,
+  }: SafeShallowShape<MyUser> = root;
+  if (!(optional === undefined || typeof optional === "number")) {
+    return false;
+  }
+  if (!(typeof nested === "object" && nested !== null)) {
+    return false;
+  }
+  const { foo }: SafeShallowShape<MyUser["nested"]> = nested;
+  if (!(typeof foo === "string")) {
+    return false;
+  }
+  if (!(typeof name === "string")) {
+    return false;
+  }
+  if (!(typeof age === "number")) {
+    return false;
+  }
+  if (!isCar(car)) {
+    return false;
+  }
+  ensureType<MyUser>({
+    optional,
+    nested: {
+      foo,
+    },
+    name,
+    age,
+    car,
+  });
+  return true;
+}
+```
+
+And this is what `esbuild` minifies it into (formatted for readability):
+
+```js
+// example.guard.min.js
+
+function u(e) {}
+export function isCar(e) {
+  if (!(typeof e == "object" && e !== null)) return !1;
+  const { brand: n } = e;
+  return typeof n != "string" ? !1 : !0;
+}
+export function isMyUser(e) {
+  if (!(typeof e == "object" && e !== null)) return !1;
+  const { optional: n, nested: r, name: t, age: f, car: a } = e;
+  if (
+    !(n === void 0 || typeof n == "number") ||
+    !(typeof r == "object" && r !== null)
+  )
+    return !1;
+  const { foo: o } = r;
+  return typeof o != "string" ||
+    typeof t != "string" ||
+    typeof f != "number" ||
+    !isCar(a)
+    ? !1
+    : !0;
+}
+```
+
+As you can see, esbuild nicely merges all the `if`s for the same set of properties into just one combined check.
 
 ## Architecture
 
