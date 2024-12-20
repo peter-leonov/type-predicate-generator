@@ -6,6 +6,7 @@ import {
   LiteralType,
   UnionType,
   ReferenceType,
+  ArrayType,
 } from "./model.mts";
 import { compile } from "./tests_helpers.mts";
 
@@ -414,5 +415,27 @@ test("reference type in an object", () => {
         b: new ReferenceType({ aliasName: "B" }, "B"),
       }
     )
+  );
+});
+
+test("array of a primitive type", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = Array<number>
+      `)
+    )
+  ).toEqual(
+    new ArrayType({ aliasName: "X" }, new PrimitiveType({}, "number"))
+  );
+
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = number[]
+      `)
+    )
+  ).toEqual(
+    new ArrayType({ aliasName: "X" }, new PrimitiveType({}, "number"))
   );
 });

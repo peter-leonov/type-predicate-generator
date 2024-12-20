@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { unimplemented } from "./helpers.mts";
+import { ok } from "node:assert";
 
 export type TypeOptions = {
   isOptional?: boolean;
@@ -67,6 +68,18 @@ export class UnionType {
   }
 }
 
+export class ArrayType {
+  options: TypeOptions;
+  element: TypeModel;
+  constructor(
+    options: typeof this.options,
+    element: typeof this.element
+  ) {
+    this.options = normilizeOptions(options);
+    this.element = element;
+  }
+}
+
 export class ReferenceType {
   options: TypeOptions;
   name: string;
@@ -81,6 +94,7 @@ export type TypeModel =
   | PrimitiveType
   | ObjectType
   | UnionType
+  | ArrayType
   | ReferenceType;
 
 export function typeToModel(
@@ -127,7 +141,15 @@ export function typeToModel(
 
   // const aliasName = type.aliasSymbol?.escapedName.toString();
 
-  if (tsTypeIsObject(type)) {
+  if (tsTypeIsArray(checker, type)) {
+    const elementType = checker.getTypeArguments(type)[0];
+    ok(elementType);
+    return new ArrayType(
+      { isOptional, aliasName },
+      typeToModel(checker, elementType, null, depth + 1)
+    );
+    console.log(type);
+  } else if (tsTypeIsObject(type)) {
     const attributes: Record<string, TypeModel> = {};
     // console.log(`- object: ${checker.typeToString(type)}`);
     for (const attr of checker.getPropertiesOfType(type)) {
@@ -170,6 +192,13 @@ export function typeToModel(
 
   console.error(type);
   unimplemented(checker.typeToString(type));
+}
+
+function tsTypeIsArray(
+  checker: ts.TypeChecker,
+  type: ts.Type
+): type is ts.TypeReference {
+  return checker.isArrayType(type);
 }
 
 function isSymbolOptional(s: ts.Symbol) {

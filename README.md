@@ -232,6 +232,7 @@ Avoid trivial aliases like `type X = Y` as TypeScript erases the information abo
 ### TODO
 
 1. Support lists
+1. Support tuples
 1. Implement installing as a CLI
 1. Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
 1. Generate unit tests with example data
