@@ -1,8 +1,10 @@
-# TypeScript Type Guard Generator
+# TypeScript Type Predicates Generator
 
 ## About
 
-A TypeScript guard functions generator that produces strictly type safe readable and extremely fast TypeScript code.
+A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe readable and extremely fast TypeScript code.
+
+Also known as type guard generator.
 
 ## Run
 
