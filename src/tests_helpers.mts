@@ -71,14 +71,14 @@ export function compile(
         "\n"
       );
       if (!diagnostic.file) {
-        console.log(message);
+        console.error(message);
         return;
       }
       var { line, character } =
         diagnostic.file.getLineAndCharacterOfPosition(
           diagnostic.start!
         );
-      console.log(
+      console.error(
         `${diagnostic.file.fileName} (${line + 1},${
           character + 1
         }): ${message}`

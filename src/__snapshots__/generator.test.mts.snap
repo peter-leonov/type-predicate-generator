@@ -1,17 +1,18 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`null 1`] = `
-"function isX(root: unknown): root is X {
+"export function isX(root: unknown): root is X {
     if (!(root === null)) {
         return false;
     }
-    const _root_type_assertion: X = root;
+    ensureType<X>(root);
+    return true;
 }
 "
 `;
 
 exports[`object with primitive types 1`] = `
-"function isX(root: unknown): root is X {
+"export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -25,27 +26,29 @@ exports[`object with primitive types 1`] = `
     if (!(typeof c === "boolean")) {
         return false;
     }
-    const _root_type_assertion: X = {
+    ensureType<X>({
         a,
         b,
         c
-    };
+    });
+    return true;
 }
 "
 `;
 
 exports[`reference type in a union 1`] = `
-"function isX(root: unknown): root is X {
+"export function isX(root: unknown): root is X {
     if (!((typeof root === "number") || (isA(root)))) {
         return false;
     }
-    const _root_type_assertion: X = root;
+    ensureType<X>(root);
+    return true;
 }
 "
 `;
 
 exports[`reference type in an object 1`] = `
-"function isX(root: unknown): root is X {
+"export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -56,30 +59,33 @@ exports[`reference type in an object 1`] = `
     if (!(isB(b))) {
         return false;
     }
-    const _root_type_assertion: X = {
+    ensureType<X>({
         a,
         b
-    };
+    });
+    return true;
 }
 "
 `;
 
 exports[`undefined 1`] = `
-"function isX(root: unknown): root is X {
+"export function isX(root: unknown): root is X {
     if (!(root === undefined)) {
         return false;
     }
-    const _root_type_assertion: X = root;
+    ensureType<X>(root);
+    return true;
 }
 "
 `;
 
 exports[`union of primitive and literal types 1`] = `
-"function isUnion(root: unknown): root is Union {
+"export function isUnion(root: unknown): root is Union {
     if (!((typeof root === "string") || (typeof root === "number") || (root === null))) {
         return false;
     }
-    const _root_type_assertion: Union = root;
+    ensureType<Union>(root);
+    return true;
 }
 "
 `;

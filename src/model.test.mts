@@ -124,10 +124,10 @@ test("a nested union", () => {
     )
   ).toEqual(
     new UnionType({ aliasName: "X" }, [
-      new LiteralType({}, 1),
-      new LiteralType({}, 2),
       new LiteralType({}, 3),
       new LiteralType({}, 4),
+      new LiteralType({}, 2),
+      new LiteralType({}, 1),
     ])
   );
 });
@@ -361,8 +361,8 @@ test("object with a complex union type", () => {
         a: new UnionType({}, [
           new PrimitiveType({}, "string"),
           new LiteralType({}, false),
-          new LiteralType({}, 2),
           new ObjectType({}, { b: new PrimitiveType({}, "string") }),
+          new LiteralType({}, 2),
         ]),
       }
     )
@@ -401,6 +401,7 @@ test("reference type in an object", () => {
     typeToModel(
       ...compile(`
         type A = { a: 1 }
+        type B = { b: 2 }
         type X = {
           a: A,
           b: B
