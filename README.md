@@ -1,10 +1,16 @@
-# TypeScript Type Predicates Generator
+# TypeScript Type Predicate Generator
+
+A.k.a type guard generator.
 
 ## About
 
-A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe readable and extremely fast TypeScript code.
+A TypeScript [type predicate](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe readable and extremely fast TypeScript code.
 
-Also known as type guard generator.
+Yep, the type predicates it generates are themselves strictly type checked by TS that guarantees that the checked value satisfies the expected type.
+
+## Status
+
+Alpha. Most of the key distinctive features are proven to work, but some essential features are still be missing (see [Known Limitations](#known-limitations)).
 
 ## Run
 
@@ -192,11 +198,28 @@ export function isPost(e) {
 
 As you can see, esbuild nicely merges all the `if`s for the same set of properties into just one combined check.
 
-## Known low level limitations
+## Known Limitations
+
+Arrays are yet to be supported.
+
+Anonymous object types in unions and arrays are coming soon as they require a bit more thinking on how to make it both type safe and readable. A good workaround is to extract those into separate types and use references:
+
+```ts
+// instead of
+type X = {
+  union: { a: string } | { b: number };
+};
+// use
+type A = { a: string };
+type B = { b: number };
+type X = {
+  union: A | B;
+};
+```
 
 Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 
-Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces extra code for `X` where it would be just a shared guard function like `const isX = isY` or `function isX(…) { return isY() }`.
+Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces extra code for `X` where it would be just a shared predicate function like `const isX = isY` or `function isX(…) { return isY() }`.
 
 ## Prior art
 
@@ -211,6 +234,7 @@ Avoid trivial aliases like `type X = Y` as TypeScript erases the information abo
 1. Support lists
 1. Implement installing as a CLI
 1. Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
+1. Generate unit tests with example data
 
 ### Architecture
 
@@ -239,7 +263,7 @@ Guiding principles:
 
 Nice to haves:
 
-- Languare server plugin / VS Code extension that "just" generates the guard next to the type.
+- Languare server plugin / VS Code extension that "just" generates the predicate next to the type.
 
 ### Tools used
 
