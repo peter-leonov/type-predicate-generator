@@ -8,6 +8,7 @@ type User = {
     main: { enabled: boolean };
   };
   added?: boolean;
+  comments: Array<{ title: string; body: string }>;
 };
 
 type SafeShallowShape<Type> = {
@@ -46,7 +47,7 @@ const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
  * to be of wrong type closer to the top of the type declaration
  * to allow the guard to fail faster.
  */
-function isNestedUser(root: unknown): root is User {
+function isUser(root: unknown): root is User {
   // Checking `root`.
   if (!(typeof root === "object" && root !== null)) {
     return false;
@@ -59,6 +60,7 @@ function isNestedUser(root: unknown): root is User {
     age,
     friends,
     address,
+    comments,
   }: SafeShallowShape<User> = root;
 
   // Checking `root.oneof`.
@@ -77,7 +79,7 @@ function isNestedUser(root: unknown): root is User {
   }
 
   // Checking `root.friends`.
-  if (!(safeIsArray(friends) && friends.every(isNestedUser))) {
+  if (!(safeIsArray(friends) && friends.every(isUser))) {
     return false;
   }
 
@@ -103,6 +105,20 @@ function isNestedUser(root: unknown): root is User {
   const { enabled }: SafeShallowShape<User["address"]["main"]> = main;
   // Checking `root.address.main.enabled`.
   if (!(typeof enabled === "boolean")) {
+    return false;
+  }
+
+  // Checking `root.comments`.
+  type User_comments_element = User["comments"][number];
+  function isRootCommentsElement(
+    root: unknown
+  ): root is User_comments_element {
+    // here goes recursion
+    return true;
+  }
+  if (
+    !(safeIsArray(comments) && comments.every(isRootCommentsElement))
+  ) {
     return false;
   }
 
@@ -151,6 +167,7 @@ function isNestedUser(root: unknown): root is User {
         street,
         main: { enabled },
       },
+      comments,
     };
     // TODO: move more checks to the generated tests
   }
