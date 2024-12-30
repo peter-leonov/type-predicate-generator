@@ -25,65 +25,88 @@ export class TypeGuardGenerator {
     target: AttributeLocal,
     typePath: string[],
     type: TypeModel
-  ): ts.Statement[] {
+  ): { hoist: ts.Statement[]; body: ts.Statement[] } {
     const targetPath = [...path, target.attribute_name];
 
     if (type instanceof ReferenceType) {
-      return ifNotReturnFalse(
-        assertionConditionForType(target.local_name, type)
-      );
+      return {
+        hoist: [],
+        body: ifNotReturnFalse(
+          assertionConditionForType(target.local_name, type)
+        ),
+      };
     } else if (type instanceof ArrayType) {
       const nestedTypeName = scope.newTypeName(
         typePath.map(capitalise),
         "Element"
       );
       const guardName = scope.newLocalName([], `is${nestedTypeName}`);
-      return [
-        typeAliasForArrayElement(nestedTypeName, typePath),
-        this.createTypeGuardFor(
-          guardName,
-          nestedTypeName,
-          type.element
-        ),
-        ...ifNotReturnFalse(
+      return {
+        hoist: [
+          typeAliasForArrayElement(nestedTypeName, typePath),
+          this.createTypeGuardFor(
+            guardName,
+            nestedTypeName,
+            type.element
+          ),
+        ],
+        body: ifNotReturnFalse(
           assertionConditionForArrayType(target.local_name, guardName)
         ),
-      ];
+      };
     } else if (type instanceof ObjectType) {
       const entries = Object.entries(type.attributes).map(
         ([attr, type]) =>
           [scope.createAttribute(targetPath, attr), type] as const
       );
       const attrs = entries.map(([local, _]) => local);
-      return [
+      const hoists: ts.Statement[] = [];
+      const bodies: ts.Statement[] = [
         ...assertIsObject(target.local_name),
         ...objectSpread(
           target.local_name,
           attrs,
           typePathToTypeSelector(typePath)
         ),
-        ...entries.flatMap(([local, type]) => {
-          return this.getAssertionsForLocalVar(
-            scope,
-            targetPath,
-            local,
-            [...typePath, local.attribute_name],
-            type
-          );
-        }),
       ];
+
+      entries.forEach(([local, type]) => {
+        const { hoist, body } = this.getAssertionsForLocalVar(
+          scope,
+          targetPath,
+          local,
+          [...typePath, local.attribute_name],
+          type
+        );
+        hoists.push(...hoist);
+        bodies.push(...body);
+      });
+
+      return {
+        hoist: hoists,
+        body: bodies,
+      };
     } else if (type instanceof PrimitiveType) {
-      return ifNotReturnFalse(
-        assertionConditionForType(target.local_name, type)
-      );
+      return {
+        hoist: [],
+        body: ifNotReturnFalse(
+          assertionConditionForType(target.local_name, type)
+        ),
+      };
     } else if (type instanceof LiteralType) {
-      return ifNotReturnFalse(
-        assertionConditionForType(target.local_name, type)
-      );
+      return {
+        hoist: [],
+        body: ifNotReturnFalse(
+          assertionConditionForType(target.local_name, type)
+        ),
+      };
     } else if (type instanceof UnionType) {
-      return ifNotReturnFalse(
-        assertionConditionForType(target.local_name, type)
-      );
+      return {
+        hoist: [],
+        body: ifNotReturnFalse(
+          assertionConditionForType(target.local_name, type)
+        ),
+      };
     }
 
     unimplemented(`${(type as Object)?.constructor.name}`);
@@ -102,18 +125,23 @@ export class TypeGuardGenerator {
 
     const predicateName = scope.newLocalName([], `is${typeName}`);
 
+    const { hoist, body } = this.getAssertionsForLocalVar(
+      scope,
+      [],
+      rootLocal,
+      [typeName],
+      type
+    );
+
     const guard = predicateFunction(
       root,
       predicateName,
       typeName,
       [
-        ...this.getAssertionsForLocalVar(
-          scope,
-          [],
-          rootLocal,
-          [typeName],
-          type
-        ),
+        // hoist to the top what's returned as hoist
+        ...hoist,
+        // then follow with the body statements
+        ...body,
         // ...assertAreNotNever(scope.list()),
         ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
         returnTrue(),
@@ -132,14 +160,19 @@ export class TypeGuardGenerator {
     const root = "root";
     const scope = new Scope();
     const rootLocal = scope.createAttribute([], root);
+    const { hoist, body } = this.getAssertionsForLocalVar(
+      scope,
+      [],
+      rootLocal,
+      [typeName],
+      type
+    );
+
     return predicateFunction(root, guardName, typeName, [
-      ...this.getAssertionsForLocalVar(
-        scope,
-        [],
-        rootLocal,
-        [typeName],
-        type
-      ),
+      // hoist to the top what's returned as hoist
+      ...hoist,
+      // then follow with the body statements
+      ...body,
       // ...assertAreNotNever(scope.list()),
       ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
       returnTrue(),
@@ -278,9 +311,7 @@ function safeIsArray(): ts.Statement {
           )
         ),
       ],
-      ts.NodeFlags.Const |
-        ts.NodeFlags.Constant |
-        ts.NodeFlags.Constant
+      ts.NodeFlags.Const
     )
   );
 }

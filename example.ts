@@ -13,4 +13,5 @@ export type Post = {
   link?: string;
   published: boolean;
   author: User;
+  list: Array<number | string>;
 };

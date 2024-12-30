@@ -2,6 +2,7 @@ import { type User, type Post } from "./example.ts";
 type SafeShallowShape<Type> = {
     [_ in keyof Type]?: unknown;
 };
+const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 function ensureType<T>(_: T) { }
 export function isUser(root: unknown): root is User {
     if (!(typeof root === "object" && root !== null)) {
@@ -35,10 +36,18 @@ export function isUser(root: unknown): root is User {
     return true;
 }
 export function isPost(root: unknown): root is Post {
+    type Element = Post["list"][number];
+    function isElement(root: unknown): root is Element {
+        if (!((typeof root === "string") || (typeof root === "number"))) {
+            return false;
+        }
+        ensureType<Element>(root);
+        return true;
+    }
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    const { title, text, link, published, author }: SafeShallowShape<Post> = root;
+    const { title, text, link, published, author, list }: SafeShallowShape<Post> = root;
     if (!(typeof title === "string")) {
         return false;
     }
@@ -54,12 +63,16 @@ export function isPost(root: unknown): root is Post {
     if (!(isUser(author))) {
         return false;
     }
+    if (!(safeIsArray(list) && list.every(isElement))) {
+        return false;
+    }
     ensureType<Post>({
         title,
         text,
         link,
         published,
-        author
+        author,
+        list
     });
     return true;
 }

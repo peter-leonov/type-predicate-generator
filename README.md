@@ -75,6 +75,7 @@ export type Post = {
   link?: string;
   published: boolean;
   author: User;
+  list: Array<number | string>;
 };
 ```
 
@@ -89,10 +90,11 @@ This is the output with a readable and strictly type safe TS guard:
 ```ts
 // example.guard.ts
 import { type User, type Post } from "./example.ts";
+
 type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
-
+const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 function ensureType<T>(_: T) {}
 
 export function isUser(root: unknown): root is User {
@@ -128,6 +130,14 @@ export function isUser(root: unknown): root is User {
 }
 
 export function isPost(root: unknown): root is Post {
+  type Element = Post["list"][number];
+  function isElement(root: unknown): root is Element {
+    if (!(typeof root === "string" || typeof root === "number")) {
+      return false;
+    }
+    ensureType<Element>(root);
+    return true;
+  }
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
@@ -137,6 +147,7 @@ export function isPost(root: unknown): root is Post {
     link,
     published,
     author,
+    list,
   }: SafeShallowShape<Post> = root;
   if (!(typeof title === "string")) {
     return false;
@@ -153,12 +164,16 @@ export function isPost(root: unknown): root is Post {
   if (!isUser(author)) {
     return false;
   }
+  if (!(safeIsArray(list) && list.every(isElement))) {
+    return false;
+  }
   ensureType<Post>({
     title,
     text,
     link,
     published,
     author,
+    list,
   });
   return true;
 }
@@ -168,27 +183,39 @@ And this is what `esbuild` minifies it into (formatted for readability):
 
 ```js
 // example.guard.min.js
-function i(e) {}
+const u = Array.isArray;
+function p(e) {}
 export function isUser(e) {
   if (!(typeof e == "object" && e !== null)) return !1;
-  const { id: n, login: r, bio: t } = e;
+  const { id: s, login: r, bio: t } = e;
   if (
-    typeof n != "number" ||
+    typeof s != "number" ||
     typeof r != "string" ||
     !(typeof t == "object" && t !== null)
   )
     return !1;
-  const { first: f, last: o } = t;
-  return typeof f != "string" || typeof o != "string" ? !1 : !0;
+  const { first: n, last: f } = t;
+  return typeof n != "string" || typeof f != "string" ? !1 : !0;
 }
 export function isPost(e) {
+  function s(o) {
+    return typeof o == "string" || typeof o == "number" ? !0 : !1;
+  }
   if (!(typeof e == "object" && e !== null)) return !1;
-  const { title: n, text: r, link: t, published: f, author: o } = e;
-  return typeof n != "string" ||
-    typeof r != "string" ||
-    !(t === void 0 || typeof t == "string") ||
+  const {
+    title: r,
+    text: t,
+    link: n,
+    published: f,
+    author: l,
+    list: i,
+  } = e;
+  return typeof r != "string" ||
+    typeof t != "string" ||
+    !(n === void 0 || typeof n == "string") ||
     typeof f != "boolean" ||
-    !isUser(o)
+    !isUser(l) ||
+    !(u(i) && i.every(s))
     ? !1
     : !0;
 }
