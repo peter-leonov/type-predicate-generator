@@ -30,31 +30,29 @@ To account for the above this generator emits explicitly readable code that is e
 
 ## Pros
 
-1. The produced code is type safe
-1. The produced code is as fast as it gets
-1. The produced code is readable and easy to modify in case you need to
+1. The produced code is type safe and gets checked by your TS setup
+1. The produced code is as fast as it gets: no extra reads, calls, comparisons
+1. The produced code is readable, lenear and easy to modify in case you need to
 1. Does not require any runtime or compile time dependencies
-1. It's bundler agnostic as it outputs plain TS and does not rely on `tsc` plugins
-1. The bundle size cost is 100% predictable
-1. Zero performance cost in development: run once and forget, no recompilations
+1. It's bundler agnostic as it's output is plain TS (no `tsc` plugins required)
+1. The bundle size cost is 100% visible and predictable
 1. Safe to upgrade: if the produced code changes you'll see it in the PR
-1. Virtually cannot break as the produced code is checked into your repository
+1. Zero performance cost in development: run once and forget
+1. Full IDE support: jump to definition just works
+1. Cannot unexpectedly break as the produced code is static and checked into your repository
 1. Reliable: the tool rejects the types it cannot cover 100%
-1. Easy to debug: the stacktrace points exactly at where the bug is (if any)
+1. Easy to debug and fix: the stacktrace points exactly at where the bug is
 1. No vendor lock-in: any tool that works with TS can be used instead
+1. Unix-way: relies on other tools for minification, dead code elimination, etc
 
-Cons
+## Cons
 
-These are by desing, fixing them would affect the pros:
+These are by desing, fixing them would affect the [Pros](#pros):
 
 1. Compared to `tsc` plugins it requires a separate build step
-1. Compared to `tsc` plugins it reads a dedicated file and produces a file
+1. Compared to `tsc` plugins it reads a file and produces a file
 
-These are temporary limitations:
-
-1. Does not support extended schema verification: mostly to stay simple and fast to evolve while in beta. It's trivial to add more value checkers with the current design.
-1. Does not produce error messages. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema chacker on error.
-1. Does not support generics atm, but designed with them in mind, so coming soon.
+See [Known Limitations](#known-limitations) for more on low level missing bits.
 
 ## Example
 
@@ -200,9 +198,17 @@ As you can see, esbuild nicely merges all the `if`s for the same set of properti
 
 ## Known Limitations
 
-Arrays are yet to be supported.
+Most of the below is gonna be eventually fixed.
 
-Anonymous object types in unions and arrays are coming soon as they require a bit more thinking on how to make it both type safe and readable. A good workaround is to extract those into separate types and use references:
+1. No support for extended schema verification. This is mostly to stay simple and fast to evolve while in alpha/beta. It's trivial to add more value checkers with the current design.
+
+1. Does not produce error messages yet. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema chacker on error.
+
+1. No support for generics atm, but the code is designed with them in mind, so also coming soon.
+
+1. Arrays are yet to be supported (work in progress).
+
+1. Anonymous object types in unions and arrays are coming soon. They require a bit more thinking on how to make it both type safe and readable. A good workaround is to extract those into separate types and use references:
 
 ```ts
 // instead of
@@ -217,9 +223,9 @@ type X = {
 };
 ```
 
-Expects `strict: true`, otherwise every type is nullable which defends the purpose.
+1. Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 
-Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces extra code for `X` where it would be just a shared predicate function like `const isX = isY` or `function isX(…) { return isY() }`.
+1. Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces duplicate code for `X` where it would be just a shared predicate function like `const isX = isY` or `function isX(…) { return isY() }`. It is possible to fix by considering AST nodes in addition to symbols and type objects, but it's not a common use case, so for now not handled properly.
 
 ## Prior art
 
