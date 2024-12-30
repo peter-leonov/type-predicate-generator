@@ -206,9 +206,8 @@ Most of the below is gonna be eventually fixed.
 
 1. No support for generics atm, but the code is designed with them in mind, so also coming soon.
 
-1. Arrays are yet to be supported (work in progress).
-
 1. Anonymous object types in unions and arrays are coming soon. They require a bit more thinking on how to make it both type safe and readable. A good workaround is to extract those into separate types and use references:
+   See here for more: [https://stackoverflow.com/a/55128956/2224875]
 
 ```ts
 // instead of

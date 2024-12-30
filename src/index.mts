@@ -70,7 +70,7 @@ function generateTypeGuards(fileName: string): boolean {
         symbol
       );
 
-      generator.addTypeGuardFor(model);
+      generator.addRootTypeGuardFor(model);
     });
 
     const resultFile = factory.updateSourceFile(

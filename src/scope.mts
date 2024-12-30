@@ -20,10 +20,12 @@ export type Path = string[];
 export class Scope {
   #by_full_path: Map<string, AttributeLocal>;
   #local_names: Set<string>;
+  #type_names: Set<string>;
 
   constructor() {
     this.#by_full_path = new Map();
     this.#local_names = new Set();
+    this.#type_names = new Set();
   }
 
   /**
@@ -41,9 +43,8 @@ export class Scope {
       );
     }
 
-    const desired_local_name =
-      objectAttributeToLocalName(attribute_name);
-    const local_name = this.getNewLocalName(path, desired_local_name);
+    const desired_local_name = toIdentifier(attribute_name);
+    const local_name = this.newLocalName(path, desired_local_name);
     const attr = new AttributeLocal(attribute_name, local_name);
     this.#by_full_path.set(key, attr);
     return attr;
@@ -61,15 +62,17 @@ export class Scope {
     return value;
   }
 
-  private getNewLocalName(path: Path, name: string): string {
-    if (!this.#local_names.has(name)) {
-      this.#local_names.add(name);
-      return name;
+  newLocalName(path: Path, proposal: string): string {
+    proposal = toIdentifier(proposal);
+
+    if (!this.#local_names.has(proposal)) {
+      this.#local_names.add(proposal);
+      return proposal;
     }
 
     for (let i = 0; i < path.length; i++) {
-      const prefixed = [...path.slice(-i - 1), name]
-        .map(objectAttributeToLocalName)
+      const prefixed = [...path.slice(-i - 1), proposal]
+        .map(toIdentifier)
         .join("_");
       if (!this.#local_names.has(prefixed)) {
         this.#local_names.add(prefixed);
@@ -78,14 +81,47 @@ export class Scope {
     }
 
     for (let i = 2; i < 10_000; i++) {
-      const name2 = `${name}_${i}`;
+      const name2 = `${proposal}_${i}`;
       if (!this.#local_names.has(name2)) {
         this.#local_names.add(name2);
         return name2;
       }
     }
     throw new Error(
-      `too many unique locals of name ${JSON.stringify(name)}`
+      `too many unique locals of name ${JSON.stringify(proposal)}`
+    );
+  }
+
+  /**
+   * A shameless copy paste of the above.
+   */
+  newTypeName(path: string[], proposal: string): string {
+    proposal = toIdentifier(proposal);
+
+    if (!this.#type_names.has(proposal)) {
+      this.#type_names.add(proposal);
+      return proposal;
+    }
+
+    for (let i = 0; i < path.length; i++) {
+      const prefixed = [...path.slice(-i - 1), proposal]
+        .map(toIdentifier)
+        .join("_");
+      if (!this.#type_names.has(prefixed)) {
+        this.#type_names.add(prefixed);
+        return prefixed;
+      }
+    }
+
+    for (let i = 2; i < 10_000; i++) {
+      const name2 = `${proposal}_${i}`;
+      if (!this.#type_names.has(name2)) {
+        this.#type_names.add(name2);
+        return name2;
+      }
+    }
+    throw new Error(
+      `too many unique types of name ${JSON.stringify(proposal)}`
     );
   }
 
@@ -95,11 +131,11 @@ export class Scope {
 }
 
 /**
- * Convrts a attribute name that is can effectively be any string
- * to a safe local variable name. For simplicity it ignores Unicode.
+ * Converts any string to a safe local identifier.
+ * For simplicity it ignores Unicode.
  */
-function objectAttributeToLocalName(attribute: string): string {
-  return attribute
+function toIdentifier(name: string): string {
+  return name
     .replace(/[^_a-zA-Z0-9]/g, "_")
     .replace(/^([^_a-zA-Z])/, "_$1");
 }

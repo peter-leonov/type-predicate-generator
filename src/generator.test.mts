@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 import { TypeGuardGenerator } from "./generator.mts";
 import {
+  ArrayType,
   LiteralType,
   ObjectType,
   PrimitiveType,
@@ -12,7 +13,7 @@ import { printNodes } from "./tests_helpers.mts";
 
 export function generate(model: TypeModel): string {
   const tgg = new TypeGuardGenerator();
-  tgg.addTypeGuardFor(model);
+  tgg.addRootTypeGuardFor(model);
   return printNodes(tgg.getGuards());
 }
 
@@ -98,6 +99,17 @@ test("nested object", () => {
             }
           ),
         }
+      )
+    )
+  ).toMatchSnapshot();
+});
+
+test("array of a primitive type", () => {
+  expect(
+    generate(
+      new ArrayType(
+        { aliasName: "X" },
+        new PrimitiveType({}, "number")
       )
     )
   ).toMatchSnapshot();
