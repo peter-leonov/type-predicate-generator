@@ -362,7 +362,7 @@ function assertIsObject(target: string): ts.Statement[] {
 function objectSpread(
   target: string,
   properties: AttributeLocal[],
-  type: string
+  type: ts.TypeNode
 ): ts.Statement[] {
   ok(properties.length != 0);
   return [
@@ -386,12 +386,7 @@ function objectSpread(
             undefined,
             factory.createTypeReferenceNode(
               factory.createIdentifier(SafeShallowShape),
-              [
-                factory.createTypeReferenceNode(
-                  factory.createIdentifier(type),
-                  undefined
-                ),
-              ]
+              [type]
             ),
             factory.createIdentifier(target)
           ),
@@ -421,11 +416,28 @@ function valueToNode(value: LiteralValue): ts.Expression {
   unimplemented();
 }
 
-function typePathToTypeSelector(path: string[]): string {
+/**
+ * Expects the path to start with a type name and the rest to be
+ * attribute names. `path` should have at least 1 element.
+ */
+function typePathToTypeSelector(path: string[]): ts.TypeNode {
+  assert(path.length >= 1);
   const [root, ...rest] = path;
-  return `${root}${rest
-    .map((attr) => `[${JSON.stringify(attr)}]`)
-    .join("")}`;
+  ok(root);
+
+  return rest.reduce<ts.TypeNode>(
+    (acc, attr) =>
+      factory.createIndexedAccessTypeNode(
+        acc,
+        factory.createLiteralTypeNode(
+          factory.createStringLiteral(attr)
+        )
+      ),
+    factory.createTypeReferenceNode(
+      factory.createIdentifier(root),
+      undefined
+    )
+  );
 }
 
 function typeSafeCheckObject(
