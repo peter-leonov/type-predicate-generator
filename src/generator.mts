@@ -423,7 +423,9 @@ function valueToNode(value: LiteralValue): ts.Expression {
 
 function typePathToTypeSelector(path: string[]): string {
   const [root, ...rest] = path;
-  return `${root}${rest.map((attr) => `[${JSON.stringify(attr)}]`)}`;
+  return `${root}${rest
+    .map((attr) => `[${JSON.stringify(attr)}]`)
+    .join("")}`;
 }
 
 function typeSafeCheckObject(

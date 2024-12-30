@@ -79,3 +79,26 @@ test("reference type in a union", () => {
     )
   ).toMatchSnapshot();
 });
+
+test("nested object", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          a: new ObjectType(
+            {},
+            {
+              b: new ObjectType(
+                {},
+                {
+                  c: new PrimitiveType({}, "string"),
+                }
+              ),
+            }
+          ),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});

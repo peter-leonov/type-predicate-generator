@@ -1,5 +1,34 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`nested object 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    const { a }: SafeShallowShape<X> = root;
+    if (!(typeof a === "object" && a !== null)) {
+        return false;
+    }
+    const { b }: SafeShallowShape<X["a"]> = a;
+    if (!(typeof b === "object" && b !== null)) {
+        return false;
+    }
+    const { c }: SafeShallowShape<X["a"]["b"]> = b;
+    if (!(typeof c === "string")) {
+        return false;
+    }
+    ensureType<X>({
+        a: {
+            b: {
+                c
+            }
+        }
+    });
+    return true;
+}
+"
+`;
+
 exports[`null 1`] = `
 "export function isX(root: unknown): root is X {
     if (!(root === null)) {
