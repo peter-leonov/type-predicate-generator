@@ -6,12 +6,22 @@ import {
   LiteralType,
   ObjectType,
   PrimitiveType,
-  ReferenceType,
+  AliasType,
   UnionType,
   type TypeModel,
 } from "./model.mts";
 import assert, { ok } from "node:assert";
 import { unimplemented } from "./helpers.mts";
+
+export class GeneratorError extends Error {}
+
+export class UnsupportedUnionMember extends GeneratorError {
+  constructor(type: TypeModel) {
+    super(
+      `The ${type.nameForErrors} is not supported in unions. Try extracting it into a separate type alias. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/1`
+    );
+  }
+}
 
 export class TypeGuardGenerator {
   guards: Map<string, ts.Statement>;
@@ -28,7 +38,7 @@ export class TypeGuardGenerator {
   ): { hoist: ts.Statement[]; body: ts.Statement[] } {
     const targetPath = [...path, target.attribute_name];
 
-    if (type instanceof ReferenceType) {
+    if (type instanceof AliasType) {
       return {
         hoist: [],
         body: ifNotReturnFalse(
@@ -101,6 +111,12 @@ export class TypeGuardGenerator {
         ),
       };
     } else if (type instanceof UnionType) {
+      const unsafeUnionType = type.types.find(
+        (t) => !safeToUseInAUnion(t)
+      );
+      if (unsafeUnionType) {
+        throw new UnsupportedUnionMember(unsafeUnionType);
+      }
       return {
         hoist: [],
         body: ifNotReturnFalse(
@@ -216,6 +232,14 @@ export class TypeGuardGenerator {
       ...this.getGuards(),
     ];
   }
+}
+
+function safeToUseInAUnion(type: TypeModel) {
+  return (
+    type instanceof LiteralType ||
+    type instanceof PrimitiveType ||
+    type instanceof AliasType
+  );
 }
 
 function capitalise(str: string): string {
@@ -385,7 +409,7 @@ function assertionConditionForType(
   target: string,
   type: TypeModel
 ): ts.Expression {
-  if (type instanceof ReferenceType) {
+  if (type instanceof AliasType) {
     return factory.createCallExpression(
       factory.createIdentifier(`is${type.name}`),
       undefined,

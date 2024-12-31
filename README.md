@@ -233,8 +233,7 @@ Most of the below is gonna be eventually fixed.
 
 1. No support for generics atm, but the code is designed with them in mind, so also coming soon.
 
-1. Anonymous object types in unions and arrays are coming soon. They require a bit more thinking on how to make it both type safe and readable. A good workaround is to extract those into separate types and use references:
-   See here for more: [https://stackoverflow.com/a/55128956/2224875]
+1. Anonymous object types in unions are not supported.
 
 ```ts
 // instead of
@@ -248,6 +247,8 @@ type X = {
   union: A | B;
 };
 ```
+
+See more here [#1](https://github.com/peter-leonov/typescript-predicate-generator/issues/1).
 
 1. Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 

@@ -5,7 +5,7 @@ import {
   PrimitiveType,
   LiteralType,
   UnionType,
-  ReferenceType,
+  AliasType,
   ArrayType,
 } from "./model.mts";
 import { compile } from "./tests_helpers.mts";
@@ -391,7 +391,7 @@ test("reference type in a union", () => {
   ).toEqual(
     new UnionType({ aliasName: "X" }, [
       new PrimitiveType({}, "number"),
-      new ReferenceType({ aliasName: "A" }, "A"),
+      new AliasType({ aliasName: "A" }, "A"),
     ])
   );
 });
@@ -412,8 +412,8 @@ test("reference type in an object", () => {
     new ObjectType(
       { aliasName: "X" },
       {
-        a: new ReferenceType({ aliasName: "A" }, "A"),
-        b: new ReferenceType({ aliasName: "B" }, "B"),
+        a: new AliasType({ aliasName: "A" }, "A"),
+        b: new AliasType({ aliasName: "B" }, "B"),
       }
     )
   );

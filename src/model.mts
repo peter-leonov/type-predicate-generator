@@ -14,7 +14,12 @@ function normilizeOptions(options: TypeOptions): TypeOptions {
   };
 }
 
-export class LiteralType {
+interface BaseType {
+  nameForErrors: string;
+}
+
+export class LiteralType implements BaseType {
+  nameForErrors: string;
   options: TypeOptions;
   value:
     | undefined
@@ -27,63 +32,74 @@ export class LiteralType {
     options: typeof this.options,
     value: typeof this.value
   ) {
+    this.nameForErrors = "literal type";
     this.options = normilizeOptions(options);
     this.value = value;
   }
 }
 
-export class PrimitiveType {
+export class PrimitiveType implements BaseType {
+  nameForErrors: string;
   options: TypeOptions;
   primitive: string;
   constructor(
     options: typeof this.options,
     primitive: typeof this.primitive
   ) {
+    this.nameForErrors = "primitive type";
     this.options = normilizeOptions(options);
     this.primitive = primitive;
   }
 }
 
-export class ObjectType {
+export class ObjectType implements BaseType {
+  nameForErrors: string;
   options: TypeOptions;
   attributes: { [key: string]: TypeModel };
   constructor(
     options: typeof this.options,
     attributes: typeof this.attributes
   ) {
+    this.nameForErrors = "object type";
     this.options = normilizeOptions(options);
     this.attributes = attributes;
   }
 }
 
-export class UnionType {
+export class UnionType implements BaseType {
+  nameForErrors: string;
   options: TypeOptions;
   types: TypeModel[];
   constructor(
     options: typeof this.options,
     types: typeof this.types
   ) {
+    this.nameForErrors = "union type";
     this.options = normilizeOptions(options);
     this.types = types;
   }
 }
 
-export class ArrayType {
+export class ArrayType implements BaseType {
+  nameForErrors: string;
   options: TypeOptions;
   element: TypeModel;
   constructor(
     options: typeof this.options,
     element: typeof this.element
   ) {
+    this.nameForErrors = "array type";
     this.options = normilizeOptions(options);
     this.element = element;
   }
 }
 
-export class ReferenceType {
+export class AliasType implements BaseType {
+  nameForErrors: string;
   options: TypeOptions;
   name: string;
   constructor(options: typeof this.options, name: typeof this.name) {
+    this.nameForErrors = "type alias";
     this.options = normilizeOptions(options);
     this.name = name;
   }
@@ -95,7 +111,7 @@ export type TypeModel =
   | ObjectType
   | UnionType
   | ArrayType
-  | ReferenceType;
+  | AliasType;
 
 export function typeToModel(
   checker: ts.TypeChecker,
@@ -137,7 +153,7 @@ export function typeToModel(
     const { aliasSymbol } = type;
     if (aliasSymbol) {
       const aliasName = aliasSymbol.escapedName.toString();
-      return new ReferenceType({ isOptional, aliasName }, aliasName);
+      return new AliasType({ isOptional, aliasName }, aliasName);
     }
   }
 

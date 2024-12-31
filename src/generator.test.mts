@@ -1,11 +1,14 @@
 import { expect, test } from "vitest";
-import { TypeGuardGenerator } from "./generator.mts";
+import {
+  TypeGuardGenerator,
+  UnsupportedUnionMember,
+} from "./generator.mts";
 import {
   ArrayType,
   LiteralType,
   ObjectType,
   PrimitiveType,
-  ReferenceType,
+  AliasType,
   TypeModel,
   UnionType,
 } from "./model.mts";
@@ -41,6 +44,17 @@ test("union of primitive and literal types", () => {
   ).toMatchSnapshot();
 });
 
+test.only("union of object types", () => {
+  expect(() =>
+    generate(
+      new UnionType({ aliasName: "Union" }, [
+        new ObjectType({}, { a: new PrimitiveType({}, "number") }),
+        new ObjectType({}, { b: new PrimitiveType({}, "string") }),
+      ])
+    )
+  ).toThrow(UnsupportedUnionMember);
+});
+
 test("object with primitive types", () => {
   expect(
     generate(
@@ -62,8 +76,8 @@ test("reference type in an object", () => {
       new ObjectType(
         { aliasName: "X" },
         {
-          a: new ReferenceType({ aliasName: "A" }, "A"),
-          b: new ReferenceType({ aliasName: "B" }, "B"),
+          a: new AliasType({ aliasName: "A" }, "A"),
+          b: new AliasType({ aliasName: "B" }, "B"),
         }
       )
     )
@@ -75,7 +89,7 @@ test("reference type in a union", () => {
     generate(
       new UnionType({ aliasName: "X" }, [
         new PrimitiveType({}, "number"),
-        new ReferenceType({ aliasName: "A" }, "A"),
+        new AliasType({ aliasName: "A" }, "A"),
       ])
     )
   ).toMatchSnapshot();
