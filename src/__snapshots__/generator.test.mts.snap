@@ -19,6 +19,54 @@ exports[`array of a primitive type 1`] = `
 "
 `;
 
+exports[`array of a primitive type union 1`] = `
+"export function isX(root: unknown): root is X {
+    type Element = X[number];
+    function isElement(root: unknown): root is Element {
+        if (!((typeof root === "number") || (typeof root === "string"))) {
+            return false;
+        }
+        ensureType<Element>(root);
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isElement))) {
+        return false;
+    }
+    ensureType<X>(root);
+    return true;
+}
+"
+`;
+
+exports[`array of an object type 1`] = `
+"export function isX(root: unknown): root is X {
+    type Element = X[number];
+    function isElement(root: unknown): root is Element {
+        if (!(typeof root === "object" && root !== null)) {
+            return false;
+        }
+        const { a, b }: SafeShallowShape<Element> = root;
+        if (!(typeof a === "number")) {
+            return false;
+        }
+        if (!(typeof b === "string")) {
+            return false;
+        }
+        ensureType<Element>({
+            a,
+            b
+        });
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isElement))) {
+        return false;
+    }
+    ensureType<X>(root);
+    return true;
+}
+"
+`;
+
 exports[`nested object 1`] = `
 "export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
@@ -105,6 +153,43 @@ exports[`reference type in an object 1`] = `
         return false;
     }
     if (!(isB(b))) {
+        return false;
+    }
+    ensureType<X>({
+        a,
+        b
+    });
+    return true;
+}
+"
+`;
+
+exports[`two arrays of a primitive type 1`] = `
+"export function isX(root: unknown): root is X {
+    type Element = X["a"][number];
+    function isElement(root: unknown): root is Element {
+        if (!(typeof root === "number")) {
+            return false;
+        }
+        ensureType<Element>(root);
+        return true;
+    }
+    type B_Element = X["b"][number];
+    function isB_Element(root: unknown): root is B_Element {
+        if (!(typeof root === "string")) {
+            return false;
+        }
+        ensureType<B_Element>(root);
+        return true;
+    }
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    const { a, b }: SafeShallowShape<X> = root;
+    if (!(safeIsArray(a) && a.every(isElement))) {
+        return false;
+    }
+    if (!(safeIsArray(b) && b.every(isB_Element))) {
         return false;
     }
     ensureType<X>({

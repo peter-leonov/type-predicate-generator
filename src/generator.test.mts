@@ -114,3 +114,48 @@ test("array of a primitive type", () => {
     )
   ).toMatchSnapshot();
 });
+
+test("array of a primitive type union", () => {
+  expect(
+    generate(
+      new ArrayType(
+        { aliasName: "X" },
+        new UnionType({}, [
+          new PrimitiveType({}, "number"),
+          new PrimitiveType({}, "string"),
+        ])
+      )
+    )
+  ).toMatchSnapshot();
+});
+
+test("array of an object type", () => {
+  expect(
+    generate(
+      new ArrayType(
+        { aliasName: "X" },
+        new ObjectType(
+          {},
+          {
+            a: new PrimitiveType({}, "number"),
+            b: new PrimitiveType({}, "string"),
+          }
+        )
+      )
+    )
+  ).toMatchSnapshot();
+});
+
+test("two arrays of a primitive type", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          a: new ArrayType({}, new PrimitiveType({}, "number")),
+          b: new ArrayType({}, new PrimitiveType({}, "string")),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});
