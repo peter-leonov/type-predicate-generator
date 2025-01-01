@@ -10,8 +10,7 @@ import {
   UnionType,
   type TypeModel,
 } from "./model.mts";
-import assert, { ok } from "node:assert";
-import { unimplemented } from "./helpers.mts";
+import { assert, ok, unimplemented } from "./helpers.mts";
 
 export class GeneratorError extends Error {}
 

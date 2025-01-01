@@ -1,6 +1,5 @@
 import ts from "typescript";
-import { unimplemented } from "./helpers.mts";
-import { ok } from "node:assert";
+import { ok, unimplemented } from "./helpers.mts";
 
 export type TypeOptions = {
   isOptional?: boolean;
