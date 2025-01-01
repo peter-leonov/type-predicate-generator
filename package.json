@@ -2,11 +2,15 @@
   "name": "type-predicate-generator",
   "version": "0.1.1",
   "main": "index.js",
+  "type": "module",
+  "bin": "dist/cli.js",
   "repository": {
     "url": "https://github.com/peter-leonov/typescript-predicate-generator"
   },
   "scripts": {
     "test": "vitest",
+    "typecheck": "tsc",
+    "check": "npm run typecheck && CI=true npm run test",
     "generate": "NODE_NO_WARNINGS=1 node --experimental-strip-types src/index.mts"
   },
   "keywords": [
@@ -23,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
+    "esbuild": "^0.24.2",
     "vitest": "^2.1.8"
   }
 }

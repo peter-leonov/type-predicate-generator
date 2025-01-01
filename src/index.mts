@@ -1,8 +1,8 @@
-import { ok } from "node:assert";
 import ts from "typescript";
 import { factory } from "typescript";
 import { typeToModel } from "./model.mts";
 import { TypeGuardGenerator } from "./generator.mts";
+import { ok } from "./helpers.mts";
 
 function generateTypeGuards(fileName: string): boolean {
   // Build a program using the set of root file names in fileNames

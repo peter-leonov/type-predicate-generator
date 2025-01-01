@@ -44,7 +44,7 @@ test("union of primitive and literal types", () => {
   ).toMatchSnapshot();
 });
 
-test.only("union of object types", () => {
+test("union of object types", () => {
   expect(() =>
     generate(
       new UnionType({ aliasName: "Union" }, [
