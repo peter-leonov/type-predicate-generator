@@ -1,15 +1,23 @@
 {
-  "name": "type-guard-generator",
-  "version": "1.0.0",
+  "name": "type-predicate-generator",
+  "version": "0.1.1",
   "main": "index.js",
+  "repository": {
+    "url": "https://github.com/peter-leonov/typescript-predicate-generator"
+  },
   "scripts": {
     "test": "vitest",
     "generate": "NODE_NO_WARNINGS=1 node --experimental-strip-types src/index.mts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "typescript",
+    "predicate",
+    "type safety",
+    "code generator"
+  ],
+  "author": "Peter Leonov",
   "license": "MIT",
-  "description": "",
+  "description": "TypeScript Type Predicate Generator. It generates type safe TypeScript code out of a given TypeScript type that ensures the given type structure.",
   "peerDependencies": {
     "typescript": ">=4.8.0 <5.8.0"
   },
