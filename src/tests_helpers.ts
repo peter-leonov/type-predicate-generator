@@ -1,6 +1,6 @@
 import ts from "typescript";
 import { factory } from "typescript";
-import { unimplemented } from "./helpers.mts";
+import { unimplemented } from "./helpers";
 import { ok } from "assert";
 
 /**

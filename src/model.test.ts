@@ -7,8 +7,8 @@ import {
   UnionType,
   AliasType,
   ArrayType,
-} from "./model.mts";
-import { compile } from "./tests_helpers.mts";
+} from "./model";
+import { compile } from "./tests_helpers";
 
 test("undefined", () => {
   expect(

@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { ok, unimplemented } from "./helpers.mts";
+import { ok, unimplemented } from "./helpers";
 
 export type TypeOptions = {
   isOptional?: boolean;

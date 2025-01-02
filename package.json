@@ -2,16 +2,19 @@
   "name": "type-predicate-generator",
   "version": "0.1.1",
   "main": "index.js",
-  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "bin": "dist/cli.js",
   "repository": {
     "url": "https://github.com/peter-leonov/typescript-predicate-generator"
   },
   "scripts": {
     "test": "vitest",
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && CI=true npm run test",
-    "generate": "NODE_NO_WARNINGS=1 node --experimental-strip-types src/index.mts"
+    "generate": "npm run --silent build && node dist/index.js",
+    "build": "tsc"
   },
   "keywords": [
     "typescript",
@@ -22,8 +25,8 @@
   "author": "Peter Leonov",
   "license": "MIT",
   "description": "TypeScript Type Predicate Generator. It generates type safe TypeScript code out of a given TypeScript type that ensures the given type structure.",
-  "peerDependencies": {
-    "typescript": ">=4.8.0 <5.8.0"
+  "dependencies": {
+    "typescript": ">=5.7.0 <5.8.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

@@ -1,6 +1,6 @@
 import ts from "typescript";
 import { factory } from "typescript";
-import { AttributeLocal, type Path, Scope } from "./scope.mts";
+import { AttributeLocal, type Path, Scope } from "./scope";
 import {
   ArrayType,
   LiteralType,
@@ -9,8 +9,8 @@ import {
   AliasType,
   UnionType,
   type TypeModel,
-} from "./model.mts";
-import { assert, ok, unimplemented } from "./helpers.mts";
+} from "./model.js";
+import { assert, ok, unimplemented } from "./helpers";
 
 export class GeneratorError extends Error {}
 

@@ -1,8 +1,8 @@
-import ts from "typescript";
-import { factory } from "typescript";
-import { typeToModel } from "./model.mts";
-import { TypeGuardGenerator } from "./generator.mts";
-import { ok } from "./helpers.mts";
+#!/usr/bin/env node
+import ts, { factory } from "typescript";
+import { typeToModel } from "./model";
+import { TypeGuardGenerator } from "./generator";
+import { ok } from "./helpers";
 
 function generateTypeGuards(fileName: string): boolean {
   // Build a program using the set of root file names in fileNames
