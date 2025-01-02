@@ -15,6 +15,7 @@ Alpha. Most of the key distinctive features are proven to work, but some essenti
 ## Run
 
 ```bash
+cd generator
 nvm install 22
 npm i
 npm run --silent generate -- "./example.ts" > "example.guard.ts"

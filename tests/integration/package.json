@@ -1,0 +1,25 @@
+{
+  "name": "integration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run test",
+    "generate-type-guards": "type-predicate-generator ./types.ts > guards.ts",
+    "build": "npm run generate-type-guards && prettier -w .",
+    "ci": "npm run build && npm run check"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "type-predicate-generator": "file:../../generator"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
