@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && CI=true npm run test",
     "generate": "npm run --silent build && node dist/index.js",
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc",
+    "publish": "npm run build && npm publish"
   },
   "keywords": [
     "typescript",
