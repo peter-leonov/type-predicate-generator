@@ -10,15 +10,13 @@ Yep, the type predicates it generates are themselves strictly type checked by TS
 
 ## Status
 
-Alpha. Most of the key distinctive features are proven to work, but some essential features are still be missing (see [Known Limitations](#known-limitations)).
+Beta. Most of the key distinctive features are proven to work, but there are still some rough edges to polish (see [Known Limitations](#known-limitations)).
 
-## Run
+## Install
 
 ```bash
-cd generator
-nvm install 22
-npm i
-npm run --silent generate -- "./example.ts" > "example.guard.ts"
+npm i -D generate-type-guards
+npx type-predicate-generator ./types.ts > guards.ts
 ```
 
 ## Why
