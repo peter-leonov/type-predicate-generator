@@ -8,8 +8,6 @@ set -eux -o pipefail
   npm run ci
 )
 
-ls
-
 (
   cd tests/integration
   npm i
