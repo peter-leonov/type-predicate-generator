@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 
-import { isPost, isUser } from "./guards";
+import { isPost, isUser } from "./types_guards";
 
 const validUser = [
   {

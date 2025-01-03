@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import ts, { factory } from "typescript";
+import fs from "node:fs";
 import { typeToModel } from "./model";
 import { TypeGuardGenerator } from "./generator";
 import { ok } from "./helpers";
@@ -73,9 +74,9 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
       generator.addRootTypeGuardFor(model);
     });
 
-    const importFrom = flags.keepExtension
-      ? fileName
-      : fileName.replace(/\.\w+$/, "");
+    const fileNameNoExt = fileName.replace(/\.\w+$/, "");
+
+    const importFrom = flags.keepExtension ? fileName : fileNameNoExt;
 
     const resultFile = factory.updateSourceFile(
       ts.createSourceFile(
@@ -91,7 +92,11 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
     const printer = ts.createPrinter({
       newLine: ts.NewLineKind.LineFeed,
     });
-    console.log(printer.printFile(resultFile));
+
+    const content = printer.printFile(resultFile);
+    const suffix = "_guards.ts";
+    const outputFile = `${fileNameNoExt}${suffix}`;
+    fs.writeFileSync(outputFile, content);
   }
 
   return true;
