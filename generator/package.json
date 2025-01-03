@@ -1,6 +1,6 @@
 {
   "name": "type-predicate-generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "index.js",
   "engines": {
     "node": ">=22"
@@ -15,8 +15,7 @@
     "check": "npm run typecheck && CI=true npm run test",
     "generate": "npm run --silent build && node dist/index.js",
     "build": "rm -rf dist && tsc && chmod +x dist/cli.js",
-    "ci": "npm run build && npm run check",
-    "publish": "npm run build && npm publish"
+    "ci": "npm run build && npm run check"
   },
   "keywords": [
     "typescript",
