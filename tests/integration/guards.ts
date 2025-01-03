@@ -1,4 +1,4 @@
-import { type User, type Post } from "./types.ts";
+import { type User, type Post } from "./types";
 type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
