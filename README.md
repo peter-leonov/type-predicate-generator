@@ -1,39 +1,46 @@
 # TypeScript Type Predicate Generator
 
-A.k.a type guard generator.
+Check JSON data from APIs 100% type safe and at blazing speed.
 
 ## About
 
 A TypeScript [type predicate](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe readable and extremely fast TypeScript code.
 
-Yep, the type predicates it generates are themselves strictly type checked by TS that guarantees that the checked value satisfies the expected type.
+Yep, the type predicates (a.k.a type guards) it generates are themselves strictly type checked by TS that guarantees that the checked value satisfies the expected type.
 
 ## Status
 
-Beta. Most of the key distinctive features are proven to work, but there are still some rough edges to polish (see [Known Limitations](#known-limitations)).
+Beta. Most of the key distinctive features are proven to work, but there are still some rough edges to polish (see [Known Limitations](#known-limitations) and [TODO](#todo)).
 
 ## Install
 
 ```bash
 npm i -D generate-type-guards
-npx type-predicate-generator ./types.ts > guards.ts
 ```
+
+## Use
+
+```bash
+npx type-predicate-generator ./types.ts
+```
+
+Generates `types_guards.ts` with the code like in the example [below](#example).
 
 ## Why
 
-It's a simple, easy to integrate tool that does only one thing and does it well: generates type safe and fast code ready to use right away. The implmentation is near trivial, it uses minimal TypeScript public API surface thus is easy to update to keep up with changes in TS itself.
+It's a simple, easy to integrate tool that does only one thing and does it well: generates type safe and fast code ready to use right away. The implmentation is near trivial, it uses minimal TypeScript public API surface thus is easy to update to keep up with the constant changes in TS itself.
 
-Experience shows that many teams can remain hesitant to introduce a runtime type checker because of many reasons. The main two have been speed (some checkers bring a whole runtime engine with them) and reliability (the produced code is invisible and hard to fix).
+Experience shows that many teams can remain hesitant to introduce a runtime type checker because of various reasons. The main two have been speed (some checkers bring a whole runtime rule engine with them) and reliability (the produced code or a rule set is a black box that is hard to assess).
 
-To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if manually written and minifies really well. This all is heavily inspired by code generators from other languages.
+To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if it's manually written and minifies really well. This all is heavily inspired by code generators from other languages.
 
 ## Pros
 
 1. The produced code is type safe and gets checked by your TS setup
 1. The produced code is as fast as it gets: no extra reads, calls, comparisons
-1. The produced code is readable, lenear and easy to modify in case you need to
+1. The produced code is readable, linear and easy to modify if needed
 1. Does not require any runtime or compile time dependencies
-1. It's bundler agnostic as it's output is plain TS (no `tsc` plugins required)
+1. It's bundler agnostic as its output is plain TS (no `tsc` plugins required)
 1. The bundle size cost is 100% visible and predictable
 1. Safe to upgrade: if the produced code changes you'll see it in the PR
 1. Zero performance cost in development: run once and forget
@@ -81,13 +88,13 @@ export type Post = {
 Running the generator on it:
 
 ```bash
-npm run --silent generate -- "./example.ts" > "example.guard.ts"
+npx type-predicate-generator ./example.ts
 ```
 
 This is the output with a readable and strictly type safe TS guard:
 
 ```ts
-// example.guard.ts
+// example_guards.ts
 import { type User, type Post } from "./example.ts";
 
 type SafeShallowShape<Type> = {
@@ -181,7 +188,7 @@ export function isPost(root: unknown): root is Post {
 And this is what `esbuild` minifies it into (formatted for readability):
 
 ```js
-// example.guard.min.js
+// example_guards.min.js
 const u = Array.isArray;
 function p(e) {}
 export function isUser(e) {
@@ -228,7 +235,7 @@ Most of the below is gonna be eventually fixed.
 
 1. No support for extended schema verification. This is mostly to stay simple and fast to evolve while in alpha/beta. It's trivial to add more value checkers with the current design.
 
-1. Does not produce error messages yet. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema chacker on error.
+1. Does not produce error messages yet. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema checker on error.
 
 1. No support for generics atm, but the code is designed with them in mind, so also coming soon.
 
@@ -263,21 +270,28 @@ See more here [#1](https://github.com/peter-leonov/typescript-predicate-generato
 
 ### TODO
 
-1. Support lists
-1. Support tuples
-1. Implement installing as a CLI
-1. Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
-1. Generate unit tests with example data
+Feel free to pick any of the tasks here or in the GH issues.
+
+- [x] Support lists
+- [ ] Support tuples
+- [x] Report TS errors before running
+- [ ] Report errors nicely
+- [x] Implement installing as a CLI
+- [ ] Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
+- [ ] Generate unit tests with example data
 
 ### Architecture
 
-This tool is simple if not trivial. The code generator uses the TypeScript public API to emit the valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
+This tool is simple if not trivial. The code generator uses the TypeScript public API to emit valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
 
-What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type). The parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed into the generator to actually produce the resulting TS code. This way both subsystems can be developed and tested independently. This resembles very much the `ViewModel` approach from the MVC web frameworks.
+What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type in [generator/src/model.ts](generator/src/model.ts)). The type parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed to the generator to actually produce the resulting TS code. This way both subsystems can be developed and tested independently. This resembles the viewmodel from [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) and in general promotes clean domain boundaries inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 
 ### Design
 
-Moto: check JSON data from APIs 100% type safe and at blazing speed.
+Goals:
+
+- Check JSON data from APIs 100% type safe and fast
+- Make the tool easy to use and maintain both for the tool users and the tool developers
 
 Non-goals:
 
@@ -292,7 +306,7 @@ Guiding principles:
 - The generated code should be readable and easy to modify by hand if needed.
 - Common minifiers should be able to produce efficient and compact code
 - KISS the generator to address the bugs and TypeScript updates quicker
-- Use monomorphised functions to keep the JIT happy
+- Use monomorphised functions to keep the JIT happy (a.k.a generate same helpers for each unique tipe)
 
 Nice to haves:
 
