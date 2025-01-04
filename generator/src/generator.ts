@@ -427,6 +427,15 @@ function assertionConditionForType(
   }
 
   if (type instanceof LiteralType) {
+    if (type.value === undefined) {
+      return factory.createBinaryExpression(
+        factory.createTypeOfExpression(
+          factory.createIdentifier(target)
+        ),
+        factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+        factory.createStringLiteral("undefined")
+      );
+    }
     return factory.createBinaryExpression(
       factory.createIdentifier(target),
       factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),

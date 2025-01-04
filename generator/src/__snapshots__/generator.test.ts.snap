@@ -203,7 +203,7 @@ exports[`two arrays of a primitive type 1`] = `
 
 exports[`undefined 1`] = `
 "export function isX(root: unknown): root is X {
-    if (!(root === undefined)) {
+    if (!(typeof root === "undefined")) {
         return false;
     }
     ensureType<X>(root);
