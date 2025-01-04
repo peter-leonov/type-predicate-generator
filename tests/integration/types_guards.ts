@@ -3,7 +3,6 @@ type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
-function ensureType<T>(_: T) {}
 export function isUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
@@ -25,14 +24,14 @@ export function isUser(root: unknown): root is User {
   if (!(typeof last === "string")) {
     return false;
   }
-  ensureType<User>({
+  ({
     id,
     login,
     bio: {
       first,
       last,
     },
-  });
+  }) satisfies User;
   return true;
 }
 export function isPost(root: unknown): root is Post {
@@ -41,7 +40,7 @@ export function isPost(root: unknown): root is Post {
     if (!(typeof root === "string" || typeof root === "number")) {
       return false;
     }
-    ensureType<Element>(root);
+    root satisfies Element;
     return true;
   }
   if (!(typeof root === "object" && root !== null)) {
@@ -55,7 +54,7 @@ export function isPost(root: unknown): root is Post {
   if (!(typeof text === "string")) {
     return false;
   }
-  if (!(link === undefined || typeof link === "string")) {
+  if (!(typeof link === "undefined" || typeof link === "string")) {
     return false;
   }
   if (!(typeof published === "boolean")) {
@@ -67,13 +66,13 @@ export function isPost(root: unknown): root is Post {
   if (!(safeIsArray(list) && list.every(isElement))) {
     return false;
   }
-  ensureType<Post>({
+  ({
     title,
     text,
     link,
     published,
     author,
     list,
-  });
+  }) satisfies Post;
   return true;
 }
