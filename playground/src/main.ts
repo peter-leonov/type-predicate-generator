@@ -1,4 +1,5 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import { generateTypeGuards } from "type-predicate-generator/src";
 import "./style.css";
 import "./worker";
 
@@ -43,10 +44,7 @@ const sourceModel = monaco.editor.createModel(
 );
 
 const predicateModel = monaco.editor.createModel(
-  `import { User } from "./example";
-
-let x: User | null = null
-`,
+  ``,
   "typescript",
   monaco.Uri.file("/example_guards.ts")
 );
@@ -69,12 +67,10 @@ const predicates = monaco.editor.create(predicatesRoot, {
 });
 predicates.setModel(predicateModel);
 
-let counter = 0;
-source.onDidChangeModelContent(() => {
-  predicates.setValue(`import { User } from "./example";
+function onChange() {
+  predicates.setValue(generateTypeGuards(sourceModel.getValue()));
+}
 
-let x: User | null = null
+source.onDidChangeModelContent(onChange);
 
-// ${counter++}
-`);
-});
+onChange();

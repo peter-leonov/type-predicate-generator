@@ -37,7 +37,7 @@ export function generateTypeGuards(
     fileExists: (fileName) => files.has(fileName),
     getSourceFile: (fileName, options) => {
       const content = files.get(fileName);
-      ok(content);
+      ok(content != undefined);
       return ts.createSourceFile(fileName, content, options);
     },
     getDefaultLibFileName: () => "/lib/lib.d.ts",
