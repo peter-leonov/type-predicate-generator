@@ -12,8 +12,10 @@ export function ok(value: unknown): asserts value {
   }
 }
 
-const sourceRoot = $("#source");
-ok(sourceRoot);
+monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+  strict: true,
+  noImplicitAny: true,
+});
 
 const example = `export type User = {
   id: number;
@@ -34,14 +36,45 @@ export type Post = {
 };
 `;
 
-const editor = monaco.editor.create(sourceRoot, {
+const sourceModel = monaco.editor.createModel(
+  example,
+  "typescript",
+  monaco.Uri.file("/example.ts")
+);
+
+const predicateModel = monaco.editor.createModel(
+  `import { User } from "./example";
+
+let x: User | null = null
+`,
+  "typescript",
+  monaco.Uri.file("/example_guards.ts")
+);
+
+const sourceRoot = $("#source");
+ok(sourceRoot);
+const source = monaco.editor.create(sourceRoot, {
   theme: "vs-dark",
   minimap: { enabled: false },
-  value: example,
   language: "typescript",
 });
+source.setModel(sourceModel);
 
-editor.onDidChangeModelContent(() => {
-  console.log("!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!");
-  console.log(editor.getValue());
+const predicatesRoot = $("#predicates");
+ok(predicatesRoot);
+const predicates = monaco.editor.create(predicatesRoot, {
+  theme: "vs-dark",
+  minimap: { enabled: false },
+  language: "typescript",
+});
+predicates.setModel(predicateModel);
+
+let counter = 0;
+source.onDidChangeModelContent(() => {
+  predicates.setValue(`import { User } from "./example";
+
+let x: User | null = null
+
+// ${counter++}
+`);
 });
