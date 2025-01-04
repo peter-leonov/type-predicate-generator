@@ -54,7 +54,7 @@ ok(sourceRoot);
 const source = monaco.editor.create(sourceRoot, {
   theme: "vs-dark",
   minimap: { enabled: false },
-  language: "typescript",
+  automaticLayout: true,
 });
 source.setModel(sourceModel);
 
@@ -63,7 +63,7 @@ ok(predicatesRoot);
 const predicates = monaco.editor.create(predicatesRoot, {
   theme: "vs-dark",
   minimap: { enabled: false },
-  language: "typescript",
+  automaticLayout: true,
 });
 predicates.setModel(predicateModel);
 
