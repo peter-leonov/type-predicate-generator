@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateTypeGuards 1`] = `
+"import { type X } from "./foo";
+type SafeShallowShape<Type> = {
+    [_ in keyof Type]?: unknown;
+};
+const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
+function ensureType<T>(_: T) { }
+export function isX(root: unknown): root is X {
+    if (!(typeof root === "number")) {
+        return false;
+    }
+    ensureType<X>(root);
+    return true;
+}
+"
+`;
