@@ -6,12 +6,11 @@ type SafeShallowShape<Type> = {
     [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
-function ensureType<T>(_: T) { }
 export function isX(root: unknown): root is X {
     if (!(typeof root === "number")) {
         return false;
     }
-    ensureType<X>(root);
+    (root) satisfies X;
     return true;
 }
 "

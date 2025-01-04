@@ -227,7 +227,6 @@ export class TypeGuardGenerator {
       ...this.getTypeImports(sourceFileName),
       ...typeSafeShallowShape(),
       safeIsArray(),
-      ...functionEnsureType(),
       ...this.getGuards(),
     ];
   }
@@ -251,41 +250,6 @@ function capitalise(str: string): string {
 
 function returnTrue(): ts.Statement {
   return factory.createReturnStatement(factory.createTrue());
-}
-
-const ensureType = "ensureType";
-
-function functionEnsureType(): ts.Statement[] {
-  return [
-    factory.createFunctionDeclaration(
-      undefined,
-      undefined,
-      factory.createIdentifier(ensureType),
-      [
-        factory.createTypeParameterDeclaration(
-          undefined,
-          factory.createIdentifier("T"),
-          undefined,
-          undefined
-        ),
-      ],
-      [
-        factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          factory.createIdentifier("_"),
-          undefined,
-          factory.createTypeReferenceNode(
-            factory.createIdentifier("T"),
-            undefined
-          ),
-          undefined
-        ),
-      ],
-      undefined,
-      factory.createBlock([], false)
-    ),
-  ];
 }
 
 const SafeShallowShape = "SafeShallowShape";
@@ -699,15 +663,12 @@ function typeSafeCheckAssembly(
 
   return [
     factory.createExpressionStatement(
-      factory.createCallExpression(
-        factory.createIdentifier(ensureType),
-        [
-          factory.createTypeReferenceNode(
-            factory.createIdentifier(typeName),
-            undefined
-          ),
-        ],
-        [value]
+      factory.createSatisfiesExpression(
+        factory.createParenthesizedExpression(value),
+        factory.createTypeReferenceNode(
+          factory.createIdentifier(typeName),
+          undefined
+        )
       )
     ),
   ];
