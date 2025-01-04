@@ -68,7 +68,16 @@ const predicates = monaco.editor.create(predicatesRoot, {
 predicates.setModel(predicateModel);
 
 function onChange() {
-  predicates.setValue(generateTypeGuards(sourceModel.getValue()));
+  try {
+    predicates.setValue(generateTypeGuards(sourceModel.getValue()));
+  } catch (err) {
+    predicates.setValue(
+      `// Compilation failed!
+// Please see the error message in the browser console.
+`
+    );
+    throw err;
+  }
 }
 
 source.onDidChangeModelContent(onChange);
