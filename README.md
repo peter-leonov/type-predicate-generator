@@ -2,6 +2,8 @@
 
 Check JSON data from APIs 100% type safe and at blazing speed.
 
+Give it a try in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/).
+
 ## About
 
 A TypeScript [type predicate](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe readable and extremely fast TypeScript code.
