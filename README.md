@@ -6,9 +6,9 @@ Give it a try in the [Playground](https://peter-leonov.github.io/typescript-pred
 
 ## About
 
-A TypeScript [type predicate](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe readable and extremely fast TypeScript code.
+A TypeScript code generator that produces strictly type safe readable and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates).
 
-Yep, the type predicates (a.k.a type guards) it generates are themselves strictly type checked by TS that guarantees that the checked value satisfies the expected type.
+Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe and checked by TS as part of your project setup.
 
 ## Status
 
