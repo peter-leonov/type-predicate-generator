@@ -35,7 +35,7 @@ export function isUser(root: unknown): root is User {
   return true;
 }
 export function isPost(root: unknown): root is Post {
-  type Element = Post["list"][number];
+  type Element = Post["more"][number];
   function isElement(root: unknown): root is Element {
     if (!(typeof root === "string" || typeof root === "number")) {
       return false;
@@ -46,7 +46,7 @@ export function isPost(root: unknown): root is Post {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  const { title, text, link, published, author, list }: SafeShallowShape<Post> =
+  const { title, text, link, published, author, more }: SafeShallowShape<Post> =
     root;
   if (!(typeof title === "string")) {
     return false;
@@ -63,7 +63,7 @@ export function isPost(root: unknown): root is Post {
   if (!isUser(author)) {
     return false;
   }
-  if (!(safeIsArray(list) && list.every(isElement))) {
+  if (!(safeIsArray(more) && more.every(isElement))) {
     return false;
   }
   ({
@@ -72,7 +72,7 @@ export function isPost(root: unknown): root is Post {
     link,
     published,
     author,
-    list,
+    more,
   }) satisfies Post;
   return true;
 }

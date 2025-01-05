@@ -124,7 +124,7 @@ const validPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -132,22 +132,14 @@ const validPost = [
     link: "string",
     published: false,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
     text: "string",
     published: true,
     author: validUser[0],
-    list: [1],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: true,
-    author: validUser[0],
-    list: ["string"],
+    more: [1],
   },
   {
     title: "string",
@@ -155,7 +147,15 @@ const validPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: ["string", 1],
+    more: ["string"],
+  },
+  {
+    title: "string",
+    text: "string",
+    link: "string",
+    published: true,
+    author: validUser[0],
+    more: ["string", 1],
   },
 ];
 
@@ -166,28 +166,28 @@ const invalidPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
     link: "string",
     published: true,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
     text: "string",
     link: "string",
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
     text: "string",
     link: "string",
     published: true,
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -202,7 +202,7 @@ const invalidPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -210,7 +210,7 @@ const invalidPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -218,7 +218,7 @@ const invalidPost = [
     link: 1,
     published: true,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -226,7 +226,7 @@ const invalidPost = [
     link: "string",
     published: 1,
     author: validUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -234,7 +234,7 @@ const invalidPost = [
     link: "string",
     published: true,
     author: invalidUser[0],
-    list: [1],
+    more: [1],
   },
   {
     title: "string",
@@ -242,7 +242,7 @@ const invalidPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: null,
+    more: null,
   },
   {
     title: "string",
@@ -250,7 +250,7 @@ const invalidPost = [
     link: "string",
     published: true,
     author: validUser[0],
-    list: [true],
+    more: [true],
   },
 ];
 

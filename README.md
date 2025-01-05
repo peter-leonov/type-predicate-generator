@@ -83,7 +83,7 @@ export type Post = {
   link?: string;
   published: boolean;
   author: User;
-  list: Array<number | string>;
+  more: Array<number | string>;
 };
 ```
 
@@ -97,14 +97,11 @@ This is the output with a readable and strictly type safe TS guard:
 
 ```ts
 // example_guards.ts
-import { type User, type Post } from "./example.ts";
-
+import { type User, type Post } from "./types";
 type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
-function ensureType<T>(_: T) {}
-
 export function isUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
@@ -126,24 +123,23 @@ export function isUser(root: unknown): root is User {
   if (!(typeof last === "string")) {
     return false;
   }
-  ensureType<User>({
+  ({
     id,
     login,
     bio: {
       first,
       last,
     },
-  });
+  }) satisfies User;
   return true;
 }
-
 export function isPost(root: unknown): root is Post {
-  type Element = Post["list"][number];
+  type Element = Post["more"][number];
   function isElement(root: unknown): root is Element {
     if (!(typeof root === "string" || typeof root === "number")) {
       return false;
     }
-    ensureType<Element>(root);
+    root satisfies Element;
     return true;
   }
   if (!(typeof root === "object" && root !== null)) {
@@ -155,7 +151,7 @@ export function isPost(root: unknown): root is Post {
     link,
     published,
     author,
-    list,
+    more,
   }: SafeShallowShape<Post> = root;
   if (!(typeof title === "string")) {
     return false;
@@ -163,7 +159,7 @@ export function isPost(root: unknown): root is Post {
   if (!(typeof text === "string")) {
     return false;
   }
-  if (!(link === undefined || typeof link === "string")) {
+  if (!(typeof link === "undefined" || typeof link === "string")) {
     return false;
   }
   if (!(typeof published === "boolean")) {
@@ -172,17 +168,17 @@ export function isPost(root: unknown): root is Post {
   if (!isUser(author)) {
     return false;
   }
-  if (!(safeIsArray(list) && list.every(isElement))) {
+  if (!(safeIsArray(more) && more.every(isElement))) {
     return false;
   }
-  ensureType<Post>({
+  ({
     title,
     text,
     link,
     published,
     author,
-    list,
-  });
+    more,
+  }) satisfies Post;
   return true;
 }
 ```
@@ -192,40 +188,39 @@ And this is what `esbuild` minifies it into (formatted for readability):
 ```js
 // example_guards.min.js
 const u = Array.isArray;
-function p(e) {}
 export function isUser(e) {
   if (!(typeof e == "object" && e !== null)) return !1;
-  const { id: s, login: r, bio: t } = e;
+  const { id: f, login: r, bio: t } = e;
   if (
-    typeof s != "number" ||
+    typeof f != "number" ||
     typeof r != "string" ||
     !(typeof t == "object" && t !== null)
   )
     return !1;
-  const { first: n, last: f } = t;
-  return typeof n != "string" || typeof f != "string" ? !1 : !0;
+  const { first: n, last: s } = t;
+  return !(typeof n != "string" || typeof s != "string");
 }
 export function isPost(e) {
-  function s(o) {
-    return typeof o == "string" || typeof o == "number" ? !0 : !1;
+  function f(o) {
+    return typeof o == "string" || typeof o == "number";
   }
   if (!(typeof e == "object" && e !== null)) return !1;
   const {
     title: r,
     text: t,
     link: n,
-    published: f,
+    published: s,
     author: l,
-    list: i,
+    more: i,
   } = e;
-  return typeof r != "string" ||
+  return !(
+    typeof r != "string" ||
     typeof t != "string" ||
-    !(n === void 0 || typeof n == "string") ||
-    typeof f != "boolean" ||
+    !(typeof n > "u" || typeof n == "string") ||
+    typeof s != "boolean" ||
     !isUser(l) ||
-    !(u(i) && i.every(s))
-    ? !1
-    : !0;
+    !(u(i) && i.every(f))
+  );
 }
 ```
 
@@ -234,6 +229,8 @@ As you can see, esbuild nicely merges all the `if`s for the same set of properti
 ## Known Limitations
 
 Most of the below is gonna be eventually fixed.
+
+1. Does not support `interface` for no particular reason. A good first issue if you'd like to contribute!
 
 1. No support for extended schema verification. This is mostly to stay simple and fast to evolve while in alpha/beta. It's trivial to add more value checkers with the current design.
 
