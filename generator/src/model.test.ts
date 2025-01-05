@@ -440,3 +440,21 @@ test("array of a primitive type", () => {
     new ArrayType({ aliasName: "X" }, new PrimitiveType({}, "number"))
   );
 });
+
+test("nested arrays of a primitive type", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = number[][][]
+      `)
+    )
+  ).toEqual(
+    new ArrayType(
+      { aliasName: "X" },
+      new ArrayType(
+        {},
+        new ArrayType({}, new PrimitiveType({}, "number"))
+      )
+    )
+  );
+});
