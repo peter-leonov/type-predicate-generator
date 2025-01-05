@@ -8,7 +8,7 @@ Give it a try in the [Playground](https://peter-leonov.github.io/typescript-pred
 
 A TypeScript code generator that produces strictly type safe readable and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates).
 
-Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe and checked by TS as part of your project setup.
+Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and checked by TS as part of your project setup.
 
 ## Status
 
