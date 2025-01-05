@@ -115,6 +115,31 @@ test("union of primitive types", () => {
   );
 });
 
+test("union of literal types", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = "a" | "b"
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new LiteralType({}, "a"),
+      new LiteralType({}, "b"),
+    ])
+  );
+});
+
+test("union of true and false", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        type X = true | false
+      `)
+    )
+  ).toEqual(new PrimitiveType({ aliasName: "X" }, "boolean"));
+});
+
 test("a nested union", () => {
   expect(
     typeToModel(

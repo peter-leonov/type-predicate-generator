@@ -587,6 +587,22 @@ function valueToNode(value: LiteralValue): ts.Expression {
     return factory.createIdentifier("undefined");
   }
 
+  if (typeof value === "string") {
+    return factory.createStringLiteral(value);
+  }
+
+  if (typeof value === "number") {
+    return factory.createNumericLiteral(value);
+  }
+
+  if (value === true) {
+    return factory.createTrue();
+  }
+
+  if (value === false) {
+    return factory.createFalse();
+  }
+
   unimplemented();
 }
 

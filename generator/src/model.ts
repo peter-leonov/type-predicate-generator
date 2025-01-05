@@ -186,10 +186,11 @@ export function typeToModel(
     }
     return new ObjectType({ isOptional, aliasName }, attributes);
   } else if (tsTypeIsPrimitive(type)) {
+    const intrinsicName = (type as IntrinsicType)?.intrinsicName;
     // console.log(`- primitive: ${checker.typeToString(type)}`);
     return new PrimitiveType(
       { isOptional, aliasName },
-      checker.typeToString(type)
+      intrinsicName || checker.typeToString(type)
     );
   } else if (type.isLiteral()) {
     // console.log(`- literal: ${checker.typeToString(type)}`);

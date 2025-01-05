@@ -50,6 +50,35 @@ test("union of primitive and literal types", () => {
   ).toMatchSnapshot();
 });
 
+test("union of literal types", () => {
+  expect(
+    generate(
+      new UnionType({ aliasName: "X" }, [
+        new LiteralType({}, "a"),
+        new LiteralType({}, "b"),
+        new LiteralType({}, 1),
+        new LiteralType({}, 2),
+        new LiteralType({}, true),
+        new LiteralType({}, false),
+        new LiteralType({}, null),
+        new LiteralType({}, undefined),
+      ])
+    )
+  ).toMatchSnapshot();
+});
+
+test("union of mixed safe types", () => {
+  expect(
+    generate(
+      new UnionType({ aliasName: "X" }, [
+        new PrimitiveType({}, "number"),
+        new LiteralType({}, "a"),
+        new LiteralType({}, true),
+      ])
+    )
+  ).toMatchSnapshot();
+});
+
 test("union of object types", () => {
   expect(() =>
     generate(

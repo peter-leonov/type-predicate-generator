@@ -266,6 +266,28 @@ exports[`undefined 1`] = `
 "
 `;
 
+exports[`union of literal types 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!((root === "a") || (root === "b") || (root === 1) || (root === 2) || (root === true) || (root === false) || (root === null) || (typeof root === "undefined"))) {
+        return false;
+    }
+    (root) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`union of mixed safe types 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!((typeof root === "number") || (root === "a") || (root === true))) {
+        return false;
+    }
+    (root) satisfies X;
+    return true;
+}
+"
+`;
+
 exports[`union of primitive and literal types 1`] = `
 "export function isUnion(root: unknown): root is Union {
     if (!((typeof root === "string") || (typeof root === "number") || (root === null))) {
