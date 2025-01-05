@@ -13,6 +13,7 @@
     "vite": "^6.0.5"
   },
   "dependencies": {
+    "lz-string": "^1.5.0",
     "monaco-editor": "^0.52.2",
     "type-predicate-generator": "file:../generator"
   }

@@ -1,5 +1,9 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { generateTypeGuards } from "type-predicate-generator/src";
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from "lz-string";
 import "./style.css";
 import "./worker";
 
@@ -19,7 +23,7 @@ monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   strictNullChecks: true,
 });
 
-const example = `export type User = {
+const defaultExample = `export type User = {
   id: number;
   login: string;
   bio: {
@@ -38,8 +42,37 @@ export type Post = {
 };
 `;
 
+function saveState(source: string) {
+  try {
+    history.replaceState(
+      null,
+      "",
+      `?s=${compressToEncodedURIComponent(source)}`
+    );
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function loadState(): string {
+  try {
+    const url = new URL(location.href);
+    const encoded = url.searchParams.get("s");
+    if (encoded) {
+      const source = decompressFromEncodedURIComponent(encoded);
+      if (source) {
+        return source;
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  return defaultExample;
+}
+
 const sourceModel = monaco.editor.createModel(
-  example,
+  loadState(),
   "typescript",
   monaco.Uri.file("/example.ts")
 );
@@ -72,7 +105,9 @@ predicates.setModel(predicateModel);
 
 function onChange() {
   try {
-    predicates.setValue(generateTypeGuards(sourceModel.getValue()));
+    const sourceCode = sourceModel.getValue();
+    saveState(sourceCode);
+    predicates.setValue(generateTypeGuards(sourceCode));
   } catch (err) {
     predicates.setValue(
       `// Compilation failed:
