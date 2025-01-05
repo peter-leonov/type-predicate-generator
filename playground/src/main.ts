@@ -56,6 +56,7 @@ const source = monaco.editor.create(sourceRoot, {
   theme: "vs-dark",
   minimap: { enabled: false },
   automaticLayout: true,
+  scrollBeyondLastLine: false,
 });
 source.setModel(sourceModel);
 
@@ -65,6 +66,7 @@ const predicates = monaco.editor.create(predicatesRoot, {
   theme: "vs-dark",
   minimap: { enabled: false },
   automaticLayout: true,
+  scrollBeyondLastLine: false,
 });
 predicates.setModel(predicateModel);
 
@@ -73,8 +75,10 @@ function onChange() {
     predicates.setValue(generateTypeGuards(sourceModel.getValue()));
   } catch (err) {
     predicates.setValue(
-      `// Compilation failed!
-// Please see the error message in the browser console.
+      `// Compilation failed:
+//    ${err}
+// Please see the full error message,
+// stacktrace and more context in the browser console.
 `
     );
     throw err;
