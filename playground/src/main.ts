@@ -13,9 +13,10 @@ export function ok(value: unknown): asserts value {
   }
 }
 
-monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   strict: true,
   noImplicitAny: true,
+  strictNullChecks: true,
 });
 
 const example = `export type User = {

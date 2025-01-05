@@ -520,10 +520,20 @@ function objectSpread(
   properties: AttributeLocal[],
   type: ts.TypeNode
 ): ts.Statement[] {
+  const satisfiesObject = factory.createExpressionStatement(
+    factory.createSatisfiesExpression(
+      factory.createParenthesizedExpression(
+        factory.createIdentifier(target)
+      ),
+      factory.createTypeLiteralNode([])
+    )
+  );
+
   if (properties.length == 0) {
-    return [];
+    return [satisfiesObject];
   }
   return [
+    satisfiesObject,
     factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(

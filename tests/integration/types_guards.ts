@@ -7,6 +7,7 @@ export function isUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
+  root satisfies {};
   const { id, login, bio }: SafeShallowShape<User> = root;
   if (!(typeof id === "number")) {
     return false;
@@ -17,6 +18,7 @@ export function isUser(root: unknown): root is User {
   if (!(typeof bio === "object" && bio !== null)) {
     return false;
   }
+  bio satisfies {};
   const { first, last }: SafeShallowShape<User["bio"]> = bio;
   if (!(typeof first === "string")) {
     return false;
@@ -46,6 +48,7 @@ export function isPost(root: unknown): root is Post {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
+  root satisfies {};
   const { title, text, link, published, author, more }: SafeShallowShape<Post> =
     root;
   if (!(typeof title === "string")) {

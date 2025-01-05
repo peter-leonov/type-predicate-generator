@@ -45,6 +45,7 @@ exports[`array of an object type 1`] = `
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
+        (root) satisfies {};
         const { a, b }: SafeShallowShape<Element> = root;
         if (!(typeof a === "number")) {
             return false;
@@ -72,6 +73,7 @@ exports[`empty object 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
+    (root) satisfies {};
     ({}) satisfies X;
     return true;
 }
@@ -83,14 +85,17 @@ exports[`nested object 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
+    (root) satisfies {};
     const { a }: SafeShallowShape<X> = root;
     if (!(typeof a === "object" && a !== null)) {
         return false;
     }
+    (a) satisfies {};
     const { b }: SafeShallowShape<X["a"]> = a;
     if (!(typeof b === "object" && b !== null)) {
         return false;
     }
+    (b) satisfies {};
     const { c }: SafeShallowShape<X["a"]["b"]> = b;
     if (!(typeof c === "string")) {
         return false;
@@ -123,6 +128,7 @@ exports[`object with primitive types 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
+    (root) satisfies {};
     const { a, b, c }: SafeShallowShape<X> = root;
     if (!(typeof a === "number")) {
         return false;
@@ -159,6 +165,7 @@ exports[`reference type in an object 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
+    (root) satisfies {};
     const { a, b }: SafeShallowShape<X> = root;
     if (!(isA(a))) {
         return false;
@@ -196,6 +203,7 @@ exports[`two arrays of a primitive type 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
+    (root) satisfies {};
     const { a, b }: SafeShallowShape<X> = root;
     if (!(safeIsArray(a) && a.every(isElement))) {
         return false;
