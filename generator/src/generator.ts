@@ -520,7 +520,9 @@ function objectSpread(
   properties: AttributeLocal[],
   type: ts.TypeNode
 ): ts.Statement[] {
-  ok(properties.length != 0);
+  if (properties.length == 0) {
+    return [];
+  }
   return [
     factory.createVariableStatement(
       undefined,

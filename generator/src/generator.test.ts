@@ -32,6 +32,12 @@ test("null", () => {
   ).toMatchSnapshot();
 });
 
+test("empty object", () => {
+  expect(
+    generate(new ObjectType({ aliasName: "X" }, {}))
+  ).toMatchSnapshot();
+});
+
 test("union of primitive and literal types", () => {
   expect(
     generate(

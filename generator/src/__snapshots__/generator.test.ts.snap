@@ -67,6 +67,17 @@ exports[`array of an object type 1`] = `
 "
 `;
 
+exports[`empty object 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    ({}) satisfies X;
+    return true;
+}
+"
+`;
+
 exports[`nested object 1`] = `
 "export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
