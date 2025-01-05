@@ -9,7 +9,7 @@ cp types.ts guards.test.ts test_project
 cd test_project
 npm init -y
 npm i -D vitest typescript type-predicate-generator
-npx type-predicate-generator ./types.ts > guards.ts
+npx type-predicate-generator ./types.ts
 CI=1 npx vitest
 npx tsc --init
 npx tsc --strict

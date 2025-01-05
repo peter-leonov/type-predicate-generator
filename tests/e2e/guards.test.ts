@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { isFoo } from "./guards";
+import { isFoo } from "./types_guards";
 
 test("valid", () => {
   expect(isFoo(1)).toBe(true);
