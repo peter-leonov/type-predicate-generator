@@ -80,6 +80,41 @@ exports[`empty object 1`] = `
 "
 `;
 
+exports[`nested arrays of a primitive type 1`] = `
+"export function isX(root: unknown): root is X {
+    type Element = X[number];
+    function isElement(root: unknown): root is Element {
+        type Element_Element = Element[number];
+        function isElement_Element(root: unknown): root is Element_Element {
+            type Element_Element_Element = Element_Element[number];
+            function isElement_Element_Element(root: unknown): root is Element_Element_Element {
+                if (!(typeof root === "number")) {
+                    return false;
+                }
+                (root) satisfies Element_Element_Element;
+                return true;
+            }
+            if (!(safeIsArray(root) && root.every(isElement_Element_Element))) {
+                return false;
+            }
+            (root) satisfies Element_Element;
+            return true;
+        }
+        if (!(safeIsArray(root) && root.every(isElement_Element))) {
+            return false;
+        }
+        (root) satisfies Element;
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isElement))) {
+        return false;
+    }
+    (root) satisfies X;
+    return true;
+}
+"
+`;
+
 exports[`nested object 1`] = `
 "export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {

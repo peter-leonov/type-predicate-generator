@@ -179,3 +179,17 @@ test("two arrays of a primitive type", () => {
     )
   ).toMatchSnapshot();
 });
+
+test("nested arrays of a primitive type", () => {
+  expect(
+    generate(
+      new ArrayType(
+        { aliasName: "X" },
+        new ArrayType(
+          {},
+          new ArrayType({}, new PrimitiveType({}, "number"))
+        )
+      )
+    )
+  ).toMatchSnapshot();
+});

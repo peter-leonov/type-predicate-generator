@@ -17,15 +17,17 @@ export class AttributeLocal {
  */
 export type Path = string[];
 
+let scopeID = 0;
 export class Scope {
+  // used to tell scopes apart in logs
+  id: number;
   #by_full_path: Map<string, AttributeLocal>;
   #local_names: Set<string>;
-  #type_names: Set<string>;
 
   constructor() {
+    this.id = ++scopeID;
     this.#by_full_path = new Map();
     this.#local_names = new Set();
-    this.#type_names = new Set();
   }
 
   /**
@@ -92,9 +94,25 @@ export class Scope {
     );
   }
 
-  /**
-   * A shameless copy paste of the above.
-   */
+  list(): string[] {
+    return [...this.#local_names.values()];
+  }
+}
+
+let typeScopeID = 0;
+/**
+ * Type namespace is not lexical, thus we need a separate scope class.
+ */
+export class TypeScope {
+  // used to tell scopes apart in logs
+  id: number;
+  #type_names: Set<string>;
+
+  constructor() {
+    this.id = ++scopeID;
+    this.#type_names = new Set();
+  }
+
   newTypeName(path: string[], proposal: string): string {
     proposal = toIdentifier(proposal);
 
@@ -123,10 +141,6 @@ export class Scope {
     throw new Error(
       `too many unique types of name ${JSON.stringify(proposal)}`
     );
-  }
-
-  list(): string[] {
-    return [...this.#local_names.values()];
   }
 }
 

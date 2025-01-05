@@ -1,6 +1,6 @@
 import ts from "typescript";
 import { factory } from "typescript";
-import { AttributeLocal, type Path, Scope } from "./scope";
+import { AttributeLocal, type Path, Scope, TypeScope } from "./scope";
 import {
   ArrayType,
   LiteralType,
@@ -24,7 +24,13 @@ export class UnsupportedUnionMember extends GeneratorError {
 
 export class TypeGuardGenerator {
   guards: Map<string, ts.Statement>;
+  /**
+   * File global type scope.
+   */
+  typeScope: TypeScope;
+
   constructor() {
+    this.typeScope = new TypeScope();
     this.guards = new Map();
   }
 
@@ -45,7 +51,7 @@ export class TypeGuardGenerator {
         ),
       };
     } else if (type instanceof ArrayType) {
-      const nestedTypeName = scope.newTypeName(
+      const nestedTypeName = this.typeScope.newTypeName(
         typePath.map(capitalise),
         "Element"
       );
