@@ -47,7 +47,7 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%;
+  flex: 0 1 100%;
 }
 
 .column {
@@ -58,7 +58,8 @@ body {
 }
 
 h1 {
-  font-size: 2em;
+  padding-left: 1em;
+  font-size: 1.1em;
   line-height: 1.1;
 }
 
@@ -66,4 +67,12 @@ h1 {
   height: 600px;
   resize: vertical;
   overflow: auto;
+}
+
+#source {
+  border-right: 1px dashed #888;
+}
+
+#footer {
+  text-align: center
 }
