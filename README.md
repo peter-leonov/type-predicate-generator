@@ -230,7 +230,7 @@ As you can see, esbuild nicely merges all the `if`s for the same set of properti
 
 Most of the below is gonna be eventually fixed.
 
-1. Does not support `interface` for no particular reason. A good first issue if you'd like to contribute!
+1. With `exactOptionalPropertyTypes: true` you'd need to add `undefined` to the optional properties' types. For JSON API it's safe as JSON cannot encode `undefined` therefor a missing property always reads as `undefined`. This limitation is possible to fix but it's gonna make the predicate code exponentially more branchy, not sure if it's worth the effort.
 
 1. No support for extended schema verification. This is mostly to stay simple and fast to evolve while in alpha/beta. It's trivial to add more value checkers with the current design.
 

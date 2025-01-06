@@ -27,6 +27,7 @@ monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   strict: true,
   noImplicitAny: true,
   strictNullChecks: true,
+  // exactOptionalPropertyTypes: true,
 });
 
 const defaultExample = `export type User = {
