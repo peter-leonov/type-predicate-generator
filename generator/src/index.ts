@@ -1,7 +1,7 @@
 import ts, { factory } from "typescript";
 import { typeToModel } from "./model";
 import { TypeGuardGenerator } from "./generator";
-import { ok, unimplemented } from "./helpers";
+import { assert, unimplemented } from "./helpers";
 
 /**
  * This is required for both `X[]` and `Array<X>` to work properly.
@@ -37,7 +37,7 @@ export function generateTypeGuards(
     fileExists: (fileName) => files.has(fileName),
     getSourceFile: (fileName, options) => {
       const content = files.get(fileName);
-      ok(content != undefined);
+      assert(content != undefined, "source files cannot be missing");
       return ts.createSourceFile(fileName, content, options);
     },
     getDefaultLibFileName: () => "/lib/lib.d.ts",
@@ -92,7 +92,10 @@ export function generateTypeGuards(
   }
 
   const sourceFile = program.getSourceFiles()[1];
-  ok(sourceFile);
+  assert(
+    sourceFile,
+    "the program must have 2 source files, one for the lib and one for the actual test code"
+  );
 
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();

@@ -1,7 +1,7 @@
 import ts from "typescript";
 import { factory } from "typescript";
 import { unimplemented } from "./helpers";
-import { ok } from "assert";
+import assert from "assert";
 
 /**
  * This is required for both `X[]` and `Array<X>` to work properly.
@@ -36,7 +36,7 @@ export function compile(
     fileExists: (fileName) => files.has(fileName),
     getSourceFile: (fileName, options) => {
       const content = files.get(fileName);
-      ok(content);
+      assert(content, "the file Map values must not be empty");
       return ts.createSourceFile(fileName, content, options);
     },
     getDefaultLibFileName: () => "/lib/lib.d.ts",
@@ -91,7 +91,10 @@ export function compile(
   }
 
   const sourceFile = program.getSourceFiles()[1];
-  ok(sourceFile);
+  assert(
+    sourceFile,
+    "the program must have 2 source files, one for the lib and one for the actual test code"
+  );
 
   const checker = program.getTypeChecker();
 
@@ -107,7 +110,10 @@ export function compile(
     // console.dir(checker.getTypeFromTypeNode(node.type));
   });
 
-  ok(symbol);
+  assert(
+    symbol,
+    "at least one symbol must be present in the test case"
+  );
   const type = checker.getDeclaredTypeOfSymbol(symbol);
   return [checker, type, symbol];
 }

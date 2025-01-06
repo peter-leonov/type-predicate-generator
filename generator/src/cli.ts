@@ -3,7 +3,7 @@ import ts, { factory } from "typescript";
 import fs from "node:fs";
 import { typeToModel } from "./model";
 import { TypeGuardGenerator } from "./generator";
-import { ok } from "./helpers";
+import { assert } from "./helpers";
 
 function generateTypeGuards(fileName: string, flags: Flags): boolean {
   // Build a program using the set of root file names in fileNames

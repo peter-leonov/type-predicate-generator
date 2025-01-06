@@ -10,7 +10,7 @@ import {
   UnionType,
   type TypeModel,
 } from "./model.js";
-import { assert, ok, unimplemented } from "./helpers";
+import { assert, unimplemented } from "./helpers";
 
 export class GeneratorError extends Error {}
 
@@ -138,7 +138,7 @@ export class TypeGuardGenerator {
    */
   addRootTypeGuardFor(type: TypeModel): void {
     const typeName = type.options.aliasName;
-    ok(typeName);
+    assert(typeName, "the root type must have an alias name");
 
     const root = "root";
     const scope = new Scope();
@@ -465,15 +465,15 @@ function wrapRestInOr(head: ts.Expression, list: ts.Expression[]) {
   }
 
   const [next, ...rest] = list;
-  ok(next);
+  assert(next, "expect the list head to be present");
   return wrapRestInOr(or(head, parens(next)), rest);
 }
 
 function wrapListInOr(list: ts.Expression[]) {
   assert(list.length >= 2);
   const [first, second, ...rest] = list;
-  ok(first);
-  ok(second);
+  assert(first, "expecting first element to be present");
+  assert(second, "expecting second element to be present");
 
   const head = or(parens(first), parens(second));
   return wrapRestInOr(head, rest);
@@ -613,7 +613,7 @@ function valueToNode(value: LiteralValue): ts.Expression {
 function typePathToTypeSelector(path: string[]): ts.TypeNode {
   assert(path.length >= 1);
   const [root, ...rest] = path;
-  ok(root);
+  assert(root, "expecting the path to start with a root type name");
 
   return rest.reduce<ts.TypeNode>(
     (acc, attr) =>

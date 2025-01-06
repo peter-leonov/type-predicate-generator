@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { ok, unimplemented } from "./helpers";
+import { assert, unimplemented } from "./helpers";
 
 export type TypeOptions = {
   isOptional?: boolean;
@@ -166,7 +166,7 @@ export function typeToModel(
 
   if (tsTypeIsArray(checker, type)) {
     const elementType = checker.getTypeArguments(type)[0];
-    ok(elementType);
+    assert(elementType, "expecting the first type argument");
     return new ArrayType(
       { isOptional, aliasName },
       typeToModel(checker, elementType, null, depth + 1)
