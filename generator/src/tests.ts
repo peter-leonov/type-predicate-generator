@@ -15,6 +15,11 @@ function* typeC() {
   yield "b";
 }
 
+function* typeD() {
+  yield null;
+  yield undefined;
+}
+
 function pick<T>(
   obj: Record<string, T>,
   arr: string[]
@@ -60,6 +65,10 @@ const obj: Record<string, GenFn<unknown>> = {
   a: typeA,
   b: typeB,
   c: typeC,
+  d: () =>
+    object({
+      d2: typeD,
+    }),
 };
 
 export function combine() {

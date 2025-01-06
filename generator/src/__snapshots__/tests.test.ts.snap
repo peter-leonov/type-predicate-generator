@@ -6,41 +6,129 @@ exports[`combine 1`] = `
     "a": 1,
     "b": true,
     "c": "a",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": "a",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 1,
     "b": true,
     "c": "b",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": "b",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 1,
     "b": false,
     "c": "a",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": "a",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 1,
     "b": false,
     "c": "b",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": "b",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 2,
     "b": true,
     "c": "a",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": "a",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 2,
     "b": true,
     "c": "b",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": "b",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 2,
     "b": false,
     "c": "a",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": "a",
+    "d": {
+      "d2": undefined,
+    },
   },
   {
     "a": 2,
     "b": false,
     "c": "b",
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": "b",
+    "d": {
+      "d2": undefined,
+    },
   },
 ]
 `;
