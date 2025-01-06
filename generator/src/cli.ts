@@ -6,6 +6,10 @@ import {
   generateFullFileBodyForAllTypes,
 } from "./compile";
 
+type Flags = {
+  keepExtension?: boolean;
+};
+
 function generateTypeGuards(fileName: string, flags: Flags): boolean {
   // Build a program using the set of root file names in fileNames
   const program = ts.createProgram([fileName], {
@@ -63,39 +67,40 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
   return true;
 }
 
-const args = process.argv.slice(2);
-
-const opts = args.filter((arg) => arg.startsWith("--"));
-type Flags = {
-  keepExtension?: boolean;
-};
-const flags: Flags = {};
-for (const flag of opts.map((opt) => opt.replace("--", ""))) {
-  flags[flag as unknown as keyof Flags] = true;
-}
-
-const filenames = args.filter((arg) => !arg.startsWith("--"));
-
-if (filenames.length >= 2) {
-  console.error(
-    `Error: generator does not support multiple file input yet.`
-  );
-  usage();
-  process.exit(1);
-}
-
-const fileName = filenames[0];
-
-if (!fileName) {
-  console.error("Error: missing input file.");
-  usage();
-  process.exit(1);
-} else {
-  if (!generateTypeGuards(fileName, flags)) {
-    process.exit(1);
-  }
-}
-
 function usage() {
   console.error(`Usage: type-predicate-generator source.ts`);
 }
+
+function main(argv: string[]) {
+  const args = process.argv.slice(2);
+
+  const opts = args.filter((arg) => arg.startsWith("--"));
+  const flags: Flags = {};
+  for (const flag of opts.map((opt) => opt.replace("--", ""))) {
+    flags[flag as unknown as keyof Flags] = true;
+  }
+
+  const filenames = args.filter((arg) => !arg.startsWith("--"));
+
+  if (filenames.length >= 2) {
+    console.error(
+      `Error: generator does not support multiple file input yet.`
+    );
+    usage();
+    process.exit(1);
+  }
+
+  const fileName = filenames[0];
+
+  if (!fileName) {
+    console.error("Error: missing input file.");
+    usage();
+    process.exit(1);
+  } else {
+    if (!generateTypeGuards(fileName, flags)) {
+      process.exit(1);
+    }
+  }
+}
+
+main(process.argv.slice());
