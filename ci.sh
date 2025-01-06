@@ -13,3 +13,8 @@ set -eux -o pipefail
   npm i
   npm run ci
 )
+
+git diff --exit-code
+
+set +x
+echo "✅ Ci run is successfull"

@@ -21,3 +21,6 @@ sleep 5
   cd tests/e2e
   ./test.sh
 )
+
+set +x
+echo "✅ published successfully"

@@ -13,6 +13,3 @@ npx type-predicate-generator ./types.ts
 CI=1 npx vitest
 npx tsc --init
 npx tsc --strict
-
-set +x
-echo "✅ e2e test run successfully"

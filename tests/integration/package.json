@@ -8,7 +8,7 @@
     "check": "npm run typecheck && CI=true npm run test",
     "generate-type-guards": "type-predicate-generator ./types.ts",
     "build": "npm run generate-type-guards && prettier -w .",
-    "ci": "npm run build && npm run check && git diff --exit-code"
+    "ci": "npm run build && npm run check"
   },
   "keywords": [],
   "author": "",
