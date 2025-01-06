@@ -2,6 +2,7 @@ import ts, { factory } from "typescript";
 import { typeToModel } from "./model";
 import { TypeGuardGenerator } from "./generator";
 import { assert, unimplemented } from "./helpers";
+import { generatePredicatesForAllTypes } from "./compile";
 
 /**
  * This is required for both `X[]` and `Array<X>` to work properly.
@@ -100,34 +101,11 @@ export function generateTypeGuards(
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();
 
-  const generator = new TypeGuardGenerator();
-
-  // Walk the tree to search for types
-  ts.forEachChild(sourceFile, (node) => {
-    if (ts.isTypeAliasDeclaration(node)) {
-      let symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "type alias declaration must have a symbol");
-      const model = typeToModel(
-        checker,
-        checker.getDeclaredTypeOfSymbol(symbol),
-        symbol
-      );
-
-      generator.addRootTypeGuardFor(model);
-    }
-
-    if (ts.isInterfaceDeclaration(node)) {
-      let symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "interface declaration must have a symbol");
-      const model = typeToModel(
-        checker,
-        checker.getDeclaredTypeOfSymbol(symbol),
-        symbol
-      );
-
-      generator.addRootTypeGuardFor(model);
-    }
-  });
+  const predicateFileBody = generatePredicatesForAllTypes(
+    checker,
+    sourceFile,
+    importFrom
+  );
 
   const resultFile = factory.updateSourceFile(
     ts.createSourceFile(
@@ -137,7 +115,7 @@ export function generateTypeGuards(
       /*setParentNodes*/ false,
       ts.ScriptKind.TS
     ),
-    generator.getFullFileBody(importFrom)
+    predicateFileBody
   );
 
   const printer = ts.createPrinter({

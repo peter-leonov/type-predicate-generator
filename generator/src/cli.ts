@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 import ts, { factory } from "typescript";
 import fs from "node:fs";
-import { typeToModel } from "./model";
-import { TypeGuardGenerator } from "./generator";
-import { assert } from "./helpers";
+import { generatePredicatesForAllTypes } from "./compile";
 
 function generateTypeGuards(fileName: string, flags: Flags): boolean {
   // Build a program using the set of root file names in fileNames
@@ -55,38 +53,14 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
       continue;
     }
 
-    const generator = new TypeGuardGenerator();
-
-    // Walk the tree to search for types
-    ts.forEachChild(sourceFile, (node) => {
-      if (ts.isTypeAliasDeclaration(node)) {
-        let symbol = checker.getSymbolAtLocation(node.name);
-        assert(symbol, "type alias declaration must have a symbol");
-        const model = typeToModel(
-          checker,
-          checker.getDeclaredTypeOfSymbol(symbol),
-          symbol
-        );
-
-        generator.addRootTypeGuardFor(model);
-      }
-
-      if (ts.isInterfaceDeclaration(node)) {
-        let symbol = checker.getSymbolAtLocation(node.name);
-        assert(symbol, "interface declaration must have a symbol");
-        const model = typeToModel(
-          checker,
-          checker.getDeclaredTypeOfSymbol(symbol),
-          symbol
-        );
-
-        generator.addRootTypeGuardFor(model);
-      }
-    });
-
     const fileNameNoExt = fileName.replace(/\.\w+$/, "");
-
     const importFrom = flags.keepExtension ? fileName : fileNameNoExt;
+
+    const predicateFileBody = generatePredicatesForAllTypes(
+      checker,
+      sourceFile,
+      importFrom
+    );
 
     const resultFile = factory.updateSourceFile(
       ts.createSourceFile(
@@ -96,7 +70,7 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
         /*setParentNodes*/ false,
         ts.ScriptKind.TS
       ),
-      generator.getFullFileBody(importFrom)
+      predicateFileBody
     );
 
     const printer = ts.createPrinter({
