@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`combine 1`] = `
+[
+  {
+    "a": 1,
+    "b": true,
+    "c": "a",
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": "b",
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": "a",
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": "b",
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": "a",
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": "b",
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": "a",
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": "b",
+  },
+]
+`;
