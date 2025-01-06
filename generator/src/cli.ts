@@ -5,6 +5,7 @@ import {
   ensureNoErrors,
   generateFullFileBodyForAllTypes,
 } from "./compile";
+import { explainError } from "./errors";
 
 type Flags = {
   keepExtension?: boolean;
@@ -71,8 +72,8 @@ function usage() {
   console.error(`Usage: type-predicate-generator source.ts`);
 }
 
-function main(argv: string[]) {
-  const args = process.argv.slice(2);
+function main(argv: string[]): number {
+  const args = argv.slice(2);
 
   const opts = args.filter((arg) => arg.startsWith("--"));
   const flags: Flags = {};
@@ -87,20 +88,25 @@ function main(argv: string[]) {
       `Error: generator does not support multiple file input yet.`
     );
     usage();
-    process.exit(1);
+    return 3;
   }
 
   const fileName = filenames[0];
-
   if (!fileName) {
     console.error("Error: missing input file.");
     usage();
-    process.exit(1);
-  } else {
-    if (!processFile(fileName, flags)) {
-      process.exit(1);
-    }
+    return 2;
   }
+
+  try {
+    processFile(fileName, flags);
+  } catch (err) {
+    console.error(err);
+    console.error(explainError(err, false));
+    return 1;
+  }
+
+  return 0;
 }
 
-main(process.argv.slice());
+process.exit(main(process.argv.slice()));

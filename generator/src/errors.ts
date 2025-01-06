@@ -21,3 +21,30 @@ export class UnsupportedEmptyEnum extends UnsupportedError {
     );
   }
 }
+
+export function explainError(
+  err: unknown,
+  inBrowser: boolean
+): string {
+  const title =
+    err instanceof UnimplementedError
+      ? "Unimplemented error\nCongrats, you've found a missing feature!"
+      : err instanceof UnsupportedError
+      ? "Generation error\nThe Generator stubled upon something that does not fit."
+      : err instanceof TypeScriptError
+      ? "TypeScript compilation error\nLikely it's a syntax error, if not then it's a bug."
+      : "Unknown error\nSomething went unexpectedly wrong.";
+
+  return `${title}
+
+${err}
+
+For the full error message with the stacktrace
+and the rest of the logs please check ${
+    inBrowser ? "the browser console" : "the output above"
+  }.
+
+If you feel this is a bug in the generator, pretty please report it here:
+https://github.com/peter-leonov/typescript-predicate-generator/issues/new
+`;
+}
