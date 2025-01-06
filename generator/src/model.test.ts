@@ -242,6 +242,66 @@ test("simple interface", () => {
   );
 });
 
+test("numeric enum", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+      enum X {
+          a = 7,
+          b,
+          c
+      }
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new LiteralType({}, 7),
+      new LiteralType({}, 8),
+      new LiteralType({}, 9),
+    ])
+  );
+});
+
+test("string enum", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+      enum X {
+          a = "A",
+          b = "B",
+          c = "C"
+      }
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new LiteralType({}, "A"),
+      new LiteralType({}, "B"),
+      new LiteralType({}, "C"),
+    ])
+  );
+});
+
+test("mixed enum", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+      enum X {
+          a = 5,
+          b,
+          c = "C"
+      }
+      `)
+    )
+  ).toEqual(
+    new UnionType({ aliasName: "X" }, [
+      new LiteralType({}, 5),
+      new LiteralType({}, 6),
+      new LiteralType({}, "C"),
+    ])
+  );
+});
+
 test("empty object", () => {
   expect(
     typeToModel(

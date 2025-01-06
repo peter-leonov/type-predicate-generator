@@ -20,15 +20,13 @@ export function compile(
   // This finds the LAST type definition in the source.
   let symbol: ts.Symbol | undefined;
   ts.forEachChild(sourceFile, (node) => {
-    if (ts.isTypeAliasDeclaration(node)) {
+    if (
+      ts.isTypeAliasDeclaration(node) ||
+      ts.isInterfaceDeclaration(node) ||
+      ts.isEnumDeclaration(node)
+    ) {
       symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "type alias declaration must have a symbol");
-      return;
-    }
-
-    if (ts.isInterfaceDeclaration(node)) {
-      symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "interface declaration must have a symbol");
+      assert(symbol, "a node declaration must have a symbol");
       return;
     }
   });

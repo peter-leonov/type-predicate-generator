@@ -102,21 +102,13 @@ export function generateFullFileBodyForAllTypes(
 
   // Walk the tree to search for types
   ts.forEachChild(sourceFile, (node) => {
-    if (ts.isTypeAliasDeclaration(node)) {
+    if (
+      ts.isTypeAliasDeclaration(node) ||
+      ts.isInterfaceDeclaration(node) ||
+      ts.isEnumDeclaration(node)
+    ) {
       let symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "type alias declaration must have a symbol");
-      const model = typeToModel(
-        checker,
-        checker.getDeclaredTypeOfSymbol(symbol),
-        symbol
-      );
-
-      generator.addRootTypeGuardFor(model);
-    }
-
-    if (ts.isInterfaceDeclaration(node)) {
-      let symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "interface declaration must have a symbol");
+      assert(symbol, "a node declaration must have a symbol");
       const model = typeToModel(
         checker,
         checker.getDeclaredTypeOfSymbol(symbol),
