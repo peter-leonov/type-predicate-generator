@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 import ts, { factory } from "typescript";
 import fs from "node:fs";
-import { generatePredicatesForAllTypes } from "./compile";
+import {
+  ensureDiagnostics,
+  generateFullFileBodyForAllTypes,
+} from "./compile";
 
 function generateTypeGuards(fileName: string, flags: Flags): boolean {
   // Build a program using the set of root file names in fileNames
@@ -16,33 +19,7 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
     // lib: ["lib.esnext.d.ts"],
   });
 
-  const allDiagnostics = ts.getPreEmitDiagnostics(program);
-  if (allDiagnostics.length != 0) {
-    allDiagnostics.forEach((diagnostic) => {
-      var message = ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        "\n"
-      );
-      if (!diagnostic.file) {
-        console.error(message);
-        return;
-      }
-      var { line, character } =
-        diagnostic.file.getLineAndCharacterOfPosition(
-          diagnostic.start!
-        );
-      console.error(
-        `${diagnostic.file.fileName} (${line + 1},${
-          character + 1
-        }): ${message}`
-      );
-    });
-
-    console.error(
-      "ts.getPreEmitDiagnostics() found some issues listed above"
-    );
-    return false;
-  }
+  ensureDiagnostics(program);
 
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();
@@ -56,7 +33,7 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
     const fileNameNoExt = fileName.replace(/\.\w+$/, "");
     const importFrom = flags.keepExtension ? fileName : fileNameNoExt;
 
-    const predicateFileBody = generatePredicatesForAllTypes(
+    const predicateFileBody = generateFullFileBodyForAllTypes(
       checker,
       sourceFile,
       importFrom

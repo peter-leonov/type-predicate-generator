@@ -1,67 +1,13 @@
 import ts from "typescript";
 import { factory } from "typescript";
-import { unimplemented } from "./helpers";
 import assert from "assert";
-
-/**
- * This is required for both `X[]` and `Array<X>` to work properly.
- * Otherwise `checker.isArrayType()` is not gonna work.
- */
-const libFileContent = `/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };`;
+import { ensureDiagnostics, newVFSProgram } from "./compile";
 
 export function compile(
   source: string
 ): [ts.TypeChecker, ts.Type, ts.Symbol] {
-  const fileName = "/source.ts";
-
-  const files = new Map<string, string>();
-  files.set(fileName, source);
-
-  const libFileName = "/lib/lib.d.ts";
-  files.set(libFileName, libFileContent);
-
-  const compilerHost: ts.CompilerHost = {
-    fileExists: (fileName) => files.has(fileName),
-    getSourceFile: (fileName, options) => {
-      const content = files.get(fileName);
-      assert(content, "the file Map values must not be empty");
-      return ts.createSourceFile(fileName, content, options);
-    },
-    getDefaultLibFileName: () => "/lib/lib.d.ts",
-    writeFile: unimplemented,
-    getCurrentDirectory: () => "/",
-    getDirectories: () => [],
-    getCanonicalFileName: (f) => f.toLowerCase(),
-    getNewLine: () => "\n",
-    useCaseSensitiveFileNames: () => false,
-    readFile: (path) => files.get(path),
-  };
-
-  const program = ts.createProgram(
-    [fileName],
-    {
-      target: ts.ScriptTarget.ESNext,
-      module: ts.ModuleKind.ESNext,
-      strict: true,
-      noEmit: true,
-      isolatedModules: true,
-      // don't autoload all the types from the node_modules/@types
-      types: [],
-    },
-    compilerHost
-  );
+  const program = newVFSProgram(source);
+  ensureDiagnostics(program);
 
   const allDiagnostics = ts.getPreEmitDiagnostics(program);
   if (allDiagnostics.length != 0) {
