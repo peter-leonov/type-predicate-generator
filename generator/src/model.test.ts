@@ -9,6 +9,7 @@ import {
   ArrayType,
 } from "./model";
 import { compile } from "./tests_helpers";
+import { UnsupportedEmptyEnum } from "./errors";
 
 test("undefined", () => {
   expect(
@@ -240,6 +241,16 @@ test("simple interface", () => {
       }
     )
   );
+});
+
+test("empty enum", () => {
+  expect(() =>
+    typeToModel(
+      ...compile(`
+      enum X {}
+      `)
+    )
+  ).toThrow(UnsupportedEmptyEnum);
 });
 
 test("numeric enum", () => {

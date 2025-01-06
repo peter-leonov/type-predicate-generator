@@ -1,7 +1,9 @@
+class UnimplementedError extends Error {}
+
 export function unimplemented(
   message: string = "unimplemented"
 ): never {
-  throw new Error(message);
+  throw new UnimplementedError(message);
 }
 
 class AssertionError extends Error {}

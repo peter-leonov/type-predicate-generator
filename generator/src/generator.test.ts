@@ -1,8 +1,5 @@
 import { expect, test } from "vitest";
-import {
-  TypeGuardGenerator,
-  UnsupportedUnionMember,
-} from "./generator.js";
+import { TypeGuardGenerator } from "./generator.js";
 import {
   ArrayType,
   LiteralType,
@@ -13,6 +10,7 @@ import {
   UnionType,
 } from "./model.js";
 import { printNodes } from "./tests_helpers.js";
+import { UnsupportedUnionMember } from "./errors.js";
 
 export function generate(model: TypeModel): string {
   const tgg = new TypeGuardGenerator();

@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { assert, unimplemented } from "./helpers";
+import { UnsupportedEmptyEnum } from "./errors";
 
 export type TypeOptions = {
   isOptional?: boolean;
@@ -212,9 +213,14 @@ export function typeToModel(
         return typeToModel(checker, member, null, depth + 1);
       })
     );
+  } else if (tsTypeIsEnum(type)) {
+    const exports = type.symbol.exports;
+    // empty enum
+    if (exports && exports.size == 0) {
+      throw new UnsupportedEmptyEnum(checker.typeToString(type));
+    }
   }
 
-  console.error(type);
   unimplemented(checker.typeToString(type));
 }
 
@@ -251,6 +257,10 @@ function tsTypeIsLiteral(type: ts.Type): type is IntrinsicType {
         ts.TypeFlags.Null |
         ts.TypeFlags.Undefined)
   );
+}
+
+function tsTypeIsEnum(type: ts.Type): type is ts.EnumType {
+  return Boolean(type.flags & ts.TypeFlags.Enum);
 }
 
 // Stolen from TS sources

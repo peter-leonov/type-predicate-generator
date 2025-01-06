@@ -2,6 +2,7 @@ import ts from "typescript";
 import { TypeGuardGenerator } from "./generator";
 import { assert, unimplemented } from "./helpers";
 import { typeToModel } from "./model";
+import { TypeScriptError } from "./errors";
 
 /**
  * This is required for both `X[]` and `Array<X>` to work properly.
@@ -62,8 +63,6 @@ export function newVFSProgram(source: string): ts.Program {
   );
 }
 
-class ProgramError extends Error {}
-
 export function ensureNoErrors(program: ts.Program) {
   const allDiagnostics = ts.getPreEmitDiagnostics(program);
   if (allDiagnostics.length != 0) {
@@ -87,7 +86,7 @@ export function ensureNoErrors(program: ts.Program) {
       );
     });
 
-    throw new ProgramError(
+    throw new TypeScriptError(
       "ts.getPreEmitDiagnostics() found some issues listed in the console / stderr"
     );
   }

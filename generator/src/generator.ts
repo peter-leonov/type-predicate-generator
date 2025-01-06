@@ -11,16 +11,7 @@ import {
   type TypeModel,
 } from "./model.js";
 import { assert, unimplemented } from "./helpers";
-
-export class GeneratorError extends Error {}
-
-export class UnsupportedUnionMember extends GeneratorError {
-  constructor(type: TypeModel) {
-    super(
-      `The ${type.nameForErrors} is not supported in unions. Try extracting it into a separate type alias. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/1`
-    );
-  }
-}
+import { UnsupportedUnionMember } from "./errors";
 
 export class TypeGuardGenerator {
   guards: Map<string, ts.Statement>;

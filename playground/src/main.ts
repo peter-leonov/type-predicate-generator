@@ -1,5 +1,9 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { generateTypeGuards } from "type-predicate-generator/src";
+import {
+  generateTypeGuards,
+  UnsupportedError,
+  TypeScriptError,
+} from "type-predicate-generator/src";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -109,11 +113,25 @@ function onChange() {
     saveState(sourceCode);
     predicates.setValue(generateTypeGuards(sourceCode));
   } catch (err) {
+    const title =
+      err instanceof UnsupportedError
+        ? "Generation error"
+        : err instanceof TypeScriptError
+        ? "TypeScript compilation error"
+        : "Unknown error";
+
     predicates.setValue(
-      `// Compilation failed:
-//    ${err}
-// Please see the full error message,
-// stacktrace and more context in the browser console.
+      `/*
+${title}
+
+${err}
+
+For the full error message with the stacktrace
+and the rest of the logs please check the browser console.
+
+If you feel this is a bug in the generator, pretty please report it here:
+https://github.com/peter-leonov/typescript-predicate-generator/issues/new
+*/
 `
     );
     throw err;

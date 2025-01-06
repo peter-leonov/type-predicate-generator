@@ -6,6 +6,8 @@ import {
   newVFSProgram,
 } from "./compile";
 
+export * from "./errors";
+
 export function generateTypeGuards(
   source: string,
   importFrom = "./example"
