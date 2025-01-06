@@ -9,6 +9,7 @@ import { explainError } from "./errors";
 
 type Flags = {
   keepExtension?: boolean;
+  withStacktrace?: boolean;
 };
 
 function processFile(fileName: string, flags: Flags): boolean {
@@ -69,7 +70,9 @@ function processFile(fileName: string, flags: Flags): boolean {
 }
 
 function usage() {
-  console.error(`Usage: type-predicate-generator source.ts`);
+  console.error(
+    `Usage: type-predicate-generator [--keepExtension] [--withStacktrace] source.ts`
+  );
 }
 
 function main(argv: string[]): number {
@@ -101,7 +104,9 @@ function main(argv: string[]): number {
   try {
     processFile(fileName, flags);
   } catch (err) {
-    console.error(err);
+    if (flags.withStacktrace) {
+      console.error(err);
+    }
     console.error(explainError(err, false));
     return 1;
   }

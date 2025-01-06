@@ -7,7 +7,8 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && CI=true npm run test",
     "generate-type-guards": "type-predicate-generator ./types.ts",
-    "build": "npm run generate-type-guards && prettier -w .",
+    "unsupported": "type-predicate-generator ./unsupported.ts 1>unsupported.1.txt 2>unsupported.2.txt || true",
+    "build": "npm run generate-type-guards && npm run unsupported && prettier -w .",
     "ci": "npm run build && npm run check"
   },
   "keywords": [],
