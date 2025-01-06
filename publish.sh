@@ -9,8 +9,13 @@ set -eux -o pipefail
   npm publish
 )
 
+(
+  cd playground
+  npm run build
+)
+
 # give NPM some time to propagate the change
-sleep 15
+sleep 5
 
 (
   cd tests/e2e
