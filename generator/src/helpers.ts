@@ -4,14 +4,13 @@ export function unimplemented(
   throw new Error(message);
 }
 
-export function ok(value: unknown): asserts value {
-  if (!value) {
-    throw new Error(`${value} is not truthy`);
-  }
-}
+class AssertionError extends Error {}
 
-export function assert(value: unknown): asserts value {
+export function assert(
+  value: unknown,
+  message?: string
+): asserts value {
   if (!value) {
-    throw new Error(`${value} is not truthy`);
+    throw new AssertionError(message ?? `${value} is not truthy`);
   }
 }

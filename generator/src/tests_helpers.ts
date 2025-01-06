@@ -101,13 +101,17 @@ export function compile(
   // This finds the LAST type definition in the source.
   let symbol: ts.Symbol | undefined;
   ts.forEachChild(sourceFile, (node) => {
-    if (!ts.isTypeAliasDeclaration(node)) {
+    if (ts.isTypeAliasDeclaration(node)) {
+      symbol = checker.getSymbolAtLocation(node.name);
+      assert(symbol, "type alias declaration must have a symbol");
       return;
     }
 
-    symbol = checker.getSymbolAtLocation(node.name);
-    ok(symbol);
-    // console.dir(checker.getTypeFromTypeNode(node.type));
+    if (ts.isInterfaceDeclaration(node)) {
+      symbol = checker.getSymbolAtLocation(node.name);
+      assert(symbol, "interface declaration must have a symbol");
+      return;
+    }
   });
 
   assert(

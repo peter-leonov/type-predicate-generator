@@ -223,6 +223,25 @@ test("union of same object types", () => {
   );
 });
 
+test("simple interface", () => {
+  expect(
+    typeToModel(
+      ...compile(`
+        interface X {
+          a: string
+        }
+      `)
+    )
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new PrimitiveType({}, "string"),
+      }
+    )
+  );
+});
+
 test("empty object", () => {
   expect(
     typeToModel(

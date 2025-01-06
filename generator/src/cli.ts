@@ -59,19 +59,29 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
 
     // Walk the tree to search for types
     ts.forEachChild(sourceFile, (node) => {
-      if (!ts.isTypeAliasDeclaration(node)) {
-        return;
+      if (ts.isTypeAliasDeclaration(node)) {
+        let symbol = checker.getSymbolAtLocation(node.name);
+        assert(symbol, "type alias declaration must have a symbol");
+        const model = typeToModel(
+          checker,
+          checker.getDeclaredTypeOfSymbol(symbol),
+          symbol
+        );
+
+        generator.addRootTypeGuardFor(model);
       }
 
-      let symbol = checker.getSymbolAtLocation(node.name);
-      ok(symbol);
-      const model = typeToModel(
-        checker,
-        checker.getDeclaredTypeOfSymbol(symbol),
-        symbol
-      );
+      if (ts.isInterfaceDeclaration(node)) {
+        let symbol = checker.getSymbolAtLocation(node.name);
+        assert(symbol, "interface declaration must have a symbol");
+        const model = typeToModel(
+          checker,
+          checker.getDeclaredTypeOfSymbol(symbol),
+          symbol
+        );
 
-      generator.addRootTypeGuardFor(model);
+        generator.addRootTypeGuardFor(model);
+      }
     });
 
     const fileNameNoExt = fileName.replace(/\.\w+$/, "");
