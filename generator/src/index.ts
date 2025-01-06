@@ -1,7 +1,7 @@
 import ts, { factory } from "typescript";
 import { assert } from "./helpers";
 import {
-  ensureDiagnostics,
+  ensureNoErrors,
   generateFullFileBodyForAllTypes,
   newVFSProgram,
 } from "./compile";
@@ -11,7 +11,7 @@ export function generateTypeGuards(
   importFrom = "./example"
 ): string {
   const program = newVFSProgram(source);
-  ensureDiagnostics(program);
+  ensureNoErrors(program);
 
   const sourceFile = program.getSourceFiles()[1];
   assert(

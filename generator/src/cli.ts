@@ -2,7 +2,7 @@
 import ts, { factory } from "typescript";
 import fs from "node:fs";
 import {
-  ensureDiagnostics,
+  ensureNoErrors,
   generateFullFileBodyForAllTypes,
 } from "./compile";
 
@@ -10,7 +10,7 @@ type Flags = {
   keepExtension?: boolean;
 };
 
-function generateTypeGuards(fileName: string, flags: Flags): boolean {
+function processFile(fileName: string, flags: Flags): boolean {
   // Build a program using the set of root file names in fileNames
   const program = ts.createProgram([fileName], {
     target: ts.ScriptTarget.ESNext,
@@ -23,7 +23,7 @@ function generateTypeGuards(fileName: string, flags: Flags): boolean {
     // lib: ["lib.esnext.d.ts"],
   });
 
-  ensureDiagnostics(program);
+  ensureNoErrors(program);
 
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();
@@ -97,7 +97,7 @@ function main(argv: string[]) {
     usage();
     process.exit(1);
   } else {
-    if (!generateTypeGuards(fileName, flags)) {
+    if (!processFile(fileName, flags)) {
       process.exit(1);
     }
   }

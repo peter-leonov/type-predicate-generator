@@ -1,40 +1,13 @@
 import ts from "typescript";
 import { factory } from "typescript";
 import assert from "assert";
-import { ensureDiagnostics, newVFSProgram } from "./compile";
+import { ensureNoErrors, newVFSProgram } from "./compile";
 
 export function compile(
   source: string
 ): [ts.TypeChecker, ts.Type, ts.Symbol] {
   const program = newVFSProgram(source);
-  ensureDiagnostics(program);
-
-  const allDiagnostics = ts.getPreEmitDiagnostics(program);
-  if (allDiagnostics.length != 0) {
-    allDiagnostics.forEach((diagnostic) => {
-      var message = ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        "\n"
-      );
-      if (!diagnostic.file) {
-        console.error(message);
-        return;
-      }
-      var { line, character } =
-        diagnostic.file.getLineAndCharacterOfPosition(
-          diagnostic.start!
-        );
-      console.error(
-        `${diagnostic.file.fileName} (${line + 1},${
-          character + 1
-        }): ${message}`
-      );
-    });
-
-    throw new Error(
-      "ts.getPreEmitDiagnostics() found some issues listed above"
-    );
-  }
+  ensureNoErrors(program);
 
   const sourceFile = program.getSourceFiles()[1];
   assert(

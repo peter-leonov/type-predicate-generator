@@ -64,7 +64,7 @@ export function newVFSProgram(source: string): ts.Program {
 
 class ProgramError extends Error {}
 
-export function ensureDiagnostics(program: ts.Program) {
+export function ensureNoErrors(program: ts.Program) {
   const allDiagnostics = ts.getPreEmitDiagnostics(program);
   if (allDiagnostics.length != 0) {
     allDiagnostics.forEach((diagnostic) => {
