@@ -1,6 +1,7 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import {
   generateTypeGuards,
+  UnimplementedError,
   UnsupportedError,
   TypeScriptError,
 } from "type-predicate-generator/src";
@@ -114,11 +115,13 @@ function onChange() {
     predicates.setValue(generateTypeGuards(sourceCode));
   } catch (err) {
     const title =
-      err instanceof UnsupportedError
-        ? "Generation error"
+      err instanceof UnimplementedError
+        ? "Unimplemented error\nCongrats, you've found a missing feature!"
+        : err instanceof UnsupportedError
+        ? "Generation error\nThe Generator stubled upon something that does not fit."
         : err instanceof TypeScriptError
-        ? "TypeScript compilation error"
-        : "Unknown error";
+        ? "TypeScript compilation error\nLikely it's a syntax error, if not then it's a bug."
+        : "Unknown error\nSomething went unexpectedly wrong.";
 
     predicates.setValue(
       `/*

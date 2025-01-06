@@ -1,5 +1,7 @@
 import { type TypeModel } from "./model";
 
+export class UnimplementedError extends Error {}
+
 export class TypeScriptError extends Error {}
 
 export class UnsupportedError extends Error {}

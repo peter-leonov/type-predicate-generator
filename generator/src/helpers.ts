@@ -1,4 +1,4 @@
-class UnimplementedError extends Error {}
+import { UnimplementedError } from "./errors";
 
 export function unimplemented(
   message: string = "unimplemented"
