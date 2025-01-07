@@ -1,14 +1,16 @@
 import { assert } from "./helpers";
 
-type GenFn<T> = () => Generator<T>;
+export type ValueGenerator<T> = () => Generator<T>;
 
-function value<T>(value: T): GenFn<T> {
+export function value<T>(value: T): ValueGenerator<T> {
   return function* () {
     yield value;
   };
 }
 
-function union<T>(members: GenFn<T>[]): GenFn<T> {
+export function union<T>(
+  members: ValueGenerator<T>[]
+): ValueGenerator<T> {
   return function* () {
     for (const v of members) {
       yield* v();
@@ -16,7 +18,9 @@ function union<T>(members: GenFn<T>[]): GenFn<T> {
   };
 }
 
-function object<T>(obj: Record<string, GenFn<T>>): GenFn<T> {
+export function object<T>(
+  obj: Record<string, ValueGenerator<T>>
+): ValueGenerator<T> {
   return () => rollObject(obj) as Generator<T>;
 }
 
@@ -33,7 +37,7 @@ function pick<T>(
 }
 
 function* rollObject<T>(
-  obj: Record<string, GenFn<T>>
+  obj: Record<string, ValueGenerator<T>>
 ): Generator<Record<string, T>> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
@@ -59,7 +63,7 @@ function* rollObject<T>(
   }
 }
 
-type Value =
+export type Value =
   | number
   | string
   | null
@@ -68,19 +72,6 @@ type Value =
   | { [key: string]: Value }
   | Value[];
 
-const obj = object<Value>({
-  a: union([value(1), value(2)]),
-  b: union([value(true), value(false)]),
-  c: union([value("a"), value("b")]),
-  d: object({
-    d2: union([value(null), value(undefined)]),
-  }),
-});
-
-export function combine() {
-  return [...obj()];
+export function combine(fn: ValueGenerator<unknown>) {
+  return [...fn()];
 }
-
-// export function combine(fn: GenFn<unknown>) {
-//   return [...fn()];
-// }
