@@ -190,12 +190,207 @@ exports[`object > empty 1`] = `
 ]
 `;
 
+exports[`object > of a several nested objects with a union property 1`] = `
+[
+  {
+    "a": {
+      "b": {
+        "c": {
+          "d": "D1",
+        },
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": {
+          "d": "D2",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`object > of a several nested objects with a value property 1`] = `
+[
+  {
+    "a": {
+      "b": {
+        "c": {
+          "d": "D",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`object > of a several objects with union properties 1`] = `
+[
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+]
+`;
+
+exports[`object > of a several objects with value properties 1`] = `
+[
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+]
+`;
+
+exports[`object > of a several union properties 1`] = `
+[
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": "C3",
+  },
+]
+`;
+
 exports[`object > of a several value properties 1`] = `
 [
   {
     "a": "A",
     "b": "B",
     "c": "C",
+  },
+]
+`;
+
+exports[`object > of a single union property 1`] = `
+[
+  {
+    "a": "A1",
+  },
+  {
+    "a": "A2",
   },
 ]
 `;
