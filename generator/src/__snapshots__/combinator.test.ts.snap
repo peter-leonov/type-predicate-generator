@@ -58,6 +58,68 @@ exports[`invalid > array > single value 1`] = `
 ]
 `;
 
+exports[`invalid > object > empty 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
+exports[`invalid > object > of a several value properties 1`] = `
+[
+  Symbol(invalidValue),
+  {
+    "b": "B",
+    "c": "C",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B",
+    "c": "C",
+  },
+  {
+    "a": "A",
+    "c": "C",
+  },
+  {
+    "a": "A",
+    "b": Symbol(invalidValue),
+    "c": "C",
+  },
+  {
+    "a": "A",
+    "b": "B",
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "c": Symbol(invalidValue),
+  },
+]
+`;
+
+exports[`invalid > object > of a single union property 1`] = `
+[
+  Symbol(invalidValue),
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+  },
+]
+`;
+
+exports[`invalid > object > of a single value property 1`] = `
+[
+  Symbol(invalidValue),
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+]
+`;
+
 exports[`invalid > union > couple of values 1`] = `
 [
   Symbol(invalidValue),

@@ -213,4 +213,32 @@ describe("invalid", () => {
       ).toMatchSnapshot();
     });
   });
+
+  describe("object", () => {
+    it("empty", () => {
+      expect(combineInvalid(object({}))).toMatchSnapshot();
+    });
+
+    it("of a single value property", () => {
+      expect(
+        combineInvalid(object({ a: value("A") }))
+      ).toMatchSnapshot();
+    });
+
+    it("of a several value properties", () => {
+      expect(
+        combineInvalid(
+          object({ a: value("A"), b: value("B"), c: value("C") })
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("of a single union property", () => {
+      expect(
+        combineInvalid(
+          object({ a: union([value("A1"), value("A2")]) })
+        )
+      ).toMatchSnapshot();
+    });
+  });
 });

@@ -98,7 +98,18 @@ export function object<T>(
   obj: Record<string, ValueGenerator<T>>
 ): ValueGenerator<T> {
   const id = uniqueID();
-  return (ctx: Context) => rollObject(ctx, id, obj) as Generator<T>;
+  return function* (ctx: Context) {
+    if (ctx.yieldInvalidValue) {
+      const stateKey = `${id}_root`;
+      if (!ctx.state.has(stateKey)) {
+        // Time to yield some invalid data
+        ctx.state.set(stateKey, 1);
+        ctx.yieldInvalidValue = false;
+        yield invalidValue;
+      }
+    }
+    yield* rollObject(ctx, id, obj) as Generator<T>;
+  };
 }
 
 function pick<T>(
@@ -112,6 +123,10 @@ function pick<T>(
     return acc;
   }, {});
 }
+
+// TODO
+// const uniqueKey = "80D79A5A-5D38-4302-BA04-F5AC748C1464";
+// yield { [uniqueKey]: invalidValue };
 
 function* rollObject<T>(
   ctx: Context,
@@ -127,10 +142,26 @@ function* rollObject<T>(
   const [key, ...restKeys] = keys;
   assert(key, "at least one property must be present at this point");
 
+  const restObj = pick(obj, restKeys);
+
+  if (ctx.yieldInvalidValue) {
+    const stateKey = `${id}_key_${key}`;
+    if (!ctx.state.has(stateKey)) {
+      // Time to yield some invalid data
+      ctx.state.set(stateKey, 1);
+      ctx.yieldInvalidValue = false;
+      for (const rest of rollObject(ctx, id, restObj)) {
+        yield {
+          // TODO skip for optional keys
+          // Omit the current key and value
+          ...rest,
+        };
+      }
+    }
+  }
+
   const value = obj[key];
   assert(value);
-
-  const restObj = pick(obj, restKeys);
 
   for (const v of value(ctx)) {
     for (const rest of rollObject(ctx, id, restObj)) {
