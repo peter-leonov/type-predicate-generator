@@ -18,6 +18,16 @@ export function union<T>(
   };
 }
 
+export function array<T>(
+  value: ValueGenerator<T>
+): ValueGenerator<T[]> {
+  return function* () {
+    for (const v of value()) {
+      yield [v];
+    }
+  };
+}
+
 export function object<T>(
   obj: Record<string, ValueGenerator<T>>
 ): ValueGenerator<T> {

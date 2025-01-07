@@ -1,11 +1,18 @@
 import { expect, test } from "vitest";
-import { combine, object, union, value, Value } from "./tests";
+import {
+  array,
+  combine,
+  object,
+  union,
+  value,
+  type Value,
+} from "./tests";
 
 test(combine, () => {
   const obj = object<Value>({
     a: union([value(1), value(2)]),
     b: union([value(true), value(false)]),
-    c: union([value("a"), value("b")]),
+    c: array(union([value("a"), value("b")])),
     d: object({
       d2: union([value(null), value(undefined)]),
     }),
