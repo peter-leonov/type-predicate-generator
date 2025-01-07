@@ -1,8 +1,17 @@
 import { assert } from "./helpers";
 
-export type ValueGenerator<T> = () => Generator<T>;
+export type ValueGenerator<T> = (ctx: Context) => Generator<T>;
+
+type Context = {
+  doBreak: boolean;
+  brokeOnce: boolean;
+  state: Map<string, boolean>;
+};
+
+let valueCounter = 0;
 
 export function value<T>(value: T): ValueGenerator<T> {
+  const id = ++valueCounter;
   return function* () {
     yield value;
   };
@@ -11,9 +20,10 @@ export function value<T>(value: T): ValueGenerator<T> {
 export function union<T>(
   members: ValueGenerator<T>[]
 ): ValueGenerator<T> {
-  return function* () {
+  const id = ++valueCounter;
+  return function* (ctx: Context) {
     for (const v of members) {
-      yield* v();
+      yield* v(ctx);
     }
   };
 }
@@ -21,8 +31,9 @@ export function union<T>(
 export function array<T>(
   value: ValueGenerator<T>
 ): ValueGenerator<T[]> {
-  return function* () {
-    for (const v of value()) {
+  const id = ++valueCounter;
+  return function* (ctx: Context) {
+    for (const v of value(ctx)) {
       yield [v];
     }
   };
@@ -31,7 +42,8 @@ export function array<T>(
 export function object<T>(
   obj: Record<string, ValueGenerator<T>>
 ): ValueGenerator<T> {
-  return () => rollObject(obj) as Generator<T>;
+  const id = ++valueCounter;
+  return (ctx: Context) => rollObject(ctx, id, obj) as Generator<T>;
 }
 
 function pick<T>(
@@ -47,6 +59,8 @@ function pick<T>(
 }
 
 function* rollObject<T>(
+  ctx: Context,
+  id: number,
   obj: Record<string, ValueGenerator<T>>
 ): Generator<Record<string, T>> {
   const keys = Object.keys(obj);
@@ -63,8 +77,8 @@ function* rollObject<T>(
 
   const restObj = pick(obj, restKeys);
 
-  for (const v of value()) {
-    for (const rest of rollObject(restObj)) {
+  for (const v of value(ctx)) {
+    for (const rest of rollObject(ctx, id, restObj)) {
       yield {
         [key]: v,
         ...rest,
@@ -83,5 +97,10 @@ export type Value =
   | Value[];
 
 export function combine(fn: ValueGenerator<unknown>) {
-  return [...fn()];
+  const ctx: Context = {
+    doBreak: false,
+    brokeOnce: false,
+    state: new Map(),
+  };
+  return [...fn(ctx)];
 }
