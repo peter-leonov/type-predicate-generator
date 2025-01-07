@@ -44,6 +44,7 @@ To account for the above this generator emits explicitly readable code that is e
 1. Does not require any runtime or compile time dependencies
 1. It's bundler agnostic as its output is plain TS (no `tsc` plugins required)
 1. The bundle size cost is 100% visible and predictable
+1. Supports environments without `eval()` (such as CloudFront and Cloudflare JS runtimes)
 1. Safe to upgrade: if the produced code changes you'll see it in the PR
 1. Zero performance cost in development: run once and forget
 1. Full IDE support: jump to definition just works
