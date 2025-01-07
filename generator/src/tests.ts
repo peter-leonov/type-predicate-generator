@@ -16,6 +16,10 @@ function union<T>(members: GenFn<T>[]): GenFn<T> {
   };
 }
 
+function object<T>(obj: Record<string, GenFn<T>>): GenFn<T> {
+  return () => rollObject(obj) as Generator<T>;
+}
+
 function pick<T>(
   obj: Record<string, T>,
   arr: string[]
@@ -28,7 +32,7 @@ function pick<T>(
   }, {});
 }
 
-function* object<T>(
+function* rollObject<T>(
   obj: Record<string, GenFn<T>>
 ): Generator<Record<string, T>> {
   const keys = Object.keys(obj);
@@ -46,7 +50,7 @@ function* object<T>(
   const restObj = pick(obj, restKeys);
 
   for (const v of value()) {
-    for (const rest of object(restObj)) {
+    for (const rest of rollObject(restObj)) {
       yield {
         [key]: v,
         ...rest,
@@ -55,18 +59,26 @@ function* object<T>(
   }
 }
 
-const obj: Record<string, GenFn<unknown>> = {
+type Value =
+  | number
+  | string
+  | null
+  | undefined
+  | boolean
+  | { [key: string]: Value }
+  | Value[];
+
+const obj = object<Value>({
   a: union([value(1), value(2)]),
   b: union([value(true), value(false)]),
   c: union([value("a"), value("b")]),
-  d: () =>
-    object({
-      d2: union([value(null), value(undefined)]),
-    }),
-};
+  d: object({
+    d2: union([value(null), value(undefined)]),
+  }),
+});
 
 export function combine() {
-  return [...object(obj)];
+  return [...obj()];
 }
 
 // export function combine(fn: GenFn<unknown>) {
