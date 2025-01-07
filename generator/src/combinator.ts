@@ -96,7 +96,7 @@ export type Value =
   | { [key: string]: Value }
   | Value[];
 
-export function combine(fn: ValueGenerator<unknown>) {
+export function combineValid(fn: ValueGenerator<unknown>) {
   const ctx: Context = {
     doBreak: false,
     brokeOnce: false,

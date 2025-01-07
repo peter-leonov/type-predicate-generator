@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`all at once 1`] = `
+exports[`valid > all at once 1`] = `
 [
   {
     "a": 1,
@@ -165,7 +165,7 @@ exports[`all at once 1`] = `
 ]
 `;
 
-exports[`array > of a single value 1`] = `
+exports[`valid > array > of a single value 1`] = `
 [
   [
     1,
@@ -173,7 +173,7 @@ exports[`array > of a single value 1`] = `
 ]
 `;
 
-exports[`array > of a union 1`] = `
+exports[`valid > array > of a union 1`] = `
 [
   [
     1,
@@ -184,13 +184,13 @@ exports[`array > of a union 1`] = `
 ]
 `;
 
-exports[`object > empty 1`] = `
+exports[`valid > object > empty 1`] = `
 [
   {},
 ]
 `;
 
-exports[`object > of a several nested objects with a union property 1`] = `
+exports[`valid > object > of a several nested objects with a union property 1`] = `
 [
   {
     "a": {
@@ -213,7 +213,7 @@ exports[`object > of a several nested objects with a union property 1`] = `
 ]
 `;
 
-exports[`object > of a several nested objects with a value property 1`] = `
+exports[`valid > object > of a several nested objects with a value property 1`] = `
 [
   {
     "a": {
@@ -227,7 +227,7 @@ exports[`object > of a several nested objects with a value property 1`] = `
 ]
 `;
 
-exports[`object > of a several objects with union properties 1`] = `
+exports[`valid > object > of a several objects with union properties 1`] = `
 [
   {
     "a": {
@@ -320,7 +320,7 @@ exports[`object > of a several objects with union properties 1`] = `
 ]
 `;
 
-exports[`object > of a several objects with value properties 1`] = `
+exports[`valid > object > of a several objects with value properties 1`] = `
 [
   {
     "a": {
@@ -339,7 +339,7 @@ exports[`object > of a several objects with value properties 1`] = `
 ]
 `;
 
-exports[`object > of a several union properties 1`] = `
+exports[`valid > object > of a several union properties 1`] = `
 [
   {
     "a": "A1",
@@ -374,7 +374,7 @@ exports[`object > of a several union properties 1`] = `
 ]
 `;
 
-exports[`object > of a several value properties 1`] = `
+exports[`valid > object > of a several value properties 1`] = `
 [
   {
     "a": "A",
@@ -384,7 +384,7 @@ exports[`object > of a several value properties 1`] = `
 ]
 `;
 
-exports[`object > of a single union property 1`] = `
+exports[`valid > object > of a single union property 1`] = `
 [
   {
     "a": "A1",
@@ -395,7 +395,7 @@ exports[`object > of a single union property 1`] = `
 ]
 `;
 
-exports[`object > of a single value property 1`] = `
+exports[`valid > object > of a single value property 1`] = `
 [
   {
     "a": "A",
@@ -403,21 +403,13 @@ exports[`object > of a single value property 1`] = `
 ]
 `;
 
-exports[`union > of a single value 1`] = `
+exports[`valid > union > of a single value 1`] = `
 [
   1,
 ]
 `;
 
-exports[`union > of a union 1`] = `
-[
-  1,
-  2,
-  3,
-]
-`;
-
-exports[`union > of several values 1`] = `
+exports[`valid > union > of a union 1`] = `
 [
   1,
   2,
@@ -425,7 +417,15 @@ exports[`union > of several values 1`] = `
 ]
 `;
 
-exports[`union > of unions 1`] = `
+exports[`valid > union > of several values 1`] = `
+[
+  1,
+  2,
+  3,
+]
+`;
+
+exports[`valid > union > of unions 1`] = `
 [
   1,
   2,
@@ -434,19 +434,19 @@ exports[`union > of unions 1`] = `
 ]
 `;
 
-exports[`value > null 1`] = `
+exports[`valid > value > null 1`] = `
 [
   null,
 ]
 `;
 
-exports[`value > number 1`] = `
+exports[`valid > value > number 1`] = `
 [
   1,
 ]
 `;
 
-exports[`value > string 1`] = `
+exports[`valid > value > string 1`] = `
 [
   "a",
 ]
