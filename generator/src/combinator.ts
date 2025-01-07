@@ -144,6 +144,7 @@ function* rollObject<T>(
 
   const restObj = pick(obj, restKeys);
 
+  // TODO skip for optional keys
   if (ctx.yieldInvalidValue) {
     const stateKey = `${id}_key_${key}`;
     if (!ctx.state.has(stateKey)) {
@@ -152,11 +153,16 @@ function* rollObject<T>(
       ctx.yieldInvalidValue = false;
       for (const rest of rollObject(ctx, id, restObj)) {
         yield {
-          // TODO skip for optional keys
           // Omit the current key and value
           ...rest,
         };
+        assert(
+          ctx.yieldInvalidValue,
+          "ctx.yieldInvalidValue must be reset to true while in the missing key loop"
+        );
+        ctx.yieldInvalidValue = false;
       }
+      ctx.yieldInvalidValue = true;
     }
   }
 
