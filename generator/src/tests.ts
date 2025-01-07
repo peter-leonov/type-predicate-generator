@@ -1,23 +1,19 @@
 import { assert } from "./helpers";
 
-function* typeA() {
-  yield 1;
-  yield 2;
+type GenFn<T> = () => Generator<T>;
+
+function value<T>(value: T): GenFn<T> {
+  return function* () {
+    yield value;
+  };
 }
 
-function* typeB() {
-  yield true;
-  yield false;
-}
-
-function* typeC() {
-  yield "a";
-  yield "b";
-}
-
-function* typeD() {
-  yield null;
-  yield undefined;
+function union<T>(members: GenFn<T>[]): GenFn<T> {
+  return function* () {
+    for (const v of members) {
+      yield* v();
+    }
+  };
 }
 
 function pick<T>(
@@ -31,8 +27,6 @@ function pick<T>(
     return acc;
   }, {});
 }
-
-type GenFn<T> = () => Generator<T>;
 
 function* object<T>(
   obj: Record<string, GenFn<T>>
@@ -62,15 +56,19 @@ function* object<T>(
 }
 
 const obj: Record<string, GenFn<unknown>> = {
-  a: typeA,
-  b: typeB,
-  c: typeC,
+  a: union([value(1), value(2)]),
+  b: union([value(true), value(false)]),
+  c: union([value("a"), value("b")]),
   d: () =>
     object({
-      d2: typeD,
+      d2: union([value(null), value(undefined)]),
     }),
 };
 
 export function combine() {
   return [...object(obj)];
 }
+
+// export function combine(fn: GenFn<unknown>) {
+//   return [...fn()];
+// }
