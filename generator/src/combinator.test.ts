@@ -1,6 +1,7 @@
 import { expect, describe, it } from "vitest";
 import {
   array,
+  combineInvalid,
   combineValid,
   object,
   union,
@@ -159,6 +160,20 @@ describe("valid", () => {
           })
         )
       ).toMatchSnapshot();
+    });
+  });
+});
+
+describe("invalid", () => {
+  describe("value", () => {
+    it("number", () => {
+      expect(combineInvalid(value(1))).toMatchSnapshot();
+    });
+  });
+
+  describe("union", () => {
+    it("single value", () => {
+      expect(combineInvalid(union([value(1)]))).toMatchSnapshot();
     });
   });
 });

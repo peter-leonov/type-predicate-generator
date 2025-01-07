@@ -1,18 +1,53 @@
 import { assert } from "./helpers";
 
+/**
+ * Main invariant: do not reuse the values produced by the value funtions
+ * (value, union, array, object), they each get a unique ID that is
+ * used to remember if the value has produced a broken value.
+ *
+ * If this becomes a problem, the next in line solution is to again
+ * use value paths as IDs and store per path state.
+ */
+
+/**
+ * A unique value used in tests to mark a wrong value that does not match
+ * anything esle but itself and cannot be expressed in the subset of the
+ * type system supported by the generator.
+ */
+const invalidValue = Symbol("invalidValue");
+
+export type Value =
+  | number
+  | string
+  | null
+  | undefined
+  | boolean
+  | { [key: string]: Value }
+  | Value[];
+
 export type ValueGenerator<T> = (ctx: Context) => Generator<T>;
 
 type Context = {
-  doBreak: boolean;
-  brokeOnce: boolean;
-  state: Map<string, boolean>;
+  invalidOnce: boolean;
+  state: Map<string, number>;
 };
 
 let valueCounter = 0;
+function uniqueID(): string {
+  return String(++valueCounter);
+}
 
 export function value<T>(value: T): ValueGenerator<T> {
-  const id = ++valueCounter;
-  return function* () {
+  const id = uniqueID();
+  return function* (ctx: Context) {
+    if (ctx.invalidOnce) {
+      if (!ctx.state.has(id)) {
+        // Time to yield some invalid data
+        ctx.state.set(id, 1);
+        ctx.invalidOnce = false;
+        yield invalidValue as T;
+      }
+    }
     yield value;
   };
 }
@@ -20,7 +55,7 @@ export function value<T>(value: T): ValueGenerator<T> {
 export function union<T>(
   members: ValueGenerator<T>[]
 ): ValueGenerator<T> {
-  const id = ++valueCounter;
+  const id = uniqueID();
   return function* (ctx: Context) {
     for (const v of members) {
       yield* v(ctx);
@@ -31,7 +66,7 @@ export function union<T>(
 export function array<T>(
   value: ValueGenerator<T>
 ): ValueGenerator<T[]> {
-  const id = ++valueCounter;
+  const id = uniqueID();
   return function* (ctx: Context) {
     for (const v of value(ctx)) {
       yield [v];
@@ -42,7 +77,7 @@ export function array<T>(
 export function object<T>(
   obj: Record<string, ValueGenerator<T>>
 ): ValueGenerator<T> {
-  const id = ++valueCounter;
+  const id = uniqueID();
   return (ctx: Context) => rollObject(ctx, id, obj) as Generator<T>;
 }
 
@@ -60,7 +95,7 @@ function pick<T>(
 
 function* rollObject<T>(
   ctx: Context,
-  id: number,
+  id: string,
   obj: Record<string, ValueGenerator<T>>
 ): Generator<Record<string, T>> {
   const keys = Object.keys(obj);
@@ -87,20 +122,39 @@ function* rollObject<T>(
   }
 }
 
-export type Value =
-  | number
-  | string
-  | null
-  | undefined
-  | boolean
-  | { [key: string]: Value }
-  | Value[];
-
-export function combineValid(fn: ValueGenerator<unknown>) {
+export function combineValid(fn: ValueGenerator<Value>) {
   const ctx: Context = {
-    doBreak: false,
-    brokeOnce: false,
+    invalidOnce: false,
     state: new Map(),
   };
   return [...fn(ctx)];
+}
+
+export function combineInvalid(fn: ValueGenerator<Value>) {
+  const ctx: Context = {
+    invalidOnce: false,
+    state: new Map(),
+  };
+
+  const g = fn(ctx);
+
+  const res: Value[] = [];
+
+  for (;;) {
+    // Reset the flag for the current step of the state machine.
+    ctx.invalidOnce = true;
+    const ir = g.next();
+    if (ir.done) {
+      break;
+    }
+    // All the values have produce invalid values in their turn enough times,
+    // thus none has this time, we're done.
+    if (ctx.invalidOnce) {
+      break;
+    }
+    // Storing one more broken value.
+    res.push(ir.value);
+  }
+
+  return res;
 }

@@ -1,5 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`invalid > union > single value 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
+exports[`invalid > value > number 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
 exports[`valid > all at once 1`] = `
 [
   {
