@@ -6,7 +6,7 @@ import {
   union,
   value,
   type Value,
-} from "./tests";
+} from "./combinator";
 
 it("all at once", () => {
   const obj = object<Value>({
