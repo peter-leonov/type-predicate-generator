@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`combine 1`] = `
+exports[`all at once 1`] = `
 [
   {
     "a": 1,
@@ -162,5 +162,54 @@ exports[`combine 1`] = `
       "d2": undefined,
     },
   },
+]
+`;
+
+exports[`union > of a single value 1`] = `
+[
+  1,
+]
+`;
+
+exports[`union > of a union 1`] = `
+[
+  1,
+  2,
+  3,
+]
+`;
+
+exports[`union > of several values 1`] = `
+[
+  1,
+  2,
+  3,
+]
+`;
+
+exports[`union > of unions 1`] = `
+[
+  1,
+  2,
+  3,
+  4,
+]
+`;
+
+exports[`value > null 1`] = `
+[
+  null,
+]
+`;
+
+exports[`value > number 1`] = `
+[
+  1,
+]
+`;
+
+exports[`value > string 1`] = `
+[
+  "a",
 ]
 `;
