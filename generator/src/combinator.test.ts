@@ -73,6 +73,18 @@ describe("valid", () => {
         combineValid(array(union([value(1), value(2)])))
       ).toMatchSnapshot();
     });
+
+    it("of an array of an array of a value", () => {
+      expect(
+        combineValid(array(array(array(value(1)))))
+      ).toMatchSnapshot();
+    });
+
+    it("of an array of an array of a union", () => {
+      expect(
+        combineValid(array(array(array(union([value(1), value(2)])))))
+      ).toMatchSnapshot();
+    });
   });
 
   describe("object", () => {
@@ -174,6 +186,31 @@ describe("invalid", () => {
   describe("union", () => {
     it("single value", () => {
       expect(combineInvalid(union([value(1)]))).toMatchSnapshot();
+    });
+    it("couple of values", () => {
+      expect(
+        combineInvalid(union([value(1), value(2), value(3)]))
+      ).toMatchSnapshot();
+    });
+  });
+
+  describe("array", () => {
+    it("single value", () => {
+      expect(combineInvalid(array(value(1)))).toMatchSnapshot();
+    });
+
+    it("of an array of an array of a value", () => {
+      expect(
+        combineInvalid(array(array(array(value(1)))))
+      ).toMatchSnapshot();
+    });
+
+    it("of an array of an array of a union", () => {
+      expect(
+        combineInvalid(
+          array(array(array(union([value(1), value(2)]))))
+        )
+      ).toMatchSnapshot();
     });
   });
 });

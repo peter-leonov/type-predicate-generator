@@ -1,5 +1,71 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`invalid > array > of an array of an array of a union 1`] = `
+[
+  Symbol(invalidValue),
+  [
+    Symbol(invalidValue),
+  ],
+  [
+    [
+      Symbol(invalidValue),
+    ],
+  ],
+  [
+    [
+      [
+        Symbol(invalidValue),
+      ],
+    ],
+  ],
+  [
+    [
+      [
+        Symbol(invalidValue),
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`invalid > array > of an array of an array of a value 1`] = `
+[
+  Symbol(invalidValue),
+  [
+    Symbol(invalidValue),
+  ],
+  [
+    [
+      Symbol(invalidValue),
+    ],
+  ],
+  [
+    [
+      [
+        Symbol(invalidValue),
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`invalid > array > single value 1`] = `
+[
+  Symbol(invalidValue),
+  [
+    Symbol(invalidValue),
+  ],
+]
+`;
+
+exports[`invalid > union > couple of values 1`] = `
+[
+  Symbol(invalidValue),
+  Symbol(invalidValue),
+  Symbol(invalidValue),
+]
+`;
+
 exports[`invalid > union > single value 1`] = `
 [
   Symbol(invalidValue),
@@ -192,6 +258,37 @@ exports[`valid > array > of a union 1`] = `
   ],
   [
     2,
+  ],
+]
+`;
+
+exports[`valid > array > of an array of an array of a union 1`] = `
+[
+  [
+    [
+      [
+        1,
+      ],
+    ],
+  ],
+  [
+    [
+      [
+        2,
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`valid > array > of an array of an array of a value 1`] = `
+[
+  [
+    [
+      [
+        1,
+      ],
+    ],
   ],
 ]
 `;

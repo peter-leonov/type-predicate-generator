@@ -13,8 +13,21 @@ import { assert } from "./helpers";
  * A unique value used in tests to mark a wrong value that does not match
  * anything esle but itself and cannot be expressed in the subset of the
  * type system supported by the generator.
+ *
+ * This explicit value covers cases when in a union one member's invalid value
+ * is a valid for the other. For example in:
+ * ```ts
+ * type X = string | number
+ * ```
+ * the `string` value might choose a `1` as it's invalid value,
+ * but `1` is a valid value for the `number` thus the union as a whole
+ * never yields an invalid value.
+ *
+ * If this special value becomes a blocker it should be possible to
+ * inspect the union values in the generator and infer a safe invalid value
+ * per union.
  */
-const invalidValue = Symbol("invalidValue");
+const invalidValue: any = Symbol("invalidValue");
 
 export type Value =
   | number
@@ -28,7 +41,7 @@ export type Value =
 export type ValueGenerator<T> = (ctx: Context) => Generator<T>;
 
 type Context = {
-  invalidOnce: boolean;
+  yieldInvalidValue: boolean;
   state: Map<string, number>;
 };
 
@@ -40,12 +53,12 @@ function uniqueID(): string {
 export function value<T>(value: T): ValueGenerator<T> {
   const id = uniqueID();
   return function* (ctx: Context) {
-    if (ctx.invalidOnce) {
+    if (ctx.yieldInvalidValue) {
       if (!ctx.state.has(id)) {
         // Time to yield some invalid data
         ctx.state.set(id, 1);
-        ctx.invalidOnce = false;
-        yield invalidValue as T;
+        ctx.yieldInvalidValue = false;
+        yield invalidValue;
       }
     }
     yield value;
@@ -55,7 +68,6 @@ export function value<T>(value: T): ValueGenerator<T> {
 export function union<T>(
   members: ValueGenerator<T>[]
 ): ValueGenerator<T> {
-  const id = uniqueID();
   return function* (ctx: Context) {
     for (const v of members) {
       yield* v(ctx);
@@ -68,6 +80,14 @@ export function array<T>(
 ): ValueGenerator<T[]> {
   const id = uniqueID();
   return function* (ctx: Context) {
+    if (ctx.yieldInvalidValue) {
+      if (!ctx.state.has(id)) {
+        // Time to yield some invalid data
+        ctx.state.set(id, 1);
+        ctx.yieldInvalidValue = false;
+        yield invalidValue;
+      }
+    }
     for (const v of value(ctx)) {
       yield [v];
     }
@@ -124,7 +144,7 @@ function* rollObject<T>(
 
 export function combineValid(fn: ValueGenerator<Value>) {
   const ctx: Context = {
-    invalidOnce: false,
+    yieldInvalidValue: false,
     state: new Map(),
   };
   return [...fn(ctx)];
@@ -132,7 +152,7 @@ export function combineValid(fn: ValueGenerator<Value>) {
 
 export function combineInvalid(fn: ValueGenerator<Value>) {
   const ctx: Context = {
-    invalidOnce: false,
+    yieldInvalidValue: false,
     state: new Map(),
   };
 
@@ -142,18 +162,18 @@ export function combineInvalid(fn: ValueGenerator<Value>) {
 
   for (;;) {
     // Reset the flag for the current step of the state machine.
-    ctx.invalidOnce = true;
+    ctx.yieldInvalidValue = true;
     const ir = g.next();
     if (ir.done) {
       break;
     }
-    // All the values have produce invalid values in their turn enough times,
-    // thus none has this time, we're done.
-    if (ctx.invalidOnce) {
-      break;
+
+    if (!ctx.yieldInvalidValue) {
+      // Storing one more broken value.
+      res.push(ir.value);
+    } else {
+      // Ignoring valid ones
     }
-    // Storing one more broken value.
-    res.push(ir.value);
   }
 
   return res;
