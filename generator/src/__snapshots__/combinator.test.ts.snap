@@ -165,6 +165,49 @@ exports[`all at once 1`] = `
 ]
 `;
 
+exports[`array > of a single value 1`] = `
+[
+  [
+    1,
+  ],
+]
+`;
+
+exports[`array > of a union 1`] = `
+[
+  [
+    1,
+  ],
+  [
+    2,
+  ],
+]
+`;
+
+exports[`object > empty 1`] = `
+[
+  {},
+]
+`;
+
+exports[`object > of a several value properties 1`] = `
+[
+  {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+  },
+]
+`;
+
+exports[`object > of a single value property 1`] = `
+[
+  {
+    "a": "A",
+  },
+]
+`;
+
 exports[`union > of a single value 1`] = `
 [
   1,

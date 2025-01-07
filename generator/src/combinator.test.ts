@@ -61,3 +61,31 @@ describe("union", () => {
     ).toMatchSnapshot();
   });
 });
+
+describe("array", () => {
+  it("of a single value", () => {
+    expect(combine(array(value(1)))).toMatchSnapshot();
+  });
+
+  it("of a union", () => {
+    expect(
+      combine(array(union([value(1), value(2)])))
+    ).toMatchSnapshot();
+  });
+});
+
+describe("object", () => {
+  it("empty", () => {
+    expect(combine(object({}))).toMatchSnapshot();
+  });
+
+  it("of a single value property", () => {
+    expect(combine(object({ a: value("A") }))).toMatchSnapshot();
+  });
+
+  it("of a several value properties", () => {
+    expect(
+      combine(object({ a: value("A"), b: value("B"), c: value("C") }))
+    ).toMatchSnapshot();
+  });
+});
