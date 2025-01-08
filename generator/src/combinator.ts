@@ -111,7 +111,7 @@ function* rollObject<T>(
 
   for (const [isValidValue, v] of value(doInvalid)) {
     for (const [isValidRest, rest] of rollObject(
-      isValidValue,
+      doInvalid && isValidValue,
       restObj
     )) {
       yield [
@@ -155,11 +155,7 @@ function compareCombinations(a: unknown, b: unknown) {
 }
 
 export function combineValid(fn: ValueGenerator<Value>) {
-  return [
-    ...fn(false)
-      .filter(([isValid, _]) => isValid)
-      .map(([_, v]) => v),
-  ].sort(compareCombinations);
+  return [...fn(false).map(([_, v]) => v)].sort(compareCombinations);
 }
 
 export function combineInvalid(fn: ValueGenerator<Value>) {

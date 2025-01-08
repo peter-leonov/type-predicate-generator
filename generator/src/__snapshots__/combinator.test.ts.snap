@@ -164,25 +164,6 @@ exports[`invalid > object > of a several union properties 1`] = `
   },
   {
     "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-  },
-  {
-    "a": Symbol(invalidValue),
     "b": "B2",
     "c": "C1",
   },
@@ -197,25 +178,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "c": "C3",
   },
   {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-  },
-  {
     "b": "B1",
     "c": "C1",
   },
@@ -228,21 +190,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "c": "C3",
   },
   {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-  },
-  {
     "b": "B2",
     "c": "C1",
   },
@@ -253,21 +200,6 @@ exports[`invalid > object > of a several union properties 1`] = `
   {
     "b": "B2",
     "c": "C3",
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
   },
 ]
 `;
@@ -299,24 +231,8 @@ exports[`invalid > object > of a several value properties 1`] = `
     "c": "C",
   },
   {
-    "a": Symbol(invalidValue),
-    "b": "B",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B",
-  },
-  {
     "b": "B",
     "c": "C",
-  },
-  {
-    "b": "B",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B",
   },
 ]
 `;
