@@ -103,8 +103,10 @@ function* rollObject<T>(
   const value = obj[key];
   assert(value);
 
-  for (const [_, rest] of rollObject(doInvalid, restObj)) {
-    yield [false, rest];
+  if (doInvalid) {
+    for (const [_, rest] of rollObject(false, restObj)) {
+      yield [false, rest];
+    }
   }
 
   for (const [isValidValue, v] of value(doInvalid)) {

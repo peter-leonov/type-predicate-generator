@@ -149,21 +149,6 @@ exports[`invalid > object > of a several union properties 1`] = `
   },
   {
     "a": "A1",
-  },
-  {
-    "a": "A1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
     "b": Symbol(invalidValue),
   },
   {
@@ -228,21 +213,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "c": "C3",
   },
   {
-    "b": "B1",
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
     "a": Symbol(invalidValue),
     "b": "B1",
   },
@@ -289,21 +259,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "c": "C3",
   },
   {
-    "b": "B2",
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
     "a": Symbol(invalidValue),
     "b": "B2",
   },
@@ -321,17 +276,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "a": Symbol(invalidValue),
     "b": "B2",
     "c": Symbol(invalidValue),
-  },
-  {
-    "c": "C1",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C1",
   },
   {
     "a": Symbol(invalidValue),
@@ -348,17 +292,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "c": "C1",
   },
   {
-    "c": "C2",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
     "a": Symbol(invalidValue),
     "c": "C2",
   },
@@ -373,17 +306,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "c": "C2",
   },
   {
-    "c": "C3",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
     "a": Symbol(invalidValue),
     "c": "C3",
   },
@@ -396,61 +318,6 @@ exports[`invalid > object > of a several union properties 1`] = `
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
     "c": "C3",
-  },
-  {},
-  {
-    "c": Symbol(invalidValue),
-  },
-  {
-    "c": Symbol(invalidValue),
-  },
-  {
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
   },
   {
     "a": Symbol(invalidValue),
@@ -516,13 +383,6 @@ exports[`invalid > object > of a several value properties 1`] = `
   },
   {
     "a": "A",
-  },
-  {
-    "a": "A",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A",
     "b": Symbol(invalidValue),
   },
   {
@@ -540,13 +400,6 @@ exports[`invalid > object > of a several value properties 1`] = `
     "c": "C",
   },
   {
-    "b": "B",
-  },
-  {
-    "b": "B",
-    "c": Symbol(invalidValue),
-  },
-  {
     "a": Symbol(invalidValue),
     "b": "B",
   },
@@ -556,13 +409,6 @@ exports[`invalid > object > of a several value properties 1`] = `
     "c": Symbol(invalidValue),
   },
   {
-    "c": "C",
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C",
-  },
-  {
     "a": Symbol(invalidValue),
     "c": "C",
   },
@@ -570,24 +416,6 @@ exports[`invalid > object > of a several value properties 1`] = `
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
     "c": "C",
-  },
-  {},
-  {
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
   },
   {
     "a": Symbol(invalidValue),
