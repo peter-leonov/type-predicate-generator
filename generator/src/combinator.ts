@@ -151,25 +151,8 @@ function pick<T>(
   }, {});
 }
 
-const stringified = new Map<unknown, string>();
-function stringifyCombination(value: unknown): string {
-  const str = stringified.get(value);
-  if (str != undefined) {
-    return str;
-  }
-  const str2 = JSON.stringify(value, (_, v) => {
-    return typeof v == "symbol" ? String(v) : v;
-  });
-  stringified.set(value, str2);
-  return str2;
-}
-
-function compareCombinations(a: unknown, b: unknown) {
-  return stringifyCombination(a) < stringifyCombination(b) ? -1 : 0;
-}
-
 export function combineValid(fn: ValueGenerator<Value>) {
-  return [...fn(false).map(([_, v]) => v)].sort(compareCombinations);
+  return [...fn(false).map(([isValid, v]) => (assert(isValid), v))];
 }
 
 export function combineInvalid(fn: ValueGenerator<Value>) {
@@ -177,5 +160,5 @@ export function combineInvalid(fn: ValueGenerator<Value>) {
     ...fn(true)
       .filter(([isValid, _]) => !isValid)
       .map(([_, v]) => v),
-  ].sort(compareCombinations);
+  ];
 }
