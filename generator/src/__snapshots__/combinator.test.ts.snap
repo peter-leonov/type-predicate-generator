@@ -1,5 +1,181 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`invalid > all at once 1`] = `
+[
+  Symbol(invalidValue),
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+]
+`;
+
+exports[`invalid > array > of a single value 1`] = `
+[
+  Symbol(invalidValue),
+  [
+    Symbol(invalidValue),
+  ],
+]
+`;
+
+exports[`invalid > array > of a union 1`] = `
+[
+  Symbol(invalidValue),
+  [
+    Symbol(invalidValue),
+  ],
+]
+`;
+
 exports[`invalid > array > of an array of an array of a union 1`] = `
 [
   Symbol(invalidValue),
@@ -38,15 +214,6 @@ exports[`invalid > array > of an array of an array of a value 1`] = `
         Symbol(invalidValue),
       ],
     ],
-  ],
-]
-`;
-
-exports[`invalid > array > single value 1`] = `
-[
-  Symbol(invalidValue),
-  [
-    Symbol(invalidValue),
   ],
 ]
 `;
@@ -146,6 +313,160 @@ exports[`invalid > object > of a several nested objects with a value property 1`
     "a": {},
   },
   {},
+]
+`;
+
+exports[`invalid > object > of a several objects with union properties 1`] = `
+[
+  Symbol(invalidValue),
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {},
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {},
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {},
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {},
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
 ]
 `;
 
@@ -493,19 +814,43 @@ exports[`invalid > object > of a single value property 1`] = `
 ]
 `;
 
-exports[`invalid > union > couple of values 1`] = `
+exports[`invalid > union > of a single value 1`] = `
 [
   Symbol(invalidValue),
 ]
 `;
 
-exports[`invalid > union > single value 1`] = `
+exports[`invalid > union > of a union 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
+exports[`invalid > union > of several values 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
+exports[`invalid > union > of unions 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
+exports[`invalid > value > null 1`] = `
 [
   Symbol(invalidValue),
 ]
 `;
 
 exports[`invalid > value > number 1`] = `
+[
+  Symbol(invalidValue),
+]
+`;
+
+exports[`invalid > value > string 1`] = `
 [
   Symbol(invalidValue),
 ]
