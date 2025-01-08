@@ -20,6 +20,26 @@ exports[`invalid > all at once 1`] = `
       "a",
     ],
     "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
       "d2": undefined,
     },
   },
@@ -31,6 +51,26 @@ exports[`invalid > all at once 1`] = `
     ],
     "d": {
       "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
     },
   },
   {
@@ -60,6 +100,26 @@ exports[`invalid > all at once 1`] = `
       "a",
     ],
     "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
       "d2": undefined,
     },
   },
@@ -76,6 +136,882 @@ exports[`invalid > all at once 1`] = `
   {
     "a": Symbol(invalidValue),
     "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {},
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "a",
+    ],
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {},
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [
+      "b",
+    ],
+  },
+  {
+    "a": 1,
+    "b": false,
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {},
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "a",
+    ],
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {},
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [
+      "b",
+    ],
+  },
+  {
+    "a": 1,
+    "b": true,
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "a",
+    ],
+    "d": {},
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "a",
+    ],
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {},
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [
+      "b",
+    ],
+  },
+  {
+    "a": 2,
+    "b": false,
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": Symbol(invalidValue),
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      Symbol(invalidValue),
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {},
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {},
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "b",
+    ],
+  },
+  {
+    "a": 2,
+    "b": true,
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
     "c": [
       "b",
     ],
@@ -173,6 +1109,9 @@ exports[`invalid > array > of a union 1`] = `
   [
     Symbol(invalidValue),
   ],
+  [
+    Symbol(invalidValue),
+  ],
 ]
 `;
 
@@ -185,6 +1124,13 @@ exports[`invalid > array > of an array of an array of a union 1`] = `
   [
     [
       Symbol(invalidValue),
+    ],
+  ],
+  [
+    [
+      [
+        Symbol(invalidValue),
+      ],
     ],
   ],
   [
@@ -239,6 +1185,15 @@ exports[`invalid > object > of a several nested objects with a union property 1`
     "a": {
       "b": {
         "c": Symbol(invalidValue),
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": {
+          "d": Symbol(invalidValue),
+        },
       },
     },
   },
@@ -357,6 +1312,401 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
   },
   {
     "a": {
+      "aa": "AA1",
+    },
+    "b": Symbol(invalidValue),
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": Symbol(invalidValue),
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {},
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {},
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {},
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {},
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": Symbol(invalidValue),
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": Symbol(invalidValue),
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {},
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {},
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": "BB2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {
+      "bb": Symbol(invalidValue),
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {},
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "b": {},
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA2",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
       "aa": Symbol(invalidValue),
     },
     "b": {
@@ -382,10 +1732,43 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
       "aa": Symbol(invalidValue),
     },
     "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC2",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
       "bb": "BB2",
     },
     "c": {
       "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": Symbol(invalidValue),
+    },
+    "b": {
+      "bb": "BB2",
+    },
+    "c": {
+      "cc": "CC2",
     },
   },
   {
@@ -705,6 +2088,86 @@ exports[`invalid > object > of a several union properties 1`] = `
 [
   Symbol(invalidValue),
   {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "c": "C3",
+  },
+  {
     "a": Symbol(invalidValue),
     "b": "B1",
     "c": "C1",
@@ -800,6 +2263,9 @@ exports[`invalid > object > of a single union property 1`] = `
   {
     "a": Symbol(invalidValue),
   },
+  {
+    "a": Symbol(invalidValue),
+  },
   {},
 ]
 `;
@@ -823,17 +2289,24 @@ exports[`invalid > union > of a single value 1`] = `
 exports[`invalid > union > of a union 1`] = `
 [
   Symbol(invalidValue),
+  Symbol(invalidValue),
+  Symbol(invalidValue),
 ]
 `;
 
 exports[`invalid > union > of several values 1`] = `
 [
   Symbol(invalidValue),
+  Symbol(invalidValue),
+  Symbol(invalidValue),
 ]
 `;
 
 exports[`invalid > union > of unions 1`] = `
 [
+  Symbol(invalidValue),
+  Symbol(invalidValue),
+  Symbol(invalidValue),
   Symbol(invalidValue),
 ]
 `;
