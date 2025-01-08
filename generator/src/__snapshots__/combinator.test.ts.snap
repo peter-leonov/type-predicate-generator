@@ -18,13 +18,6 @@ exports[`invalid > array > of an array of an array of a union 1`] = `
       ],
     ],
   ],
-  [
-    [
-      [
-        Symbol(invalidValue),
-      ],
-    ],
-  ],
 ]
 `;
 
@@ -67,86 +60,6 @@ exports[`invalid > object > empty 1`] = `
 exports[`invalid > object > of a several union properties 1`] = `
 [
   Symbol(invalidValue),
-  {
-    "a": "A1",
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "a": "A1",
-    "c": "C1",
-  },
-  {
-    "a": "A1",
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "c": "C3",
-  },
   {
     "a": Symbol(invalidValue),
     "b": "B1",
@@ -243,9 +156,6 @@ exports[`invalid > object > of a single union property 1`] = `
   {
     "a": Symbol(invalidValue),
   },
-  {
-    "a": Symbol(invalidValue),
-  },
   {},
 ]
 `;
@@ -262,8 +172,6 @@ exports[`invalid > object > of a single value property 1`] = `
 
 exports[`invalid > union > couple of values 1`] = `
 [
-  Symbol(invalidValue),
-  Symbol(invalidValue),
   Symbol(invalidValue),
 ]
 `;

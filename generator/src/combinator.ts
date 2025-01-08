@@ -55,8 +55,22 @@ export function union<T>(
   members: ValueGenerator<T>[]
 ): ValueGenerator<T> {
   return function* (doInvalid: boolean) {
-    for (const v of members) {
-      yield* v(doInvalid);
+    assert(
+      members.length >= 1,
+      "a union should have at least one member to be able to produce an invalid value when asked for"
+    );
+    for (const m of members) {
+      for (const [isValid, v] of m(doInvalid)) {
+        // It should be enough to yield only one invalid value per union.
+        // In the case we get rid of `invalidValue` a union would need to
+        // infer what value is an invalid value for the given values or
+        // get it from the generator as a static property to use.
+        if (doInvalid && !isValid) {
+          yield [false, v];
+          return;
+        }
+        yield [isValid, v];
+      }
     }
   };
 }
