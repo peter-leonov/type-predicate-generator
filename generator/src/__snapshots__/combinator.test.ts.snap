@@ -4,7 +4,18 @@ exports[`invalid > array > of an array of an array of a union 1`] = `
 [
   Symbol(invalidValue),
   [
-    Symbol(invalidValue),
+    [
+      [
+        Symbol(invalidValue),
+      ],
+    ],
+  ],
+  [
+    [
+      [
+        Symbol(invalidValue),
+      ],
+    ],
   ],
   [
     [
@@ -12,18 +23,7 @@ exports[`invalid > array > of an array of an array of a union 1`] = `
     ],
   ],
   [
-    [
-      [
-        Symbol(invalidValue),
-      ],
-    ],
-  ],
-  [
-    [
-      [
-        Symbol(invalidValue),
-      ],
-    ],
+    Symbol(invalidValue),
   ],
 ]
 `;
@@ -32,7 +32,11 @@ exports[`invalid > array > of an array of an array of a value 1`] = `
 [
   Symbol(invalidValue),
   [
-    Symbol(invalidValue),
+    [
+      [
+        Symbol(invalidValue),
+      ],
+    ],
   ],
   [
     [
@@ -40,11 +44,7 @@ exports[`invalid > array > of an array of an array of a value 1`] = `
     ],
   ],
   [
-    [
-      [
-        Symbol(invalidValue),
-      ],
-    ],
+    Symbol(invalidValue),
   ],
 ]
 `;
@@ -67,24 +67,345 @@ exports[`invalid > object > empty 1`] = `
 exports[`invalid > object > of a several union properties 1`] = `
 [
   Symbol(invalidValue),
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": "C1",
+  },
+  {
+    "b": "B1",
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": "C2",
+  },
+  {
+    "b": "B1",
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": "C3",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": "C1",
+  },
+  {
+    "b": "B2",
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": "C2",
+  },
+  {
+    "b": "B2",
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": "C3",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
   {},
   {
     "c": Symbol(invalidValue),
   },
   {
-    "c": "C1",
-  },
-  {
     "c": Symbol(invalidValue),
   },
   {
-    "c": "C2",
-  },
-  {
     "c": Symbol(invalidValue),
-  },
-  {
-    "c": "C3",
   },
   {
     "b": Symbol(invalidValue),
@@ -95,50 +416,11 @@ exports[`invalid > object > of a several union properties 1`] = `
   },
   {
     "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
   },
   {
     "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "b": "B1",
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": "C1",
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": "C2",
-  },
-  {
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B1",
-    "c": "C3",
   },
   {
     "b": Symbol(invalidValue),
@@ -149,50 +431,11 @@ exports[`invalid > object > of a several union properties 1`] = `
   },
   {
     "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
   },
   {
     "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "b": "B2",
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": "C1",
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": "C2",
-  },
-  {
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B2",
-    "c": "C3",
   },
   {
     "a": Symbol(invalidValue),
@@ -203,23 +446,11 @@ exports[`invalid > object > of a several union properties 1`] = `
   },
   {
     "a": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": Symbol(invalidValue),
     "c": Symbol(invalidValue),
   },
   {
     "a": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": Symbol(invalidValue),
     "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "c": "C3",
   },
   {
     "a": Symbol(invalidValue),
@@ -233,61 +464,12 @@ exports[`invalid > object > of a several union properties 1`] = `
   {
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
   },
   {
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": "C1",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": "C2",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B1",
-    "c": "C3",
   },
   {
     "a": Symbol(invalidValue),
@@ -301,193 +483,11 @@ exports[`invalid > object > of a several union properties 1`] = `
   {
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
   },
   {
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": "C1",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": "C2",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B2",
-    "c": "C3",
-  },
-  {
-    "a": "A1",
-  },
-  {
-    "a": "A1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "c": "C1",
-  },
-  {
-    "a": "A1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "c": "C3",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B1",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C1",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": Symbol(invalidValue),
-    "c": "C3",
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
     "c": Symbol(invalidValue),
   },
 ]
@@ -496,34 +496,91 @@ exports[`invalid > object > of a several union properties 1`] = `
 exports[`invalid > object > of a several value properties 1`] = `
 [
   Symbol(invalidValue),
+  {
+    "a": "A",
+    "b": "B",
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A",
+    "c": "C",
+  },
+  {
+    "a": "A",
+    "b": Symbol(invalidValue),
+    "c": "C",
+  },
+  {
+    "a": "A",
+  },
+  {
+    "a": "A",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B",
+    "c": "C",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B",
+    "c": "C",
+  },
+  {
+    "b": "B",
+  },
+  {
+    "b": "B",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "c": "C",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C",
+  },
   {},
   {
     "c": Symbol(invalidValue),
   },
   {
-    "c": "C",
-  },
-  {
     "b": Symbol(invalidValue),
   },
   {
     "b": Symbol(invalidValue),
     "c": Symbol(invalidValue),
-  },
-  {
-    "b": Symbol(invalidValue),
-    "c": "C",
-  },
-  {
-    "b": "B",
-  },
-  {
-    "b": "B",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "b": "B",
-    "c": "C",
   },
   {
     "a": Symbol(invalidValue),
@@ -534,68 +591,11 @@ exports[`invalid > object > of a several value properties 1`] = `
   },
   {
     "a": Symbol(invalidValue),
-    "c": "C",
-  },
-  {
-    "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
   },
   {
     "a": Symbol(invalidValue),
     "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": Symbol(invalidValue),
-    "c": "C",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B",
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": Symbol(invalidValue),
-    "b": "B",
-    "c": "C",
-  },
-  {
-    "a": "A",
-  },
-  {
-    "a": "A",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A",
-    "c": "C",
-  },
-  {
-    "a": "A",
-    "b": Symbol(invalidValue),
-  },
-  {
-    "a": "A",
-    "b": Symbol(invalidValue),
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A",
-    "b": Symbol(invalidValue),
-    "c": "C",
-  },
-  {
-    "a": "A",
-    "b": "B",
-  },
-  {
-    "a": "A",
-    "b": "B",
     "c": Symbol(invalidValue),
   },
 ]
@@ -648,46 +648,6 @@ exports[`valid > all at once 1`] = `
 [
   {
     "a": 1,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 1,
     "b": false,
     "c": [
       "a",
@@ -727,7 +687,7 @@ exports[`valid > all at once 1`] = `
     },
   },
   {
-    "a": 2,
+    "a": 1,
     "b": true,
     "c": [
       "a",
@@ -737,7 +697,7 @@ exports[`valid > all at once 1`] = `
     },
   },
   {
-    "a": 2,
+    "a": 1,
     "b": true,
     "c": [
       "a",
@@ -747,7 +707,7 @@ exports[`valid > all at once 1`] = `
     },
   },
   {
-    "a": 2,
+    "a": 1,
     "b": true,
     "c": [
       "b",
@@ -757,7 +717,7 @@ exports[`valid > all at once 1`] = `
     },
   },
   {
-    "a": 2,
+    "a": 1,
     "b": true,
     "c": [
       "b",
@@ -799,6 +759,46 @@ exports[`valid > all at once 1`] = `
   {
     "a": 2,
     "b": false,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [
+      "b",
+    ],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
     "c": [
       "b",
     ],

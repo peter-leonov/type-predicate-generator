@@ -85,18 +85,6 @@ export function object<T>(
   };
 }
 
-function pick<T>(
-  obj: Record<string, T>,
-  arr: string[]
-): Record<string, T> {
-  return arr.reduce<Record<string, T>>((acc, attr) => {
-    if (attr in obj) {
-      acc[attr] = obj[attr] as T;
-    }
-    return acc;
-  }, {});
-}
-
 function* rollObject<T>(
   doInvalid: boolean,
   obj: Record<string, ValueGenerator<T>>
@@ -115,7 +103,7 @@ function* rollObject<T>(
   const value = obj[key];
   assert(value);
 
-  for (const [isValidRest, rest] of rollObject(doInvalid, restObj)) {
+  for (const [_, rest] of rollObject(doInvalid, restObj)) {
     yield [false, rest];
   }
 
@@ -135,12 +123,24 @@ function* rollObject<T>(
   }
 }
 
+function pick<T>(
+  obj: Record<string, T>,
+  arr: string[]
+): Record<string, T> {
+  return arr.reduce<Record<string, T>>((acc, attr) => {
+    if (attr in obj) {
+      acc[attr] = obj[attr] as T;
+    }
+    return acc;
+  }, {});
+}
+
 export function combineValid(fn: ValueGenerator<Value>) {
   return [
     ...fn(false)
       .filter(([isValid, _]) => isValid)
       .map(([_, v]) => v),
-  ];
+  ].sort((a, b) => (JSON.stringify(a) < JSON.stringify(b) ? -1 : 0));
 }
 
 export function combineInvalid(fn: ValueGenerator<Value>) {
@@ -148,5 +148,5 @@ export function combineInvalid(fn: ValueGenerator<Value>) {
     ...fn(true)
       .filter(([isValid, _]) => !isValid)
       .map(([_, v]) => v),
-  ];
+  ].sort((a, b) => (JSON.stringify(a) < JSON.stringify(b) ? -1 : 0));
 }
