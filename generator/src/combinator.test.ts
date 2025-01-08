@@ -252,5 +252,43 @@ describe("invalid", () => {
         )
       ).toMatchSnapshot();
     });
+
+    it("of a several objects with value properties", () => {
+      expect(
+        combineInvalid(
+          object({
+            a: object({ a1: value("A1"), a2: value("A2") }),
+            b: object({ b1: value("B1"), b2: value("B2") }),
+            c: object({ c1: value("C1"), c2: value("C2") }),
+          })
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("of a several nested objects with a value property", () => {
+      expect(
+        combineInvalid(
+          object({
+            a: object({
+              b: object({ c: object({ d: value("D") }) }),
+            }),
+          })
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("of a several nested objects with a union property", () => {
+      expect(
+        combineInvalid(
+          object({
+            a: object({
+              b: object({
+                c: object({ d: union([value("D1"), value("D2")]) }),
+              }),
+            }),
+          })
+        )
+      ).toMatchSnapshot();
+    });
   });
 });

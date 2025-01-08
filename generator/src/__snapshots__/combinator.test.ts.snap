@@ -57,6 +57,329 @@ exports[`invalid > object > empty 1`] = `
 ]
 `;
 
+exports[`invalid > object > of a several nested objects with a union property 1`] = `
+[
+  Symbol(invalidValue),
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "b": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": Symbol(invalidValue),
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": {
+          "d": Symbol(invalidValue),
+        },
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": {},
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {},
+    },
+  },
+  {
+    "a": {},
+  },
+  {},
+]
+`;
+
+exports[`invalid > object > of a several nested objects with a value property 1`] = `
+[
+  Symbol(invalidValue),
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "b": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": Symbol(invalidValue),
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": {
+          "d": Symbol(invalidValue),
+        },
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": {},
+      },
+    },
+  },
+  {
+    "a": {
+      "b": {},
+    },
+  },
+  {
+    "a": {},
+  },
+  {},
+]
+`;
+
+exports[`invalid > object > of a several objects with value properties 1`] = `
+[
+  Symbol(invalidValue),
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": Symbol(invalidValue),
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": Symbol(invalidValue),
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": Symbol(invalidValue),
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": Symbol(invalidValue),
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": Symbol(invalidValue),
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": Symbol(invalidValue),
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+]
+`;
+
 exports[`invalid > object > of a several union properties 1`] = `
 [
   Symbol(invalidValue),
