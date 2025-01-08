@@ -38,7 +38,9 @@ export type Value =
   | { [key: string]: Value }
   | Value[];
 
-export type ValueGenerator<T> = (ctx: Context) => Generator<T>;
+export type ValueGenerator<T> = (
+  ctx: Context
+) => Generator<[boolean, T]>;
 
 type Context = {
   yieldInvalidValue: boolean;
@@ -53,15 +55,8 @@ function uniqueID(): string {
 export function value<T>(value: T): ValueGenerator<T> {
   const id = uniqueID();
   return function* (ctx: Context) {
-    if (ctx.yieldInvalidValue) {
-      if (!ctx.state.has(id)) {
-        // Time to yield some invalid data
-        ctx.state.set(id, 1);
-        ctx.yieldInvalidValue = false;
-        yield invalidValue;
-      }
-    }
-    yield value;
+    yield [false, invalidValue];
+    yield [true, value];
   };
 }
 
@@ -80,16 +75,9 @@ export function array<T>(
 ): ValueGenerator<T[]> {
   const id = uniqueID();
   return function* (ctx: Context) {
-    if (ctx.yieldInvalidValue) {
-      if (!ctx.state.has(id)) {
-        // Time to yield some invalid data
-        ctx.state.set(id, 1);
-        ctx.yieldInvalidValue = false;
-        yield invalidValue;
-      }
-    }
-    for (const v of value(ctx)) {
-      yield [v];
+    yield [false, invalidValue];
+    for (const [isValid, v] of value(ctx)) {
+      yield [isValid, [v]];
     }
   };
 }
@@ -99,16 +87,8 @@ export function object<T>(
 ): ValueGenerator<T> {
   const id = uniqueID();
   return function* (ctx: Context) {
-    if (ctx.yieldInvalidValue) {
-      const stateKey = `${id}_root`;
-      if (!ctx.state.has(stateKey)) {
-        // Time to yield some invalid data
-        ctx.state.set(stateKey, 1);
-        ctx.yieldInvalidValue = false;
-        yield invalidValue;
-      }
-    }
-    yield* rollObject(ctx, id, obj) as Generator<T>;
+    yield [false, invalidValue];
+    yield* rollObject(ctx, id, obj) as Generator<any>;
   };
 }
 
@@ -132,10 +112,10 @@ function* rollObject<T>(
   ctx: Context,
   id: string,
   obj: Record<string, ValueGenerator<T>>
-): Generator<Record<string, T>> {
+): Generator<[boolean, Record<string, T>]> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
-    yield {};
+    yield [true, {}];
     return;
   }
 
@@ -144,37 +124,19 @@ function* rollObject<T>(
 
   const restObj = pick(obj, restKeys);
 
-  // TODO skip for optional keys
-  if (ctx.yieldInvalidValue) {
-    const stateKey = `${id}_key_${key}`;
-    if (!ctx.state.has(stateKey)) {
-      // Time to yield some invalid data
-      ctx.state.set(stateKey, 1);
-      ctx.yieldInvalidValue = false;
-      for (const rest of rollObject(ctx, id, restObj)) {
-        yield {
-          // Omit the current key and value
-          ...rest,
-        };
-        assert(
-          ctx.yieldInvalidValue,
-          "ctx.yieldInvalidValue must be reset to true while in the missing key loop"
-        );
-        ctx.yieldInvalidValue = false;
-      }
-      ctx.yieldInvalidValue = true;
-    }
-  }
-
   const value = obj[key];
   assert(value);
 
-  for (const v of value(ctx)) {
-    for (const rest of rollObject(ctx, id, restObj)) {
-      yield {
-        [key]: v,
-        ...rest,
-      };
+  for (const [isValidValue, v] of value(ctx)) {
+    for (const [isValidRest, rest] of rollObject(ctx, id, restObj)) {
+      yield [false, rest];
+      yield [
+        isValidValue && isValidRest,
+        {
+          [key]: v,
+          ...rest,
+        },
+      ];
     }
   }
 }
@@ -184,7 +146,11 @@ export function combineValid(fn: ValueGenerator<Value>) {
     yieldInvalidValue: false,
     state: new Map(),
   };
-  return [...fn(ctx)];
+  return [
+    ...fn(ctx)
+      .filter(([isValid, _]) => isValid)
+      .map(([_, v]) => v),
+  ];
 }
 
 export function combineInvalid(fn: ValueGenerator<Value>) {
@@ -192,26 +158,9 @@ export function combineInvalid(fn: ValueGenerator<Value>) {
     yieldInvalidValue: false,
     state: new Map(),
   };
-
-  const g = fn(ctx);
-
-  const res: Value[] = [];
-
-  for (;;) {
-    // Reset the flag for the current step of the state machine.
-    ctx.yieldInvalidValue = true;
-    const ir = g.next();
-    if (ir.done) {
-      break;
-    }
-
-    if (!ctx.yieldInvalidValue) {
-      // Storing one more broken value.
-      res.push(ir.value);
-    } else {
-      // Ignoring valid ones
-    }
-  }
-
-  return res;
+  return [
+    ...fn(ctx)
+      .filter(([isValid, _]) => !isValid)
+      .map(([_, v]) => v),
+  ];
 }
