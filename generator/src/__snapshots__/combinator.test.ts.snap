@@ -64,6 +64,1278 @@ exports[`invalid > object > empty 1`] = `
 ]
 `;
 
+exports[`invalid > object > of a several union properties 1`] = `
+[
+  Symbol(invalidValue),
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "b": "B1",
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": "C1",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "b": "B1",
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": "C2",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "b": "B1",
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B1",
+    "c": "C3",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "b": "B2",
+    "c": "C1",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": "C1",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "b": "B2",
+    "c": "C2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": "C2",
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "b": "B2",
+    "c": "C3",
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": "B2",
+    "c": "C3",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "c": "C1",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "c": "C2",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "c": "C3",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "c": "C1",
+  },
+  {
+    "b": "B1",
+    "c": "C1",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "c": "C2",
+  },
+  {
+    "b": "B1",
+    "c": "C2",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B1",
+  },
+  {
+    "a": "A1",
+    "b": "B1",
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "c": "C3",
+  },
+  {
+    "b": "B1",
+    "c": "C3",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "c": "C1",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C1",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "c": "C2",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C2",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "c": "C3",
+  },
+  {
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "b": Symbol(invalidValue),
+    "c": "C3",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "c": "C1",
+  },
+  {
+    "a": "A1",
+    "c": "C1",
+  },
+  {
+    "b": "B2",
+    "c": "C1",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "c": "C2",
+  },
+  {
+    "a": "A1",
+    "c": "C2",
+  },
+  {
+    "b": "B2",
+    "c": "C2",
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+    "c": Symbol(invalidValue),
+  },
+  {},
+  {
+    "a": "A1",
+  },
+  {
+    "b": "B2",
+  },
+  {
+    "a": "A1",
+    "b": "B2",
+  },
+  {
+    "c": "C3",
+  },
+  {
+    "a": "A1",
+    "c": "C3",
+  },
+  {
+    "b": "B2",
+    "c": "C3",
+  },
+]
+`;
+
 exports[`invalid > object > of a several value properties 1`] = `
 [
   Symbol(invalidValue),

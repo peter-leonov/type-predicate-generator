@@ -240,5 +240,17 @@ describe("invalid", () => {
         )
       ).toMatchSnapshot();
     });
+
+    it("of a several union properties", () => {
+      expect(
+        combineInvalid(
+          object({
+            a: union([value("A1")]),
+            b: union([value("B1"), value("B2")]),
+            c: union([value("C1"), value("C2"), value("C3")]),
+          })
+        )
+      ).toMatchSnapshot();
+    });
   });
 });
