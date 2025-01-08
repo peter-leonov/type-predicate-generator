@@ -111,7 +111,7 @@ function* rollObject<T>(
 
   for (const [isValidValue, v] of value(doInvalid)) {
     for (const [isValidRest, rest] of rollObject(
-      doInvalid,
+      isValidValue,
       restObj
     )) {
       yield [
