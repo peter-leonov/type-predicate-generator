@@ -42,13 +42,7 @@ export type ValueGenerator<T> = (
   doInvalid: boolean
 ) => Generator<[boolean, T]>;
 
-let valueCounter = 0;
-function uniqueID(): string {
-  return String(++valueCounter);
-}
-
 export function value<T>(value: T): ValueGenerator<T> {
-  const id = uniqueID();
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, invalidValue];
@@ -70,7 +64,6 @@ export function union<T>(
 export function array<T>(
   value: ValueGenerator<T>
 ): ValueGenerator<T[]> {
-  const id = uniqueID();
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, invalidValue];
@@ -84,12 +77,11 @@ export function array<T>(
 export function object<T>(
   obj: Record<string, ValueGenerator<T>>
 ): ValueGenerator<T> {
-  const id = uniqueID();
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, invalidValue];
     }
-    yield* rollObject(doInvalid, id, obj) as Generator<any>;
+    yield* rollObject(doInvalid, obj) as Generator<any>;
   };
 }
 
@@ -107,7 +99,6 @@ function pick<T>(
 
 function* rollObject<T>(
   doInvalid: boolean,
-  id: string,
   obj: Record<string, ValueGenerator<T>>
 ): Generator<[boolean, Record<string, T>]> {
   const keys = Object.keys(obj);
@@ -127,7 +118,6 @@ function* rollObject<T>(
   for (const [isValidValue, v] of value(doInvalid)) {
     for (const [isValidRest, rest] of rollObject(
       doInvalid,
-      id,
       restObj
     )) {
       if (doInvalid) {
