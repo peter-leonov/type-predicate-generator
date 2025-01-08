@@ -39,13 +39,8 @@ export type Value =
   | Value[];
 
 export type ValueGenerator<T> = (
-  ctx: Context
+  doInvalid: boolean
 ) => Generator<[boolean, T]>;
-
-type Context = {
-  yieldInvalidValue: boolean;
-  state: Map<string, number>;
-};
 
 let valueCounter = 0;
 function uniqueID(): string {
@@ -54,8 +49,10 @@ function uniqueID(): string {
 
 export function value<T>(value: T): ValueGenerator<T> {
   const id = uniqueID();
-  return function* (ctx: Context) {
-    yield [false, invalidValue];
+  return function* (doInvalid: boolean) {
+    if (doInvalid) {
+      yield [false, invalidValue];
+    }
     yield [true, value];
   };
 }
@@ -63,9 +60,9 @@ export function value<T>(value: T): ValueGenerator<T> {
 export function union<T>(
   members: ValueGenerator<T>[]
 ): ValueGenerator<T> {
-  return function* (ctx: Context) {
+  return function* (doInvalid: boolean) {
     for (const v of members) {
-      yield* v(ctx);
+      yield* v(doInvalid);
     }
   };
 }
@@ -74,9 +71,11 @@ export function array<T>(
   value: ValueGenerator<T>
 ): ValueGenerator<T[]> {
   const id = uniqueID();
-  return function* (ctx: Context) {
-    yield [false, invalidValue];
-    for (const [isValid, v] of value(ctx)) {
+  return function* (doInvalid: boolean) {
+    if (doInvalid) {
+      yield [false, invalidValue];
+    }
+    for (const [isValid, v] of value(doInvalid)) {
       yield [isValid, [v]];
     }
   };
@@ -86,9 +85,11 @@ export function object<T>(
   obj: Record<string, ValueGenerator<T>>
 ): ValueGenerator<T> {
   const id = uniqueID();
-  return function* (ctx: Context) {
-    yield [false, invalidValue];
-    yield* rollObject(ctx, id, obj) as Generator<any>;
+  return function* (doInvalid: boolean) {
+    if (doInvalid) {
+      yield [false, invalidValue];
+    }
+    yield* rollObject(doInvalid, id, obj) as Generator<any>;
   };
 }
 
@@ -104,12 +105,8 @@ function pick<T>(
   }, {});
 }
 
-// TODO
-// const uniqueKey = "80D79A5A-5D38-4302-BA04-F5AC748C1464";
-// yield { [uniqueKey]: invalidValue };
-
 function* rollObject<T>(
-  ctx: Context,
+  doInvalid: boolean,
   id: string,
   obj: Record<string, ValueGenerator<T>>
 ): Generator<[boolean, Record<string, T>]> {
@@ -127,9 +124,15 @@ function* rollObject<T>(
   const value = obj[key];
   assert(value);
 
-  for (const [isValidValue, v] of value(ctx)) {
-    for (const [isValidRest, rest] of rollObject(ctx, id, restObj)) {
-      yield [false, rest];
+  for (const [isValidValue, v] of value(doInvalid)) {
+    for (const [isValidRest, rest] of rollObject(
+      doInvalid,
+      id,
+      restObj
+    )) {
+      if (doInvalid) {
+        yield [false, rest];
+      }
       yield [
         isValidValue && isValidRest,
         {
@@ -142,24 +145,16 @@ function* rollObject<T>(
 }
 
 export function combineValid(fn: ValueGenerator<Value>) {
-  const ctx: Context = {
-    yieldInvalidValue: false,
-    state: new Map(),
-  };
   return [
-    ...fn(ctx)
+    ...fn(false)
       .filter(([isValid, _]) => isValid)
       .map(([_, v]) => v),
   ];
 }
 
 export function combineInvalid(fn: ValueGenerator<Value>) {
-  const ctx: Context = {
-    yieldInvalidValue: false,
-    state: new Map(),
-  };
   return [
-    ...fn(ctx)
+    ...fn(true)
       .filter(([isValid, _]) => !isValid)
       .map(([_, v]) => v),
   ];
