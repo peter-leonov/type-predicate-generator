@@ -121,6 +121,7 @@ export class TypeGuardGenerator {
       };
     }
 
+    [type] satisfies [never];
     unimplemented(`${(type as Object)?.constructor.name}`);
   }
 
@@ -195,38 +196,41 @@ export class TypeGuardGenerator {
     return [...this.guards.values()];
   }
 
-  getTypeImports(sourceFileName: string): ts.Statement[] {
-    return [
-      factory.createImportDeclaration(
-        undefined,
-        factory.createImportClause(
-          false,
-          undefined,
-
-          factory.createNamedImports(
-            [...this.guards.keys()].map((className) => {
-              return factory.createImportSpecifier(
-                true,
-                undefined,
-                factory.createIdentifier(className)
-              );
-            })
-          )
-        ),
-        factory.createStringLiteral(sourceFileName),
-        undefined
-      ),
-    ];
-  }
-
   getFullFileBody(sourceFileName: string): ts.Statement[] {
     return [
-      ...this.getTypeImports(sourceFileName),
+      ...getTypeImports(sourceFileName, [...this.guards.keys()]),
       ...typeSafeShallowShape(),
       safeIsArray(),
       ...this.getGuards(),
     ];
   }
+}
+
+function getTypeImports(
+  sourceFileName: string,
+  imports: string[]
+): ts.Statement[] {
+  return [
+    factory.createImportDeclaration(
+      undefined,
+      factory.createImportClause(
+        false,
+        undefined,
+
+        factory.createNamedImports(
+          imports.map((className) => {
+            return factory.createImportSpecifier(
+              true,
+              undefined,
+              factory.createIdentifier(className)
+            );
+          })
+        )
+      ),
+      factory.createStringLiteral(sourceFileName),
+      undefined
+    ),
+  ];
 }
 
 function safeToUseInAUnion(type: TypeModel) {
