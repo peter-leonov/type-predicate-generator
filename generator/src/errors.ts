@@ -22,6 +22,14 @@ export class UnsupportedEmptyEnum extends UnsupportedError {
   }
 }
 
+export class UnsupportedPrimitiveType extends UnsupportedError {
+  constructor(aliasName: string) {
+    super(
+      `The primitive ${aliasName} type is nor currently supported by the generator. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/12`
+    );
+  }
+}
+
 export function explainError(
   err: unknown,
   inBrowser: boolean

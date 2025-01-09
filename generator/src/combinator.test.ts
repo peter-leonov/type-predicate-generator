@@ -3,12 +3,19 @@ import {
   array,
   combineInvalid,
   combineValid,
+  modelToCombinator,
   object,
   union,
   value,
   ValueGenerator,
   type Value,
 } from "./combinator";
+import {
+  LiteralType,
+  ObjectType,
+  PrimitiveType,
+  UnionType,
+} from "./model";
 
 const stringified = new Map<unknown, string>();
 function stringifyCombination(value: unknown): string {
@@ -205,3 +212,176 @@ for (const [name, f] of [
     });
   });
 }
+
+describe(modelToCombinator.name, () => {
+  describe("LiteralType", () => {
+    it("undefined", () => {
+      expect(
+        combineValid(
+          modelToCombinator(new LiteralType({}, undefined))
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          undefined,
+        ]
+      `);
+    });
+    it("null", () => {
+      expect(
+        combineValid(modelToCombinator(new LiteralType({}, null)))
+      ).toMatchInlineSnapshot(`
+        [
+          null,
+        ]
+      `);
+    });
+    it("string", () => {
+      expect(
+        combineValid(modelToCombinator(new LiteralType({}, "foo")))
+      ).toMatchInlineSnapshot(`
+        [
+          "foo",
+        ]
+      `);
+    });
+    it("number", () => {
+      expect(combineValid(modelToCombinator(new LiteralType({}, 42))))
+        .toMatchInlineSnapshot(`
+        [
+          42,
+        ]
+      `);
+    });
+    it("boolean", () => {
+      expect(
+        combineValid(modelToCombinator(new LiteralType({}, true)))
+      ).toMatchInlineSnapshot(`
+        [
+          true,
+        ]
+      `);
+      expect(
+        combineValid(modelToCombinator(new LiteralType({}, false)))
+      ).toMatchInlineSnapshot(`
+        [
+          false,
+        ]
+      `);
+    });
+  });
+
+  describe("PrimitiveType", () => {
+    it("string", () => {
+      expect(
+        combineValid(
+          modelToCombinator(new PrimitiveType({}, "string"))
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          "string",
+        ]
+      `);
+    });
+    it("number", () => {
+      expect(
+        combineValid(
+          modelToCombinator(new PrimitiveType({}, "number"))
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          0,
+          42,
+        ]
+      `);
+    });
+    it("boolean", () => {
+      expect(
+        combineValid(
+          modelToCombinator(new PrimitiveType({}, "boolean"))
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          true,
+          false,
+        ]
+      `);
+    });
+  });
+
+  describe("ObjectType", () => {
+    it("empty", () => {
+      expect(combineValid(modelToCombinator(new ObjectType({}, {}))))
+        .toMatchInlineSnapshot(`
+          [
+            {},
+          ]
+        `);
+    });
+    it("nested", () => {
+      expect(
+        combineValid(
+          modelToCombinator(
+            new ObjectType({}, { a: new ObjectType({}, {}) })
+          )
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          {
+            "a": {},
+          },
+        ]
+      `);
+    });
+    it("literal attributes", () => {
+      expect(
+        combineValid(
+          modelToCombinator(
+            new ObjectType(
+              {},
+              {
+                a: new LiteralType({}, 1),
+                b: new LiteralType({}, "foo"),
+                c: new LiteralType({}, true),
+              }
+            )
+          )
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          {
+            "a": 1,
+            "b": "foo",
+            "c": true,
+          },
+        ]
+      `);
+    });
+  });
+
+  describe("UnionType", () => {
+    it("empty", () => {
+      expect(
+        combineValid(modelToCombinator(new UnionType({}, [])))
+      ).toMatchInlineSnapshot(`[]`);
+    });
+    it("of literal types", () => {
+      expect(
+        combineValid(
+          modelToCombinator(
+            new UnionType({}, [
+              new LiteralType({}, 1),
+              new LiteralType({}, 2),
+              new LiteralType({}, 3),
+            ])
+          )
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          1,
+          2,
+          3,
+        ]
+      `);
+    });
+  });
+});

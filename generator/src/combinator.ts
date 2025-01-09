@@ -1,4 +1,14 @@
-import { assert } from "./helpers";
+import { PseudoBigInt } from "typescript";
+import { assert, unimplemented } from "./helpers";
+import {
+  AliasType,
+  ArrayType,
+  LiteralType,
+  ObjectType,
+  PrimitiveType,
+  TypeModel,
+  UnionType,
+} from "./model";
 
 /**
  * Main invariant: do not reuse the values produced by the value funtions
@@ -36,6 +46,7 @@ export type Value =
   | undefined
   | boolean
   | { [key: string]: Value }
+  | PseudoBigInt
   | Value[];
 
 export type ValueGenerator<T> = (
@@ -147,4 +158,65 @@ export function combineInvalid(fn: ValueGenerator<Value>) {
       .filter(([isValid, _]) => !isValid)
       .map(([_, v]) => v),
   ];
+}
+
+export function modelToCombinator(
+  model: TypeModel
+): ValueGenerator<Value> {
+  if (model instanceof LiteralType) {
+    return value(model.value);
+  } else if (model instanceof PrimitiveType) {
+    switch (model.primitive) {
+      case "string":
+        return value("string");
+      case "number":
+        return union([
+          // adding 0 to cover for checks like `!x` where `0` would meant `false`
+          value(0),
+          // any arbitrary number
+          value(42),
+        ]);
+      case "boolean":
+        return union([value(true), value(false)]);
+    }
+    model.primitive satisfies never;
+    unimplemented(
+      `primitive type ${model.primitive} is not implemented`
+    );
+  } else if (model instanceof ObjectType) {
+    return object(
+      mapObjectValues(model.attributes, modelToCombinator)
+    );
+  } else if (model instanceof UnionType) {
+    return union(model.types.map(modelToCombinator));
+  } else if (model instanceof ArrayType) {
+    return array(modelToCombinator(model));
+  } else if (model instanceof AliasType) {
+    unimplemented(
+      "AliasType test generation is to be implemented soon"
+    );
+  }
+
+  model satisfies never;
+  unimplemented(
+    `model of class ${className(model)} is not implemented`
+  );
+}
+
+function className(value: unknown): string {
+  if (typeof value === "object" && value !== null) {
+    return value.constructor.name;
+  }
+  return "undefined";
+}
+
+function mapObjectValues<T, U>(
+  src: Record<string, T>,
+  f: (v: T) => U
+): Record<string, U> {
+  const dst: Record<string, U> = {};
+  for (var k in src) {
+    dst[k] = f(src[k] as any);
+  }
+  return dst;
 }

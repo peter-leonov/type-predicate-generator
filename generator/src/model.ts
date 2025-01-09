@@ -1,6 +1,9 @@
 import ts from "typescript";
 import { assert, unimplemented } from "./helpers";
-import { UnsupportedEmptyEnum } from "./errors";
+import {
+  UnsupportedEmptyEnum,
+  UnsupportedPrimitiveType,
+} from "./errors";
 
 export type TypeOptions = {
   isOptional?: boolean;
@@ -41,7 +44,7 @@ export class LiteralType implements BaseType {
 export class PrimitiveType implements BaseType {
   nameForErrors: string;
   options: TypeOptions;
-  primitive: string;
+  primitive: "string" | "number" | "boolean";
   constructor(
     options: typeof this.options,
     primitive: typeof this.primitive
@@ -188,11 +191,15 @@ export function typeToModel(
     return new ObjectType({ isOptional, aliasName }, attributes);
   } else if (tsTypeIsPrimitive(type)) {
     const intrinsicName = (type as IntrinsicType)?.intrinsicName;
-    // console.log(`- primitive: ${checker.typeToString(type)}`);
-    return new PrimitiveType(
-      { isOptional, aliasName },
-      intrinsicName || checker.typeToString(type)
-    );
+    const primitive = intrinsicName || checker.typeToString(type);
+    if (
+      primitive !== "string" &&
+      primitive !== "number" &&
+      primitive !== "boolean"
+    ) {
+      throw new UnsupportedPrimitiveType(primitive);
+    }
+    return new PrimitiveType({ isOptional, aliasName }, primitive);
   } else if (type.isLiteral()) {
     // console.log(`- literal: ${checker.typeToString(type)}`);
     return new LiteralType({ isOptional, aliasName }, type.value);
