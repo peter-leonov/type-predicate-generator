@@ -3,8 +3,8 @@
 exports[`primitive type 1`] = `
 "import { isTestType } from "./types_guards";
 const valid_TestType = [
-    "0",
-    "42"
+    0,
+    42
 ];
 describe("TestType", () => {
     it.for(valid_TestType)("valid", value => {

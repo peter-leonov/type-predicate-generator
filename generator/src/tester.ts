@@ -1,6 +1,7 @@
 import ts, { factory } from "typescript";
 import { combineValid, modelToCombinator } from "./combinator";
 import { TypeModel } from "./model";
+import { assert } from "./helpers";
 
 export function modelToTests(
   predicatesFileName: string,
@@ -55,9 +56,7 @@ function valuesVar(name: string, values: unknown[]): ts.Statement {
           undefined,
           undefined,
           factory.createArrayLiteralExpression(
-            values.map((v) =>
-              factory.createStringLiteral(JSON.stringify(v))
-            ),
+            values.map(valueToJSONExpression),
             true
           )
         ),
@@ -65,6 +64,14 @@ function valuesVar(name: string, values: unknown[]): ts.Statement {
       ts.NodeFlags.Const
     )
   );
+}
+
+function valueToJSONExpression(value: unknown): ts.Expression {
+  const json = JSON.stringify(value);
+  const file = ts.parseJsonText("valueToJSONExpression", json);
+  const statement = file.statements[0];
+  assert(statement, "must have a single statement");
+  return statement.expression;
 }
 
 function describeItFor(
