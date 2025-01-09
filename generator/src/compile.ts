@@ -92,6 +92,19 @@ export function ensureNoErrors(program: ts.Program) {
   }
 }
 
+function hasExportModifier(
+  node:
+    | ts.TypeAliasDeclaration
+    | ts.InterfaceDeclaration
+    | ts.EnumDeclaration
+): boolean {
+  return (
+    node.modifiers?.some(
+      (node) => node.kind === ts.SyntaxKind.ExportKeyword
+    ) ?? false
+  );
+}
+
 export function sourceFileToDeclarationSymbols(
   checker: ts.TypeChecker,
   sourceFile: ts.SourceFile
@@ -105,6 +118,7 @@ export function sourceFileToDeclarationSymbols(
       ts.isInterfaceDeclaration(node) ||
       ts.isEnumDeclaration(node)
     ) {
+      if (!hasExportModifier(node)) return;
       let symbol = checker.getSymbolAtLocation(node.name);
       assert(symbol, "a node declaration must have a symbol");
       symbols.push(symbol);

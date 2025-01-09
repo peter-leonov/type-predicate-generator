@@ -15,7 +15,7 @@ test("undefined", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = undefined
+        export type X = undefined
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, undefined));
@@ -25,7 +25,7 @@ test("null", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = null
+        export type X = null
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, null));
@@ -35,7 +35,7 @@ test("true", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = true
+        export type X = true
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, true));
@@ -45,7 +45,7 @@ test("false", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = false
+        export type X = false
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, false));
@@ -55,7 +55,7 @@ test("1", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = 1
+        export type X = 1
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, 1));
@@ -65,7 +65,7 @@ test('"foo"', () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = "foo"
+        export type X = "foo"
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, "foo"));
@@ -75,7 +75,7 @@ test("number", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = number
+        export type X = number
       `)
     )
   ).toEqual(new PrimitiveType({ aliasName: "X" }, "number"));
@@ -85,7 +85,7 @@ test("string", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = string
+        export type X = string
       `)
     )
   ).toEqual(new PrimitiveType({ aliasName: "X" }, "string"));
@@ -95,7 +95,7 @@ test("boolean", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = boolean
+        export type X = boolean
       `)
     )
   ).toEqual(new PrimitiveType({ aliasName: "X" }, "boolean"));
@@ -105,7 +105,7 @@ test("union of primitive types", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = number | string
+        export type X = number | string
       `)
     )
   ).toEqual(
@@ -120,7 +120,7 @@ test("union of literal types", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = "a" | "b"
+        export type X = "a" | "b"
       `)
     )
   ).toEqual(
@@ -135,7 +135,7 @@ test("union of true and false", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = true | false
+        export type X = true | false
       `)
     )
   ).toEqual(new PrimitiveType({ aliasName: "X" }, "boolean"));
@@ -145,7 +145,7 @@ test("a nested union", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = 1 | (2 | (3 | 4))
+        export type X = 1 | (2 | (3 | 4))
       `)
     )
   ).toEqual(
@@ -162,7 +162,7 @@ test("nullable string", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = string | null | undefined
+        export type X = string | null | undefined
       `)
     )
   ).toEqual(
@@ -178,7 +178,7 @@ test("union of different object types", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = { a: string } | { b: number }
+        export type X = { a: string } | { b: number }
       `)
     )
   ).toEqual(
@@ -203,7 +203,7 @@ test("union of same object types", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = { a: string } | { a: string }
+        export type X = { a: string } | { a: string }
       `)
     )
   ).toEqual(
@@ -228,7 +228,7 @@ test("simple interface", () => {
   expect(
     typeToModel(
       ...compile(`
-        interface X {
+        export interface X {
           a: string
         }
       `)
@@ -247,7 +247,7 @@ test("empty enum", () => {
   expect(() =>
     typeToModel(
       ...compile(`
-      enum X {}
+      export enum X {}
       `)
     )
   ).toThrow(UnsupportedEmptyEnum);
@@ -257,7 +257,7 @@ test("numeric enum", () => {
   expect(
     typeToModel(
       ...compile(`
-      enum X {
+      export enum X {
           a = 7,
           b,
           c
@@ -277,7 +277,7 @@ test("string enum", () => {
   expect(
     typeToModel(
       ...compile(`
-      enum X {
+      export enum X {
           a = "A",
           b = "B",
           c = "C"
@@ -297,7 +297,7 @@ test("mixed enum", () => {
   expect(
     typeToModel(
       ...compile(`
-      enum X {
+      export enum X {
           a = 5,
           b,
           c = "C"
@@ -317,7 +317,7 @@ test("empty object", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
         }
       `)
     )
@@ -328,7 +328,7 @@ test("object with optional and non-optional props", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
           a: number
           b?: number
           c: number
@@ -359,7 +359,7 @@ test("object with primitive types", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
           a: number
           b: string
           c: boolean
@@ -386,7 +386,7 @@ test("nested object", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
           a: {
             b: {
               c: string
@@ -419,7 +419,7 @@ test("object with literal types", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
           a: 1
           b: 'foo'
           c: true
@@ -442,7 +442,7 @@ test("object with a union type", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
           a: 1 | 2
         }
       `)
@@ -464,7 +464,7 @@ test("object with a complex union type", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = {
+        export type X = {
           a: string | 2 | false | { b: string }
         }
       `)
@@ -489,7 +489,7 @@ test("trivial existing type alias", () => {
     typeToModel(
       ...compile(`
         type Y = 1
-        type X = Y
+        export type X = Y
       `)
     )
   ).toEqual(new LiteralType({ aliasName: "X" }, 1));
@@ -500,7 +500,7 @@ test("reference type in a union", () => {
     typeToModel(
       ...compile(`
         type A = { a: 1 }
-        type X = number | A
+        export type X = number | A
       `)
     )
   ).toEqual(
@@ -517,7 +517,7 @@ test("reference type in an object", () => {
       ...compile(`
         type A = { a: 1 }
         type B = { b: 2 }
-        type X = {
+        export type X = {
           a: A,
           b: B
         }
@@ -538,7 +538,7 @@ test("array of a primitive type", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = Array<number>
+        export type X = Array<number>
       `)
     )
   ).toEqual(
@@ -548,7 +548,7 @@ test("array of a primitive type", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = number[]
+        export type X = number[]
       `)
     )
   ).toEqual(
@@ -560,7 +560,7 @@ test("nested arrays of a primitive type", () => {
   expect(
     typeToModel(
       ...compile(`
-        type X = number[][][]
+        export type X = number[][][]
       `)
     )
   ).toEqual(

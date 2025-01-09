@@ -32,28 +32,32 @@ function processTypes(codes: string[]): string {
 }
 
 test("primitive", () => {
-  expect(processType("type X = number")).toMatchSnapshot();
+  expect(processType("export type X = number")).toMatchSnapshot();
 });
 
 test("array", () => {
-  expect(processType("type X = string[]")).toMatchSnapshot();
+  expect(processType("export type X = string[]")).toMatchSnapshot();
 });
 
 test("object", () => {
   expect(
-    processType("type X = { a: string, b: number, c: boolean }")
+    processType(
+      "export type X = { a: string, b: number, c: boolean }"
+    )
   ).toMatchSnapshot();
 });
 
 test("union", () => {
-  expect(processType("type X = string | number")).toMatchSnapshot();
+  expect(
+    processType("export type X = string | number")
+  ).toMatchSnapshot();
 });
 
 test("multiple types", () => {
   expect(
     processTypes([
-      "type X = string | number",
-      "type Y = boolean | null",
+      "export type X = string | number",
+      "export type Y = boolean | null",
     ])
   ).toMatchSnapshot();
 });
