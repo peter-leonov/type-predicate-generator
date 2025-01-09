@@ -1,7 +1,7 @@
 import ts from "typescript";
 import { TypeGuardGenerator } from "./generator";
 import { assert, unimplemented } from "./helpers";
-import { typeToModel } from "./model";
+import { TypeModel, typeToModel } from "./model";
 import { TypeScriptError } from "./errors";
 
 /**
@@ -92,12 +92,11 @@ export function ensureNoErrors(program: ts.Program) {
   }
 }
 
-export function generateFullFileBodyForAllTypes(
+export function sourceFileToDeclarationSymbols(
   checker: ts.TypeChecker,
-  sourceFile: ts.SourceFile,
-  importFrom: string
-): ts.Statement[] {
-  const generator = new TypeGuardGenerator();
+  sourceFile: ts.SourceFile
+): ts.Symbol[] {
+  const symbols: ts.Symbol[] = [];
 
   // Walk the tree to search for types
   ts.forEachChild(sourceFile, (node) => {
@@ -108,15 +107,45 @@ export function generateFullFileBodyForAllTypes(
     ) {
       let symbol = checker.getSymbolAtLocation(node.name);
       assert(symbol, "a node declaration must have a symbol");
-      const model = typeToModel(
-        checker,
-        checker.getDeclaredTypeOfSymbol(symbol),
-        symbol
-      );
-
-      generator.addRootTypeGuardFor(model);
+      symbols.push(symbol);
     }
   });
+
+  return symbols;
+}
+
+export function sourceFileToModels(
+  checker: ts.TypeChecker,
+  sourceFile: ts.SourceFile
+): TypeModel[] {
+  const models: TypeModel[] = [];
+
+  for (const symbol of sourceFileToDeclarationSymbols(
+    checker,
+    sourceFile
+  )) {
+    const model = typeToModel(
+      checker,
+      checker.getDeclaredTypeOfSymbol(symbol),
+      symbol
+    );
+
+    models.push(model);
+  }
+
+  return models;
+}
+
+export function generateFullFileBodyForAllTypes(
+  checker: ts.TypeChecker,
+  sourceFile: ts.SourceFile,
+  importFrom: string
+): ts.Statement[] {
+  const generator = new TypeGuardGenerator();
+
+  for (const model of sourceFileToModels(checker, sourceFile)) {
+    generator.addRootTypeGuardFor(model);
+  }
 
   return generator.getFullFileBody(importFrom);
 }

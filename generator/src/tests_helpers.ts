@@ -1,7 +1,11 @@
 import ts from "typescript";
 import { factory } from "typescript";
 import assert from "assert";
-import { ensureNoErrors, newVFSProgram } from "./compile";
+import {
+  ensureNoErrors,
+  newVFSProgram,
+  sourceFileToDeclarationSymbols,
+} from "./compile";
 
 export function compile(
   source: string
@@ -18,19 +22,9 @@ export function compile(
   const checker = program.getTypeChecker();
 
   // This finds the LAST type definition in the source.
-  let symbol: ts.Symbol | undefined;
-  ts.forEachChild(sourceFile, (node) => {
-    if (
-      ts.isTypeAliasDeclaration(node) ||
-      ts.isInterfaceDeclaration(node) ||
-      ts.isEnumDeclaration(node)
-    ) {
-      symbol = checker.getSymbolAtLocation(node.name);
-      assert(symbol, "a node declaration must have a symbol");
-      return;
-    }
-  });
-
+  let symbol = sourceFileToDeclarationSymbols(checker, sourceFile).at(
+    -1
+  );
   assert(
     symbol,
     "at least one symbol must be present in the test case"
