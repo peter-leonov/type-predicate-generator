@@ -1,6 +1,71 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`primitive type 1`] = `
+exports[`array 1`] = `
+"import { isTestType } from "./types_guards";
+const invalidValue: any = Symbol("invalidValue");
+const valid_TestType = [
+    [],
+    ["string"]
+];
+const invalid_TestType = [
+    invalidValue,
+    [invalidValue]
+];
+describe("TestType", () => {
+    it.for(valid_TestType)("valid", value => {
+        expect(isTestType(value)).toBe(true);
+    });
+    it.for(invalid_TestType)("invalid", value => {
+        expect(isTestType(value)).toBe(false);
+    });
+});
+"
+`;
+
+exports[`object 1`] = `
+"import { isTestType } from "./types_guards";
+const invalidValue: any = Symbol("invalidValue");
+const valid_TestType = [
+    { "a": "string", "b": 0, "c": true },
+    { "a": "string", "b": 0, "c": false },
+    { "a": "string", "b": 42, "c": true },
+    { "a": "string", "b": 42, "c": false }
+];
+const invalid_TestType = [
+    invalidValue,
+    { "b": 0, "c": true },
+    { "b": 0, "c": false },
+    { "b": 42, "c": true },
+    { "b": 42, "c": false },
+    { "a": invalidValue, "b": 0, "c": true },
+    { "a": invalidValue, "b": 0, "c": false },
+    { "a": invalidValue, "b": 42, "c": true },
+    { "a": invalidValue, "b": 42, "c": false },
+    { "a": "string", "c": true },
+    { "a": "string", "c": false },
+    { "a": "string", "b": invalidValue, "c": true },
+    { "a": "string", "b": invalidValue, "c": false },
+    { "a": "string", "b": 0 },
+    { "a": "string", "b": 0, "c": invalidValue },
+    { "a": "string", "b": 0, "c": invalidValue },
+    { "a": "string", "b": invalidValue, "c": true },
+    { "a": "string", "b": invalidValue, "c": false },
+    { "a": "string", "b": 42 },
+    { "a": "string", "b": 42, "c": invalidValue },
+    { "a": "string", "b": 42, "c": invalidValue }
+];
+describe("TestType", () => {
+    it.for(valid_TestType)("valid", value => {
+        expect(isTestType(value)).toBe(true);
+    });
+    it.for(invalid_TestType)("invalid", value => {
+        expect(isTestType(value)).toBe(false);
+    });
+});
+"
+`;
+
+exports[`primitive 1`] = `
 "import { isTestType } from "./types_guards";
 const invalidValue: any = Symbol("invalidValue");
 const valid_TestType = [
@@ -8,6 +73,30 @@ const valid_TestType = [
     42
 ];
 const invalid_TestType = [
+    invalidValue,
+    invalidValue
+];
+describe("TestType", () => {
+    it.for(valid_TestType)("valid", value => {
+        expect(isTestType(value)).toBe(true);
+    });
+    it.for(invalid_TestType)("invalid", value => {
+        expect(isTestType(value)).toBe(false);
+    });
+});
+"
+`;
+
+exports[`union 1`] = `
+"import { isTestType } from "./types_guards";
+const invalidValue: any = Symbol("invalidValue");
+const valid_TestType = [
+    "string",
+    0,
+    42
+];
+const invalid_TestType = [
+    invalidValue,
     invalidValue,
     invalidValue
 ];

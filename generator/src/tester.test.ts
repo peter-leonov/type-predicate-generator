@@ -15,6 +15,20 @@ function process(code: string): string {
   );
 }
 
-test("primitive type", () => {
+test("primitive", () => {
   expect(process("type X = number")).toMatchSnapshot();
+});
+
+test("array", () => {
+  expect(process("type X = string[]")).toMatchSnapshot();
+});
+
+test("object", () => {
+  expect(
+    process("type X = { a: string, b: number, c: boolean }")
+  ).toMatchSnapshot();
+});
+
+test("union", () => {
+  expect(process("type X = string | number")).toMatchSnapshot();
 });
