@@ -5,16 +5,34 @@ import {
   invalidValue,
   modelToCombinator,
 } from "./combinator";
-import { TypeModel } from "./model";
+import { type TypeModel } from "./model";
 import { assert } from "./helpers";
 
-export function modelToTests(
+export function modelsToTests(
   predicatesFileName: string,
+  types: Record<string, TypeModel>
+): ts.Statement[] {
+  const predicateNames: string[] = [];
+  const tests = [];
+  for (const typeName in types) {
+    const model = types[typeName] as TypeModel;
+    const predicateName = `is${typeName}`;
+    predicateNames.push(predicateName);
+    tests.push(...modelToTests(typeName, predicateName, model));
+  }
+
+  return [
+    getImports(predicatesFileName, predicateNames),
+    defineInvalidValue(),
+    ...tests,
+  ];
+}
+
+export function modelToTests(
   typeName: string,
+  predicateName: string,
   model: TypeModel
 ): ts.Statement[] {
-  const predicateName = `is${typeName}`;
-
   const combinator = modelToCombinator(model);
 
   const valids = combineValid(combinator);
@@ -24,8 +42,6 @@ export function modelToTests(
   const invalidsName = `invalid_${typeName}`;
 
   return [
-    getImports(predicatesFileName, [predicateName]),
-    defineInvalidValue(),
     valuesVar(validsName, valids),
     valuesVar(invalidsName, invalids),
     describeItFor(typeName, validsName, invalidsName, predicateName),

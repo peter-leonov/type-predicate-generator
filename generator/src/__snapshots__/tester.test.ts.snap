@@ -1,9 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`array 1`] = `
-"import { isTestType } from "./types_guards";
-const invalidValue: any = Symbol("invalidValue");
-const valid_TestType = [
+"const valid_TestType = [
     [],
     ["string"]
 ];
@@ -22,10 +20,46 @@ describe("TestType", () => {
 "
 `;
 
-exports[`object 1`] = `
-"import { isTestType } from "./types_guards";
+exports[`multiple types 1`] = `
+"import { isType1, isType2 } from "TestType";
 const invalidValue: any = Symbol("invalidValue");
-const valid_TestType = [
+const valid_Type1 = [
+    "string",
+    0,
+    42
+];
+const invalid_Type1 = [
+    invalidValue
+];
+describe("Type1", () => {
+    it.for(valid_Type1)("valid", value => {
+        expect(isType1(value)).toBe(true);
+    });
+    it.for(invalid_Type1)("invalid", value => {
+        expect(isType1(value)).toBe(false);
+    });
+});
+const valid_Type2 = [
+    null,
+    false,
+    true
+];
+const invalid_Type2 = [
+    invalidValue
+];
+describe("Type2", () => {
+    it.for(valid_Type2)("valid", value => {
+        expect(isType2(value)).toBe(true);
+    });
+    it.for(invalid_Type2)("invalid", value => {
+        expect(isType2(value)).toBe(false);
+    });
+});
+"
+`;
+
+exports[`object 1`] = `
+"const valid_TestType = [
     { "a": "string", "b": 0, "c": true },
     { "a": "string", "b": 0, "c": false },
     { "a": "string", "b": 42, "c": true },
@@ -62,9 +96,7 @@ describe("TestType", () => {
 `;
 
 exports[`primitive 1`] = `
-"import { isTestType } from "./types_guards";
-const invalidValue: any = Symbol("invalidValue");
-const valid_TestType = [
+"const valid_TestType = [
     0,
     42
 ];
@@ -83,9 +115,7 @@ describe("TestType", () => {
 `;
 
 exports[`union 1`] = `
-"import { isTestType } from "./types_guards";
-const invalidValue: any = Symbol("invalidValue");
-const valid_TestType = [
+"const valid_TestType = [
     "string",
     0,
     42

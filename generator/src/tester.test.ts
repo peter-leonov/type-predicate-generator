@@ -1,34 +1,59 @@
 import { expect, test } from "vitest";
-import { hydrateInvalidValueToken, modelToTests } from "./tester";
-import { typeToModel } from "./model";
+import {
+  hydrateInvalidValueToken,
+  modelsToTests,
+  modelToTests,
+} from "./tester";
+import { typeToModel, type TypeModel } from "./model";
 import { compile, printNodes } from "./tests_helpers";
 
-function process(code: string): string {
+function processType(code: string): string {
   return hydrateInvalidValueToken(
     printNodes(
       modelToTests(
-        "./types_guards",
         "TestType",
+        "isTestType",
         typeToModel(...compile(code))
       )
     )
   );
 }
 
+function processTypes(codes: string[]): string {
+  const types: Record<string, TypeModel> = {};
+  let i = 0;
+  for (const code of codes) {
+    types[`Type${++i}`] = typeToModel(...compile(code));
+  }
+
+  return hydrateInvalidValueToken(
+    printNodes(modelsToTests("TestType", types))
+  );
+}
+
 test("primitive", () => {
-  expect(process("type X = number")).toMatchSnapshot();
+  expect(processType("type X = number")).toMatchSnapshot();
 });
 
 test("array", () => {
-  expect(process("type X = string[]")).toMatchSnapshot();
+  expect(processType("type X = string[]")).toMatchSnapshot();
 });
 
 test("object", () => {
   expect(
-    process("type X = { a: string, b: number, c: boolean }")
+    processType("type X = { a: string, b: number, c: boolean }")
   ).toMatchSnapshot();
 });
 
 test("union", () => {
-  expect(process("type X = string | number")).toMatchSnapshot();
+  expect(processType("type X = string | number")).toMatchSnapshot();
+});
+
+test("multiple types", () => {
+  expect(
+    processTypes([
+      "type X = string | number",
+      "type Y = boolean | null",
+    ])
+  ).toMatchSnapshot();
 });
