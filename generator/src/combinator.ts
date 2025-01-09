@@ -79,6 +79,7 @@ export function array<T>(
     if (doInvalid) {
       yield [false, invalidValue];
     }
+    yield [true, []];
     for (const [isValid, v] of value(doInvalid)) {
       yield [isValid, [v]];
     }

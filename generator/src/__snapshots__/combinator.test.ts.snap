@@ -85,12 +85,34 @@ exports[`invalid > all at once 1`] = `
   },
   {
     "a": Symbol(invalidValue),
-    "b": true,
-    "c": [
-      "a",
-    ],
+    "b": false,
+    "c": [],
     "d": {
       "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": undefined,
     },
   },
   {
@@ -110,6 +132,16 @@ exports[`invalid > all at once 1`] = `
       "a",
     ],
     "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [
+      "a",
+    ],
+    "d": {
       "d2": undefined,
     },
   },
@@ -164,6 +196,38 @@ exports[`invalid > all at once 1`] = `
     },
   },
   {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
     "a": 1,
     "b": Symbol(invalidValue),
     "c": [
@@ -239,6 +303,38 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": [],
     "d": {
       "d2": undefined,
     },
@@ -388,6 +484,39 @@ exports[`invalid > all at once 1`] = `
   {
     "a": 1,
     "b": false,
+    "c": [],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [],
+    "d": {},
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [],
+  },
+  {
+    "a": 1,
+    "b": false,
     "d": {
       "d2": null,
     },
@@ -544,6 +673,39 @@ exports[`invalid > all at once 1`] = `
   {
     "a": 1,
     "b": true,
+    "c": [],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [],
+    "d": {},
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [],
+  },
+  {
+    "a": 1,
+    "b": true,
     "d": {
       "d2": null,
     },
@@ -592,6 +754,20 @@ exports[`invalid > all at once 1`] = `
     },
   },
   {
+    "a": 1,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
     "a": 2,
     "b": Symbol(invalidValue),
     "c": [
@@ -667,6 +843,38 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": Symbol(invalidValue),
+    "c": [],
     "d": {
       "d2": undefined,
     },
@@ -816,6 +1024,39 @@ exports[`invalid > all at once 1`] = `
   {
     "a": 2,
     "b": false,
+    "c": [],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [],
+    "d": {},
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [],
+  },
+  {
+    "a": 2,
+    "b": false,
     "d": {
       "d2": null,
     },
@@ -972,6 +1213,39 @@ exports[`invalid > all at once 1`] = `
   {
     "a": 2,
     "b": true,
+    "c": [],
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [],
+    "d": {},
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [],
+  },
+  {
+    "a": 2,
+    "b": true,
     "d": {
       "d2": null,
     },
@@ -1015,6 +1289,20 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "c": [],
     "d": {
       "d2": undefined,
     },
@@ -1056,6 +1344,20 @@ exports[`invalid > all at once 1`] = `
     },
   },
   {
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
     "b": true,
     "c": [
       "a",
@@ -1087,6 +1389,20 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "b": true,
+    "c": [],
     "d": {
       "d2": undefined,
     },
@@ -2373,6 +2689,22 @@ exports[`valid > all at once 1`] = `
   },
   {
     "a": 1,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 1,
     "b": true,
     "c": [
       "a",
@@ -2412,6 +2744,22 @@ exports[`valid > all at once 1`] = `
     },
   },
   {
+    "a": 1,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 1,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
     "a": 2,
     "b": false,
     "c": [
@@ -2453,6 +2801,22 @@ exports[`valid > all at once 1`] = `
   },
   {
     "a": 2,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": false,
+    "c": [],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
     "b": true,
     "c": [
       "a",
@@ -2487,6 +2851,22 @@ exports[`valid > all at once 1`] = `
     "c": [
       "b",
     ],
+    "d": {
+      "d2": undefined,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [],
+    "d": {
+      "d2": null,
+    },
+  },
+  {
+    "a": 2,
+    "b": true,
+    "c": [],
     "d": {
       "d2": undefined,
     },
@@ -2499,6 +2879,7 @@ exports[`valid > array > of a single value 1`] = `
   [
     1,
   ],
+  [],
 ]
 `;
 
@@ -2510,6 +2891,7 @@ exports[`valid > array > of a union 1`] = `
   [
     2,
   ],
+  [],
 ]
 `;
 
@@ -2529,6 +2911,15 @@ exports[`valid > array > of an array of an array of a union 1`] = `
       ],
     ],
   ],
+  [
+    [
+      [],
+    ],
+  ],
+  [
+    [],
+  ],
+  [],
 ]
 `;
 
@@ -2541,6 +2932,15 @@ exports[`valid > array > of an array of an array of a value 1`] = `
       ],
     ],
   ],
+  [
+    [
+      [],
+    ],
+  ],
+  [
+    [],
+  ],
+  [],
 ]
 `;
 
