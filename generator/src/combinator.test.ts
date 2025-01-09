@@ -11,6 +11,8 @@ import {
   type Value,
 } from "./combinator";
 import {
+  AliasType,
+  ArrayType,
   LiteralType,
   ObjectType,
   PrimitiveType,
@@ -382,6 +384,36 @@ describe(modelToCombinator.name, () => {
           3,
         ]
       `);
+    });
+  });
+
+  describe("ArrayType", () => {
+    it("empty", () => {
+      expect(
+        combineValid(
+          modelToCombinator(
+            new ArrayType({}, new PrimitiveType({}, "boolean"))
+          )
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          [],
+          [
+            true,
+          ],
+          [
+            false,
+          ],
+        ]
+      `);
+    });
+  });
+
+  describe("AliasType", () => {
+    it("empty", () => {
+      expect(() =>
+        combineValid(modelToCombinator(new AliasType({}, "Foo")))
+      ).toThrow();
     });
   });
 });

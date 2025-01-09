@@ -191,7 +191,7 @@ export function modelToCombinator(
   } else if (model instanceof UnionType) {
     return union(model.types.map(modelToCombinator));
   } else if (model instanceof ArrayType) {
-    return array(modelToCombinator(model));
+    return array(modelToCombinator(model.element));
   } else if (model instanceof AliasType) {
     unimplemented(
       "AliasType test generation is to be implemented soon"
