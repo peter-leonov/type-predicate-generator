@@ -67,7 +67,7 @@ function valuesVar(name: string, values: unknown[]): ts.Statement {
           undefined,
           undefined,
           factory.createArrayLiteralExpression(
-            values.map(valueToExpression),
+            valuesToExpression(values),
             true
           )
         ),
@@ -103,14 +103,25 @@ function defineInvalidValue(): ts.Statement {
 export const invalidValueToken =
   "80D79A5A-5D38-4302-BA04-F5AC748C1464";
 
-function valueToExpression(value: unknown): ts.Expression {
-  const json = JSON.stringify(value, (_, v) => {
-    return v === invalidValue ? invalidValueToken : v;
-  });
-  const file = ts.parseJsonText("valueToJSONExpression", json);
-  const statement = file.statements[0];
-  assert(statement, "must have a single statement");
-  return statement.expression;
+function valuesToExpression(values: unknown[]): ts.Expression[] {
+  const res: ts.Expression[] = [];
+
+  const seen = new Set();
+  for (const value of values) {
+    const json = JSON.stringify(value, (_, v) => {
+      return v === invalidValue ? invalidValueToken : v;
+    });
+    if (seen.has(json)) {
+      continue;
+    }
+    seen.add(json);
+    const file = ts.parseJsonText("valueToJSONExpression", json);
+    const statement = file.statements[0];
+    assert(statement, "must have a single statement");
+    res.push(statement.expression);
+  }
+
+  return res;
 }
 
 /**
