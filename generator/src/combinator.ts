@@ -37,7 +37,7 @@ import {
  * inspect the union values in the generator and infer a safe invalid value
  * per union.
  */
-const invalidValue: any = Symbol("invalidValue");
+export const invalidValue: any = Symbol("invalidValue");
 
 export type Value =
   | number

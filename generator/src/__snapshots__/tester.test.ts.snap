@@ -2,13 +2,21 @@
 
 exports[`primitive type 1`] = `
 "import { isTestType } from "./types_guards";
+const invalidValue: any = Symbol("invalidValue");
 const valid_TestType = [
     0,
     42
 ];
+const invalid_TestType = [
+    invalidValue,
+    invalidValue
+];
 describe("TestType", () => {
     it.for(valid_TestType)("valid", value => {
         expect(isTestType(value)).toBe(true);
+    });
+    it.for(invalid_TestType)("invalid", value => {
+        expect(isTestType(value)).toBe(false);
     });
 });
 "
