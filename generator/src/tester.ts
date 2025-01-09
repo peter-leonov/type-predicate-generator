@@ -1,0 +1,161 @@
+import ts, { factory } from "typescript";
+import { combineValid, modelToCombinator } from "./combinator";
+import { TypeModel } from "./model";
+
+export function modelToTests(
+  predicatesFileName: string,
+  typeName: string,
+  model: TypeModel
+): ts.Statement[] {
+  const combinator = modelToCombinator(model);
+  const valids = combineValid(combinator);
+
+  const validsName = `valid_${typeName}`;
+  const predicateName = `is${typeName}`;
+
+  return [
+    getImports(predicatesFileName, [predicateName]),
+    valuesVar(validsName, valids),
+    describeItFor(typeName, validsName, predicateName),
+  ];
+}
+
+function getImports(
+  sourceFileName: string,
+  imports: string[]
+): ts.Statement {
+  return factory.createImportDeclaration(
+    undefined,
+    factory.createImportClause(
+      false,
+      undefined,
+
+      factory.createNamedImports(
+        imports.map((className) => {
+          return factory.createImportSpecifier(
+            false,
+            undefined,
+            factory.createIdentifier(className)
+          );
+        })
+      )
+    ),
+    factory.createStringLiteral(sourceFileName),
+    undefined
+  );
+}
+
+function valuesVar(name: string, values: unknown[]): ts.Statement {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier(name),
+          undefined,
+          undefined,
+          factory.createArrayLiteralExpression(
+            values.map((v) =>
+              factory.createStringLiteral(JSON.stringify(v))
+            ),
+            true
+          )
+        ),
+      ],
+      ts.NodeFlags.Const
+    )
+  );
+}
+
+function describeItFor(
+  describeName: string,
+  validsName: string,
+  predicateName: string
+): ts.Statement {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createIdentifier("describe"),
+      undefined,
+      [
+        factory.createStringLiteral(describeName),
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [],
+          undefined,
+          factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+          factory.createBlock(
+            [
+              factory.createExpressionStatement(
+                factory.createCallExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier("it"),
+                      factory.createIdentifier("for")
+                    ),
+                    undefined,
+                    [factory.createIdentifier(validsName)]
+                  ),
+                  undefined,
+                  [
+                    factory.createStringLiteral("valid"),
+                    factory.createArrowFunction(
+                      undefined,
+                      undefined,
+                      [
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          factory.createIdentifier("value"),
+                          undefined,
+                          undefined,
+                          undefined
+                        ),
+                      ],
+                      undefined,
+                      factory.createToken(
+                        ts.SyntaxKind.EqualsGreaterThanToken
+                      ),
+                      factory.createBlock(
+                        [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createCallExpression(
+                                  factory.createIdentifier("expect"),
+                                  undefined,
+                                  [
+                                    factory.createCallExpression(
+                                      factory.createIdentifier(
+                                        predicateName
+                                      ),
+                                      undefined,
+                                      [
+                                        factory.createIdentifier(
+                                          "value"
+                                        ),
+                                      ]
+                                    ),
+                                  ]
+                                ),
+                                factory.createIdentifier("toBe")
+                              ),
+                              undefined,
+                              [factory.createTrue()]
+                            )
+                          ),
+                        ],
+                        true
+                      )
+                    ),
+                  ]
+                )
+              ),
+            ],
+            true
+          )
+        ),
+      ]
+    )
+  );
+}
