@@ -7,7 +7,7 @@ import {
 import { typeToModel, type TypeModel } from "./model";
 import { compile, printNodes } from "./tests_helpers";
 
-function processType(code: string): string {
+function process(code: string): string {
   return hydrateInvalidValueToken(
     printNodes(
       modelToTests(
@@ -32,24 +32,22 @@ function processTypes(codes: string[]): string {
 }
 
 test("primitive", () => {
-  expect(processType("export type X = number")).toMatchSnapshot();
+  expect(process("export type X = number")).toMatchSnapshot();
 });
 
 test("array", () => {
-  expect(processType("export type X = string[]")).toMatchSnapshot();
+  expect(process("export type X = string[]")).toMatchSnapshot();
 });
 
 test("object", () => {
   expect(
-    processType(
-      "export type X = { a: string, b: number, c: boolean }"
-    )
+    process("export type X = { a: string, b: number, c: boolean }")
   ).toMatchSnapshot();
 });
 
 test("union", () => {
   expect(
-    processType("export type X = string | number")
+    process("export type X = string | number")
   ).toMatchSnapshot();
 });
 

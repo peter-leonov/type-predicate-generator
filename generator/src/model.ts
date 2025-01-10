@@ -118,9 +118,19 @@ export type TypeModel =
 
 export function typeToModel(
   checker: ts.TypeChecker,
+  symbol: ts.Symbol
+): TypeModel {
+  // TODO move the depth == 0 logic here and get rid of the aliasName
+  // by dealing with it here and returning the RootTypeAlias type model
+  const type = checker.getDeclaredTypeOfSymbol(symbol);
+  return typeToModelInner(checker, type, symbol, 0);
+}
+
+export function typeToModelInner(
+  checker: ts.TypeChecker,
   type: ts.Type,
   symbol: ts.Symbol | null,
-  depth: number = 0
+  depth: number
 ): TypeModel {
   if (depth >= 100) {
     throw new Error(
@@ -173,7 +183,7 @@ export function typeToModel(
     assert(elementType, "expecting the first type argument");
     return new ArrayType(
       { isOptional, aliasName },
-      typeToModel(checker, elementType, null, depth + 1)
+      typeToModelInner(checker, elementType, null, depth + 1)
     );
     console.log(type);
   } else if (tsTypeIsObject(type)) {
@@ -181,7 +191,7 @@ export function typeToModel(
     // console.log(`- object: ${checker.typeToString(type)}`);
     for (const attr of checker.getPropertiesOfType(type)) {
       // console.log(`- attr: ${attr.escapedName}`);
-      attributes[String(attr.escapedName)] = typeToModel(
+      attributes[String(attr.escapedName)] = typeToModelInner(
         checker,
         checker.getTypeOfSymbol(attr),
         attr,
@@ -217,7 +227,7 @@ export function typeToModel(
       { isOptional, aliasName },
       type.types.map((member) => {
         // console.log(`- member`);
-        return typeToModel(checker, member, null, depth + 1);
+        return typeToModelInner(checker, member, null, depth + 1);
       })
     );
   } else if (tsTypeIsEnum(type)) {

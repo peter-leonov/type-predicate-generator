@@ -138,11 +138,7 @@ export function sourceFileToModels(
     checker,
     sourceFile
   )) {
-    const model = typeToModel(
-      checker,
-      checker.getDeclaredTypeOfSymbol(symbol),
-      symbol
-    );
+    const model = typeToModel(checker, symbol);
 
     models.push(model);
   }

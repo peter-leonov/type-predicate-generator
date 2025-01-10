@@ -7,9 +7,7 @@ import {
   sourceFileToDeclarationSymbols,
 } from "./compile";
 
-export function compile(
-  source: string
-): [ts.TypeChecker, ts.Type, ts.Symbol] {
+export function compile(source: string): [ts.TypeChecker, ts.Symbol] {
   const program = newVFSProgram(source);
   ensureNoErrors(program);
 
@@ -29,8 +27,7 @@ export function compile(
     symbol,
     "at least one symbol must be present in the test case"
   );
-  const type = checker.getDeclaredTypeOfSymbol(symbol);
-  return [checker, type, symbol];
+  return [checker, symbol];
 }
 
 export function printNodes(nodes: ts.Statement[]): string {
