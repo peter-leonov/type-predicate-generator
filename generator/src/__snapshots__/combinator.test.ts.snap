@@ -2,7 +2,7 @@
 
 exports[`invalid > all at once 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
     "a": Symbol(invalidValue),
     "b": false,
@@ -401,7 +401,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "a",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 1,
@@ -444,7 +444,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 1,
@@ -485,7 +485,7 @@ exports[`invalid > all at once 1`] = `
     "a": 1,
     "b": false,
     "c": [],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 1,
@@ -590,7 +590,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "a",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 1,
@@ -633,7 +633,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 1,
@@ -674,7 +674,7 @@ exports[`invalid > all at once 1`] = `
     "a": 1,
     "b": true,
     "c": [],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 1,
@@ -941,7 +941,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "a",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 2,
@@ -984,7 +984,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 2,
@@ -1025,7 +1025,7 @@ exports[`invalid > all at once 1`] = `
     "a": 2,
     "b": false,
     "c": [],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 2,
@@ -1130,7 +1130,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "a",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 2,
@@ -1173,7 +1173,7 @@ exports[`invalid > all at once 1`] = `
     "c": [
       "b",
     ],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 2,
@@ -1214,7 +1214,7 @@ exports[`invalid > all at once 1`] = `
     "a": 2,
     "b": true,
     "c": [],
-    "d": Symbol(invalidValue),
+    "d": null,
   },
   {
     "a": 2,
@@ -1482,25 +1482,25 @@ exports[`invalid > array > of an array of an array of a value 1`] = `
 
 exports[`invalid > object > empty 1`] = `
 [
-  Symbol(invalidValue),
+  null,
 ]
 `;
 
 exports[`invalid > object > of a several nested objects with a union property 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
-    "a": Symbol(invalidValue),
+    "a": null,
   },
   {
     "a": {
-      "b": Symbol(invalidValue),
+      "b": null,
     },
   },
   {
     "a": {
       "b": {
-        "c": Symbol(invalidValue),
+        "c": null,
       },
     },
   },
@@ -1543,19 +1543,19 @@ exports[`invalid > object > of a several nested objects with a union property 1`
 
 exports[`invalid > object > of a several nested objects with a value property 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
-    "a": Symbol(invalidValue),
+    "a": null,
   },
   {
     "a": {
-      "b": Symbol(invalidValue),
+      "b": null,
     },
   },
   {
     "a": {
       "b": {
-        "c": Symbol(invalidValue),
+        "c": null,
       },
     },
   },
@@ -1589,9 +1589,9 @@ exports[`invalid > object > of a several nested objects with a value property 1`
 
 exports[`invalid > object > of a several objects with union properties 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
-    "a": Symbol(invalidValue),
+    "a": null,
     "b": {
       "bb": "BB1",
     },
@@ -1600,7 +1600,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     },
   },
   {
-    "a": Symbol(invalidValue),
+    "a": null,
     "b": {
       "bb": "BB1",
     },
@@ -1609,7 +1609,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     },
   },
   {
-    "a": Symbol(invalidValue),
+    "a": null,
     "b": {
       "bb": "BB2",
     },
@@ -1618,7 +1618,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     },
   },
   {
-    "a": Symbol(invalidValue),
+    "a": null,
     "b": {
       "bb": "BB2",
     },
@@ -1630,7 +1630,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "a": {
       "aa": "AA1",
     },
-    "b": Symbol(invalidValue),
+    "b": null,
     "c": {
       "cc": "CC1",
     },
@@ -1639,7 +1639,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "a": {
       "aa": "AA1",
     },
-    "b": Symbol(invalidValue),
+    "b": null,
     "c": {
       "cc": "CC2",
     },
@@ -1651,7 +1651,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "b": {
       "bb": "BB1",
     },
-    "c": Symbol(invalidValue),
+    "c": null,
   },
   {
     "a": {
@@ -1699,7 +1699,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "b": {
       "bb": "BB2",
     },
-    "c": Symbol(invalidValue),
+    "c": null,
   },
   {
     "a": {
@@ -1822,7 +1822,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "a": {
       "aa": "AA2",
     },
-    "b": Symbol(invalidValue),
+    "b": null,
     "c": {
       "cc": "CC1",
     },
@@ -1831,7 +1831,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "a": {
       "aa": "AA2",
     },
-    "b": Symbol(invalidValue),
+    "b": null,
     "c": {
       "cc": "CC2",
     },
@@ -1843,7 +1843,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "b": {
       "bb": "BB1",
     },
-    "c": Symbol(invalidValue),
+    "c": null,
   },
   {
     "a": {
@@ -1891,7 +1891,7 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "b": {
       "bb": "BB2",
     },
-    "c": Symbol(invalidValue),
+    "c": null,
   },
   {
     "a": {
@@ -2171,9 +2171,9 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
 
 exports[`invalid > object > of a several objects with value properties 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
-    "a": Symbol(invalidValue),
+    "a": null,
     "b": {
       "b1": "B1",
       "b2": "B2",
@@ -2188,7 +2188,7 @@ exports[`invalid > object > of a several objects with value properties 1`] = `
       "a1": "A1",
       "a2": "A2",
     },
-    "b": Symbol(invalidValue),
+    "b": null,
     "c": {
       "c1": "C1",
       "c2": "C2",
@@ -2203,7 +2203,7 @@ exports[`invalid > object > of a several objects with value properties 1`] = `
       "b1": "B1",
       "b2": "B2",
     },
-    "c": Symbol(invalidValue),
+    "c": null,
   },
   {
     "a": {
@@ -2402,7 +2402,7 @@ exports[`invalid > object > of a several objects with value properties 1`] = `
 
 exports[`invalid > object > of a several union properties 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
     "a": "A1",
     "b": "B1",
@@ -2542,7 +2542,7 @@ exports[`invalid > object > of a several union properties 1`] = `
 
 exports[`invalid > object > of a several value properties 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
     "a": "A",
     "b": "B",
@@ -2575,7 +2575,7 @@ exports[`invalid > object > of a several value properties 1`] = `
 
 exports[`invalid > object > of a single union property 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
     "a": Symbol(invalidValue),
   },
@@ -2588,7 +2588,7 @@ exports[`invalid > object > of a single union property 1`] = `
 
 exports[`invalid > object > of a single value property 1`] = `
 [
-  Symbol(invalidValue),
+  null,
   {
     "a": Symbol(invalidValue),
   },

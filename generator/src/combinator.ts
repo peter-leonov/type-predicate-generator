@@ -91,7 +91,7 @@ export function object<T>(
 ): ValueGenerator<T> {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
-      yield [false, invalidValue];
+      yield [false, null];
     }
     yield* rollObject(doInvalid, obj) as Generator<any>;
   };
