@@ -150,11 +150,23 @@ function valuesToExpression(values: unknown[]): ts.Expression[] {
  * Dirty hack to avoid wirting a JS value to Node parser just to cover
  * the invalid value symbol.
  */
-export function hydrateInvalidValueToken(code: string): string {
-  return code.replaceAll(
-    `"${invalidValueToken}"`,
-    invalidValueVarName
-  );
+export function hydrateTokens(
+  code: string,
+  tokens: Record<string, string>
+): string {
+  tokens[invalidValueToken] = invalidValueVarName;
+
+  const keys = Object.keys(tokens);
+  const rex = new RegExp(`"(${keys.join("|")})"`, "g");
+
+  return code.replaceAll(rex, (_, p1) => {
+    const value = tokens[p1];
+    assert(
+      value !== undefined,
+      "the replacing value must be present"
+    );
+    return value;
+  });
 }
 
 function describeItFor(

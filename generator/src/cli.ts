@@ -8,7 +8,7 @@ import {
 } from "./compile";
 import { explainError } from "./errors";
 import { TypeGuardGenerator } from "./generator";
-import { hydrateInvalidValueToken, modelsToTests } from "./tester";
+import { hydrateTokens, modelsToTests } from "./tester";
 
 type Flags = {
   keepExtension?: boolean;
@@ -60,7 +60,7 @@ function processFile(fileName: string, flags: Flags): boolean {
     }
 
     {
-      const content = hydrateInvalidValueToken(
+      const content = hydrateTokens(
         nodesToString(
           "tests.test.ts",
           modelsToTests(guardsFileNoExt, models)

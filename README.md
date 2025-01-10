@@ -60,6 +60,7 @@ These are by desing, fixing them would affect the [Pros](#pros):
 
 1. Compared to `tsc` plugins it requires a separate build step
 1. Compared to `tsc` plugins it reads a file and produces a file
+1. Compared to `tsc` plugins all the checked types must be explicitly exported
 
 See [Known Limitations](#known-limitations) for more on low level missing bits.
 
@@ -259,6 +260,8 @@ See more here [#1](https://github.com/peter-leonov/typescript-predicate-generato
 1. Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 
 1. Avoid trivial aliases like `type X = Y` as TypeScript erases the information about that `X` is an alias to `Y` and they effectively become the same type. This produces duplicate code for `X` where it would be just a shared predicate function like `const isX = isY` or `function isX(…) { return isY() }`. It is possible to fix by considering AST nodes in addition to symbols and type objects, but it's not a common use case, so for now not handled properly.
+
+1. Does not generate tests for recursive types. It's still possible to do, but a bit cumbersome to implement robustly. The main challenge is to teach Combinator to produce a safe valid sentinel value that terminates the recursion. This again should be done at the type level, not the Combinator itself therefor requiring to hack deeper into TS type system internals.
 
 ## Prior art
 
