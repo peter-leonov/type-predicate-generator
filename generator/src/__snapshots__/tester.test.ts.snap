@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`array 1`] = `
-"import { isX } from "guards.ts";
+"import { expect, describe, it } from "vitest";
+import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     [],
@@ -23,7 +24,8 @@ describe("X", () => {
 `;
 
 exports[`multiple types 1`] = `
-"import { isX, isY } from "guards.ts";
+"import { expect, describe, it } from "vitest";
+import { isX, isY } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     "string",
@@ -61,7 +63,8 @@ describe("Y", () => {
 `;
 
 exports[`object 1`] = `
-"import { isX } from "guards.ts";
+"import { expect, describe, it } from "vitest";
+import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     { "a": "string", "b": 0, "c": true },
@@ -100,7 +103,8 @@ describe("X", () => {
 `;
 
 exports[`primitive 1`] = `
-"import { isX } from "guards.ts";
+"import { expect, describe, it } from "vitest";
+import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     0,
@@ -121,7 +125,8 @@ describe("X", () => {
 `;
 
 exports[`union 1`] = `
-"import { isX } from "guards.ts";
+"import { expect, describe, it } from "vitest";
+import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     "string",
