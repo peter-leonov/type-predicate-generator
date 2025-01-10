@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-import ts, { factory } from "typescript";
+import ts from "typescript";
 import fs from "node:fs";
 import {
   ensureNoErrors,
-  generateFullFileBodyForAllTypes,
+  nodesToString,
   sourceFileToModels,
-  sourceFileToString,
 } from "./compile";
 import { explainError } from "./errors";
 import { TypeGuardGenerator } from "./generator";
@@ -45,28 +44,28 @@ function processFile(fileName: string, flags: Flags): boolean {
     const generator = new TypeGuardGenerator();
 
     const models = sourceFileToModels(checker, sourceFile);
-
-    for (const model of models) {
-      generator.addRootTypeGuardFor(model);
-    }
-
-    const predicateFileBody = generator.getFullFileBody(importFrom);
-
-    const guardsFile = factory.updateSourceFile(
-      ts.createSourceFile(
-        `guards.ts`,
-        "",
-        ts.ScriptTarget.Latest,
-        /*setParentNodes*/ false,
-        ts.ScriptKind.TS
-      ),
-      predicateFileBody
-    );
-
-    const content = sourceFileToString(guardsFile);
     const suffix = "_guards.ts";
     const outputFile = `${fileNameNoExt}${suffix}`;
-    fs.writeFileSync(outputFile, content);
+
+    {
+      for (const model of models) {
+        generator.addRootTypeGuardFor(model);
+      }
+
+      const predicateFileBody = generator.getFullFileBody(importFrom);
+
+      const content = nodesToString(outputFile, predicateFileBody);
+      fs.writeFileSync(outputFile, content);
+    }
+
+    // {
+    //   const tests = hydrateInvalidValueToken(
+    //     nodesToString(
+    //       "tests.test.ts",
+    //       modelsToTests("guards.ts", models)
+    //     )
+    //   );
+    // }
   }
 
   return true;

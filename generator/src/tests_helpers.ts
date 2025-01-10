@@ -29,21 +29,3 @@ export function compile(
   );
   return [checker, symbols];
 }
-
-export function printNodes(nodes: ts.Statement[]): string {
-  const resultFile = factory.updateSourceFile(
-    ts.createSourceFile(
-      "guards.ts",
-      "",
-      ts.ScriptTarget.Latest,
-      /*setParentNodes*/ false,
-      ts.ScriptKind.TS
-    ),
-    nodes
-  );
-
-  const printer = ts.createPrinter({
-    newLine: ts.NewLineKind.LineFeed,
-  });
-  return printer.printFile(resultFile);
-}

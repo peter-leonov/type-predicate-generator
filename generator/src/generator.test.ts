@@ -9,13 +9,13 @@ import {
   TypeModel,
   UnionType,
 } from "./model.js";
-import { printNodes } from "./tests_helpers.js";
 import { UnsupportedUnionMember } from "./errors.js";
+import { nodesToString } from "./compile.js";
 
 export function generate(model: TypeModel): string {
   const tgg = new TypeGuardGenerator();
   tgg.addRootTypeGuardFor(model);
-  return printNodes(tgg.getGuards());
+  return nodesToString("guards.ts", tgg.getGuards());
 }
 
 test("undefined", () => {

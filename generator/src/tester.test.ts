@@ -1,14 +1,17 @@
 import { expect, test } from "vitest";
 import { hydrateInvalidValueToken, modelsToTests } from "./tester";
-import { compile, printNodes } from "./tests_helpers";
-import { symbolsToModels } from "./compile";
+import { compile } from "./tests_helpers";
+import { symbolsToModels, nodesToString } from "./compile";
 
 function process(code: string): string {
   const [checker, symbols] = compile(code);
   const models = symbolsToModels(checker, symbols);
 
   return hydrateInvalidValueToken(
-    printNodes(modelsToTests("guards.ts", models))
+    nodesToString(
+      "guards.tests.ts",
+      modelsToTests("guards.ts", models)
+    )
   );
 }
 

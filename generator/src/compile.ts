@@ -1,4 +1,4 @@
-import ts from "typescript";
+import ts, { factory } from "typescript";
 import { TypeGuardGenerator } from "./generator";
 import { assert, unimplemented } from "./helpers";
 import { TypeModel, symbolToModel } from "./model";
@@ -159,12 +159,23 @@ export function generateFullFileBodyForAllTypes(
   return generator.getFullFileBody(importFrom);
 }
 
-export function sourceFileToString(
-  sourceFile: ts.SourceFile
+export function nodesToString(
+  fileName: string,
+  nodes: ts.Statement[]
 ): string {
+  const resultFile = factory.updateSourceFile(
+    ts.createSourceFile(
+      fileName,
+      "",
+      ts.ScriptTarget.Latest,
+      /*setParentNodes*/ false,
+      ts.ScriptKind.TS
+    ),
+    nodes
+  );
+
   const printer = ts.createPrinter({
     newLine: ts.NewLineKind.LineFeed,
   });
-
-  return printer.printFile(sourceFile);
+  return printer.printFile(resultFile);
 }
