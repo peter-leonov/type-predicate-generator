@@ -1,7 +1,7 @@
 import ts from "typescript";
 import { TypeGuardGenerator } from "./generator";
 import { assert, unimplemented } from "./helpers";
-import { TypeModel, typeToModel } from "./model";
+import { TypeModel, symbolToModel } from "./model";
 import { TypeScriptError } from "./errors";
 
 /**
@@ -132,7 +132,7 @@ export function symbolsToModels(
   checker: ts.TypeChecker,
   symbols: ts.Symbol[]
 ): TypeModel[] {
-  return symbols.map((symbol) => typeToModel(checker, symbol));
+  return symbols.map((symbol) => symbolToModel(checker, symbol));
 }
 
 export function sourceFileToModels(

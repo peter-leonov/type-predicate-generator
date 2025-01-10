@@ -116,7 +116,7 @@ export type TypeModel =
   | ArrayType
   | AliasType;
 
-export function typeToModel(
+export function symbolToModel(
   checker: ts.TypeChecker,
   symbol: ts.Symbol
 ): TypeModel {
