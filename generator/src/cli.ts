@@ -4,8 +4,11 @@ import fs from "node:fs";
 import {
   ensureNoErrors,
   generateFullFileBodyForAllTypes,
+  sourceFileToModels,
+  sourceFileToString,
 } from "./compile";
 import { explainError } from "./errors";
+import { TypeGuardGenerator } from "./generator";
 
 type Flags = {
   keepExtension?: boolean;
@@ -39,13 +42,17 @@ function processFile(fileName: string, flags: Flags): boolean {
     const fileNameNoExt = fileName.replace(/\.\w+$/, "");
     const importFrom = flags.keepExtension ? fileName : fileNameNoExt;
 
-    const predicateFileBody = generateFullFileBodyForAllTypes(
-      checker,
-      sourceFile,
-      importFrom
-    );
+    const generator = new TypeGuardGenerator();
 
-    const resultFile = factory.updateSourceFile(
+    const models = sourceFileToModels(checker, sourceFile);
+
+    for (const model of models) {
+      generator.addRootTypeGuardFor(model);
+    }
+
+    const predicateFileBody = generator.getFullFileBody(importFrom);
+
+    const guardsFile = factory.updateSourceFile(
       ts.createSourceFile(
         `guards.ts`,
         "",
@@ -56,11 +63,7 @@ function processFile(fileName: string, flags: Flags): boolean {
       predicateFileBody
     );
 
-    const printer = ts.createPrinter({
-      newLine: ts.NewLineKind.LineFeed,
-    });
-
-    const content = printer.printFile(resultFile);
+    const content = sourceFileToString(guardsFile);
     const suffix = "_guards.ts";
     const outputFile = `${fileNameNoExt}${suffix}`;
     fs.writeFileSync(outputFile, content);
