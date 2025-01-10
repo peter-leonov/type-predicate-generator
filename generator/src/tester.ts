@@ -10,7 +10,8 @@ import { assert } from "./helpers";
 
 export function modelsToTests(
   predicatesFileName: string,
-  models: TypeModel[]
+  models: TypeModel[],
+  testingLibraryname: string = "vitest"
 ): ts.Statement[] {
   const predicateNames: string[] = [];
   const tests = [];
@@ -26,6 +27,7 @@ export function modelsToTests(
   }
 
   return [
+    testFunctionsImport(testingLibraryname),
     getImports(predicatesFileName, predicateNames),
     defineInvalidValue(),
     ...tests,
@@ -311,5 +313,34 @@ function describeItFor(
         ),
       ]
     )
+  );
+}
+
+function testFunctionsImport(from: string): ts.Statement {
+  return factory.createImportDeclaration(
+    undefined,
+    factory.createImportClause(
+      false,
+      undefined,
+      factory.createNamedImports([
+        factory.createImportSpecifier(
+          false,
+          undefined,
+          factory.createIdentifier("expect")
+        ),
+        factory.createImportSpecifier(
+          false,
+          undefined,
+          factory.createIdentifier("describe")
+        ),
+        factory.createImportSpecifier(
+          false,
+          undefined,
+          factory.createIdentifier("it")
+        ),
+      ])
+    ),
+    factory.createStringLiteral(from),
+    undefined
   );
 }

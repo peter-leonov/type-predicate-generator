@@ -7,11 +7,11 @@ export type User = {
   };
 };
 
-export type Post = {
-  title: string;
-  text: string;
-  link?: string;
-  published: boolean;
-  author: User;
-  more: Array<number | string>;
-};
+// export type Post = {
+//   title: string;
+//   text: string;
+//   link?: string;
+//   published: boolean;
+//   author: User;
+//   more: Array<number | string>;
+// };

@@ -8,6 +8,7 @@ import {
 } from "./compile";
 import { explainError } from "./errors";
 import { TypeGuardGenerator } from "./generator";
+import { hydrateInvalidValueToken, modelsToTests } from "./tester";
 
 type Flags = {
   keepExtension?: boolean;
@@ -44,8 +45,8 @@ function processFile(fileName: string, flags: Flags): boolean {
     const generator = new TypeGuardGenerator();
 
     const models = sourceFileToModels(checker, sourceFile);
-    const suffix = "_guards.ts";
-    const outputFile = `${fileNameNoExt}${suffix}`;
+    const guardsFileNoExt = `${fileNameNoExt}_guards`;
+    const guardsFile = `${guardsFileNoExt}.ts`;
 
     {
       for (const model of models) {
@@ -54,18 +55,21 @@ function processFile(fileName: string, flags: Flags): boolean {
 
       const predicateFileBody = generator.getFullFileBody(importFrom);
 
-      const content = nodesToString(outputFile, predicateFileBody);
-      fs.writeFileSync(outputFile, content);
+      const content = nodesToString(guardsFile, predicateFileBody);
+      fs.writeFileSync(guardsFile, content);
     }
 
-    // {
-    //   const tests = hydrateInvalidValueToken(
-    //     nodesToString(
-    //       "tests.test.ts",
-    //       modelsToTests("guards.ts", models)
-    //     )
-    //   );
-    // }
+    {
+      const content = hydrateInvalidValueToken(
+        nodesToString(
+          "tests.test.ts",
+          modelsToTests(guardsFileNoExt, models)
+        )
+      );
+
+      const testsFile = `${fileNameNoExt}_guards.test.ts`;
+      fs.writeFileSync(testsFile, content);
+    }
   }
 
   return true;
