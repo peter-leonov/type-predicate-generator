@@ -10,8 +10,7 @@ set -eux -o pipefail
 
 (
   cd tests/integration
-  npm i
-  npm run ci
+  ./ci.sh
 )
 
 git diff --exit-code
