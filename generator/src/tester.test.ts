@@ -1,33 +1,14 @@
 import { expect, test } from "vitest";
-import {
-  hydrateInvalidValueToken,
-  modelsToTests,
-  modelToTests,
-} from "./tester";
-import { typeToModel, type TypeModel } from "./model";
+import { hydrateInvalidValueToken, modelsToTests } from "./tester";
 import { compile, printNodes } from "./tests_helpers";
+import { symbolsToModels } from "./compile";
 
 function process(code: string): string {
-  return hydrateInvalidValueToken(
-    printNodes(
-      modelToTests(
-        "TestType",
-        "isTestType",
-        typeToModel(...compile(code))
-      )
-    )
-  );
-}
-
-function processTypes(codes: string[]): string {
-  const types: Record<string, TypeModel> = {};
-  let i = 0;
-  for (const code of codes) {
-    types[`Type${++i}`] = typeToModel(...compile(code));
-  }
+  const [checker, symbols] = compile(code);
+  const models = symbolsToModels(checker, symbols);
 
   return hydrateInvalidValueToken(
-    printNodes(modelsToTests("TestType", types))
+    printNodes(modelsToTests("guards.ts", models))
   );
 }
 
@@ -53,9 +34,9 @@ test("union", () => {
 
 test("multiple types", () => {
   expect(
-    processTypes([
-      "export type X = string | number",
-      "export type Y = boolean | null",
-    ])
+    process(`
+      export type X = string | number
+      export type Y = boolean | null
+      `)
   ).toMatchSnapshot();
 });

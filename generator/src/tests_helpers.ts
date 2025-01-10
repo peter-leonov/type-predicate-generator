@@ -7,7 +7,9 @@ import {
   sourceFileToDeclarationSymbols,
 } from "./compile";
 
-export function compile(source: string): [ts.TypeChecker, ts.Symbol] {
+export function compile(
+  source: string
+): [ts.TypeChecker, ts.Symbol[]] {
   const program = newVFSProgram(source);
   ensureNoErrors(program);
 
@@ -20,14 +22,12 @@ export function compile(source: string): [ts.TypeChecker, ts.Symbol] {
   const checker = program.getTypeChecker();
 
   // This finds the LAST type definition in the source.
-  let symbol = sourceFileToDeclarationSymbols(checker, sourceFile).at(
-    -1
-  );
+  const symbols = sourceFileToDeclarationSymbols(checker, sourceFile);
   assert(
-    symbol,
+    symbols.length,
     "at least one symbol must be present in the test case"
   );
-  return [checker, symbol];
+  return [checker, symbols];
 }
 
 export function printNodes(nodes: ts.Statement[]): string {

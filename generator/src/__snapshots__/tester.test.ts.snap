@@ -1,71 +1,75 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`array 1`] = `
-"const valid_TestType = [
+"import { isX } from "guards.ts";
+const invalidValue: any = Symbol("invalidValue");
+const valid_X = [
     [],
     ["string"]
 ];
-const invalid_TestType = [
+const invalid_X = [
     invalidValue,
     [invalidValue]
 ];
-describe("TestType", () => {
-    it.for(valid_TestType)("valid", value => {
-        expect(isTestType(value)).toBe(true);
+describe("X", () => {
+    it.for(valid_X)("valid", value => {
+        expect(isX(value)).toBe(true);
     });
-    it.for(invalid_TestType)("invalid", value => {
-        expect(isTestType(value)).toBe(false);
+    it.for(invalid_X)("invalid", value => {
+        expect(isX(value)).toBe(false);
     });
 });
 "
 `;
 
 exports[`multiple types 1`] = `
-"import { isType1, isType2 } from "TestType";
+"import { isX, isY } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
-const valid_Type1 = [
+const valid_X = [
     "string",
     0,
     42
 ];
-const invalid_Type1 = [
+const invalid_X = [
     invalidValue
 ];
-describe("Type1", () => {
-    it.for(valid_Type1)("valid", value => {
-        expect(isType1(value)).toBe(true);
+describe("X", () => {
+    it.for(valid_X)("valid", value => {
+        expect(isX(value)).toBe(true);
     });
-    it.for(invalid_Type1)("invalid", value => {
-        expect(isType1(value)).toBe(false);
+    it.for(invalid_X)("invalid", value => {
+        expect(isX(value)).toBe(false);
     });
 });
-const valid_Type2 = [
+const valid_Y = [
     null,
     false,
     true
 ];
-const invalid_Type2 = [
+const invalid_Y = [
     invalidValue
 ];
-describe("Type2", () => {
-    it.for(valid_Type2)("valid", value => {
-        expect(isType2(value)).toBe(true);
+describe("Y", () => {
+    it.for(valid_Y)("valid", value => {
+        expect(isY(value)).toBe(true);
     });
-    it.for(invalid_Type2)("invalid", value => {
-        expect(isType2(value)).toBe(false);
+    it.for(invalid_Y)("invalid", value => {
+        expect(isY(value)).toBe(false);
     });
 });
 "
 `;
 
 exports[`object 1`] = `
-"const valid_TestType = [
+"import { isX } from "guards.ts";
+const invalidValue: any = Symbol("invalidValue");
+const valid_X = [
     { "a": "string", "b": 0, "c": true },
     { "a": "string", "b": 0, "c": false },
     { "a": "string", "b": 42, "c": true },
     { "a": "string", "b": 42, "c": false }
 ];
-const invalid_TestType = [
+const invalid_X = [
     invalidValue,
     { "b": 0, "c": true },
     { "b": 0, "c": false },
@@ -84,51 +88,55 @@ const invalid_TestType = [
     { "a": "string", "b": 42 },
     { "a": "string", "b": 42, "c": invalidValue }
 ];
-describe("TestType", () => {
-    it.for(valid_TestType)("valid", value => {
-        expect(isTestType(value)).toBe(true);
+describe("X", () => {
+    it.for(valid_X)("valid", value => {
+        expect(isX(value)).toBe(true);
     });
-    it.for(invalid_TestType)("invalid", value => {
-        expect(isTestType(value)).toBe(false);
+    it.for(invalid_X)("invalid", value => {
+        expect(isX(value)).toBe(false);
     });
 });
 "
 `;
 
 exports[`primitive 1`] = `
-"const valid_TestType = [
+"import { isX } from "guards.ts";
+const invalidValue: any = Symbol("invalidValue");
+const valid_X = [
     0,
     42
 ];
-const invalid_TestType = [
+const invalid_X = [
     invalidValue
 ];
-describe("TestType", () => {
-    it.for(valid_TestType)("valid", value => {
-        expect(isTestType(value)).toBe(true);
+describe("X", () => {
+    it.for(valid_X)("valid", value => {
+        expect(isX(value)).toBe(true);
     });
-    it.for(invalid_TestType)("invalid", value => {
-        expect(isTestType(value)).toBe(false);
+    it.for(invalid_X)("invalid", value => {
+        expect(isX(value)).toBe(false);
     });
 });
 "
 `;
 
 exports[`union 1`] = `
-"const valid_TestType = [
+"import { isX } from "guards.ts";
+const invalidValue: any = Symbol("invalidValue");
+const valid_X = [
     "string",
     0,
     42
 ];
-const invalid_TestType = [
+const invalid_X = [
     invalidValue
 ];
-describe("TestType", () => {
-    it.for(valid_TestType)("valid", value => {
-        expect(isTestType(value)).toBe(true);
+describe("X", () => {
+    it.for(valid_X)("valid", value => {
+        expect(isX(value)).toBe(true);
     });
-    it.for(invalid_TestType)("invalid", value => {
-        expect(isTestType(value)).toBe(false);
+    it.for(invalid_X)("invalid", value => {
+        expect(isX(value)).toBe(false);
     });
 });
 "

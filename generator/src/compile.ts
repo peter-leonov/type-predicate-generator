@@ -128,22 +128,21 @@ export function sourceFileToDeclarationSymbols(
   return symbols;
 }
 
+export function symbolsToModels(
+  checker: ts.TypeChecker,
+  symbols: ts.Symbol[]
+): TypeModel[] {
+  return symbols.map((symbol) => typeToModel(checker, symbol));
+}
+
 export function sourceFileToModels(
   checker: ts.TypeChecker,
   sourceFile: ts.SourceFile
 ): TypeModel[] {
-  const models: TypeModel[] = [];
-
-  for (const symbol of sourceFileToDeclarationSymbols(
+  return symbolsToModels(
     checker,
-    sourceFile
-  )) {
-    const model = typeToModel(checker, symbol);
-
-    models.push(model);
-  }
-
-  return models;
+    sourceFileToDeclarationSymbols(checker, sourceFile)
+  );
 }
 
 export function generateFullFileBodyForAllTypes(

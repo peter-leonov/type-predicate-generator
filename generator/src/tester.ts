@@ -10,12 +10,16 @@ import { assert } from "./helpers";
 
 export function modelsToTests(
   predicatesFileName: string,
-  types: Record<string, TypeModel>
+  models: TypeModel[]
 ): ts.Statement[] {
   const predicateNames: string[] = [];
   const tests = [];
-  for (const typeName in types) {
-    const model = types[typeName] as TypeModel;
+  for (const model of models) {
+    const typeName = model.options.aliasName;
+    assert(
+      typeName,
+      "root type model has to have the type aliasName defined"
+    );
     const predicateName = `is${typeName}`;
     predicateNames.push(predicateName);
     tests.push(...modelToTests(typeName, predicateName, model));
