@@ -15,6 +15,7 @@
     "type-predicate-generator": "file:../../generator"
   },
   "devDependencies": {
+    "esbuild": "^0.24.2",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
