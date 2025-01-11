@@ -31,10 +31,10 @@ const invalid_User = [
   { id: 42, login: "string", bio: { first: "string", last: invalidValue } },
 ];
 describe("User", () => {
-  it.for(valid_User)("valid", (value) => {
+  it.for(valid_User)("valid", (value: unknown) => {
     expect(isUser(value)).toBe(true);
   });
-  it.for(invalid_User)("invalid", (value) => {
+  it.for(invalid_User)("invalid", (value: unknown) => {
     expect(isUser(value)).toBe(false);
   });
 });
@@ -953,10 +953,10 @@ const invalid_Post = [
   },
 ];
 describe("Post", () => {
-  it.for(valid_Post)("valid", (value) => {
+  it.for(valid_Post)("valid", (value: unknown) => {
     expect(isPost(value)).toBe(true);
   });
-  it.for(invalid_Post)("invalid", (value) => {
+  it.for(invalid_Post)("invalid", (value: unknown) => {
     expect(isPost(value)).toBe(false);
   });
 });

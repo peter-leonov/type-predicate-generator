@@ -13,10 +13,10 @@ const invalid_X = [
     [invalidValue]
 ];
 describe("X", () => {
-    it.for(valid_X)("valid", value => {
+    it.for(valid_X)("valid", (value: unknown) => {
         expect(isX(value)).toBe(true);
     });
-    it.for(invalid_X)("invalid", value => {
+    it.for(invalid_X)("invalid", (value: unknown) => {
         expect(isX(value)).toBe(false);
     });
 });
@@ -36,10 +36,10 @@ const invalid_X = [
     invalidValue
 ];
 describe("X", () => {
-    it.for(valid_X)("valid", value => {
+    it.for(valid_X)("valid", (value: unknown) => {
         expect(isX(value)).toBe(true);
     });
-    it.for(invalid_X)("invalid", value => {
+    it.for(invalid_X)("invalid", (value: unknown) => {
         expect(isX(value)).toBe(false);
     });
 });
@@ -52,10 +52,10 @@ const invalid_Y = [
     invalidValue
 ];
 describe("Y", () => {
-    it.for(valid_Y)("valid", value => {
+    it.for(valid_Y)("valid", (value: unknown) => {
         expect(isY(value)).toBe(true);
     });
-    it.for(invalid_Y)("invalid", value => {
+    it.for(invalid_Y)("invalid", (value: unknown) => {
         expect(isY(value)).toBe(false);
     });
 });
@@ -92,10 +92,10 @@ const invalid_X = [
     { "a": "string", "b": 42, "c": invalidValue }
 ];
 describe("X", () => {
-    it.for(valid_X)("valid", value => {
+    it.for(valid_X)("valid", (value: unknown) => {
         expect(isX(value)).toBe(true);
     });
-    it.for(invalid_X)("invalid", value => {
+    it.for(invalid_X)("invalid", (value: unknown) => {
         expect(isX(value)).toBe(false);
     });
 });
@@ -136,10 +136,10 @@ const invalid_X = [
     { "a": 1, "b": 2, "c": 3, "d": invalidValue }
 ];
 describe("X", () => {
-    it.for(valid_X)("valid", value => {
+    it.for(valid_X)("valid", (value: unknown) => {
         expect(isX(value)).toBe(true);
     });
-    it.for(invalid_X)("invalid", value => {
+    it.for(invalid_X)("invalid", (value: unknown) => {
         expect(isX(value)).toBe(false);
     });
 });
@@ -158,10 +158,10 @@ const invalid_X = [
     invalidValue
 ];
 describe("X", () => {
-    it.for(valid_X)("valid", value => {
+    it.for(valid_X)("valid", (value: unknown) => {
         expect(isX(value)).toBe(true);
     });
-    it.for(invalid_X)("invalid", value => {
+    it.for(invalid_X)("invalid", (value: unknown) => {
         expect(isX(value)).toBe(false);
     });
 });
@@ -181,10 +181,10 @@ const invalid_A = [
     { "a": invalidValue }
 ];
 describe("A", () => {
-    it.for(valid_A)("valid", value => {
+    it.for(valid_A)("valid", (value: unknown) => {
         expect(isA(value)).toBe(true);
     });
-    it.for(invalid_A)("invalid", value => {
+    it.for(invalid_A)("invalid", (value: unknown) => {
         expect(isA(value)).toBe(false);
     });
 });
@@ -197,10 +197,10 @@ const invalid_B = [
     { "b": invalid_A[1] }
 ];
 describe("B", () => {
-    it.for(valid_B)("valid", value => {
+    it.for(valid_B)("valid", (value: unknown) => {
         expect(isB(value)).toBe(true);
     });
-    it.for(invalid_B)("invalid", value => {
+    it.for(invalid_B)("invalid", (value: unknown) => {
         expect(isB(value)).toBe(false);
     });
 });
@@ -220,10 +220,10 @@ const invalid_X = [
     invalidValue
 ];
 describe("X", () => {
-    it.for(valid_X)("valid", value => {
+    it.for(valid_X)("valid", (value: unknown) => {
         expect(isX(value)).toBe(true);
     });
-    it.for(invalid_X)("invalid", value => {
+    it.for(invalid_X)("invalid", (value: unknown) => {
         expect(isX(value)).toBe(false);
     });
 });

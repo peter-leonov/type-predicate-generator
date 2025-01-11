@@ -2,7 +2,7 @@
 
 exports[`generateForPlayground 1`] = `
 {
-  "predicatesCode": "import { type X } from "./foo";
+  "predicatesCode": "import { type X } from "./types";
 type SafeShallowShape<Type> = {
     [_ in keyof Type]?: unknown;
 };
@@ -15,22 +15,24 @@ export function isX(root: unknown): root is X {
     return true;
 }
 ",
-  "testsCode": "",
+  "testsCode": "import { expect, describe, it } from "./vitest";
+import { isX } from "./types_guards";
+const invalidValue: any = Symbol("invalidValue");
+const valid_X = [
+    0,
+    42
+];
+const invalid_X = [
+    invalidValue
+];
+describe("X", () => {
+    it.for(valid_X)("valid", (value: unknown) => {
+        expect(isX(value)).toBe(true);
+    });
+    it.for(invalid_X)("invalid", (value: unknown) => {
+        expect(isX(value)).toBe(false);
+    });
+});
+",
 }
-`;
-
-exports[`generateTypeGuards 1`] = `
-"import { type X } from "./foo";
-type SafeShallowShape<Type> = {
-    [_ in keyof Type]?: unknown;
-};
-const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
-export function isX(root: unknown): root is X {
-    if (!(typeof root === "number")) {
-        return false;
-    }
-    (root) satisfies X;
-    return true;
-}
-"
 `;
