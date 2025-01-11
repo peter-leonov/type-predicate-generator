@@ -183,15 +183,13 @@ function pick<T>(
 }
 
 export function combineValid(fn: ValueGenerator<Value>) {
-  return [...fn(false).map(([isValid, v]) => (assert(isValid), v))];
+  return [...fn(false)].map(([isValid, v]) => (assert(isValid), v));
 }
 
 export function combineInvalid(fn: ValueGenerator<Value>) {
-  return [
-    ...fn(true)
-      .filter(([isValid, _]) => !isValid)
-      .map(([_, v]) => v),
-  ];
+  return [...fn(true)]
+    .filter(([isValid, _]) => !isValid)
+    .map(([_, v]) => v);
 }
 
 export class Token {
