@@ -98,6 +98,13 @@ export function array<T>(
   };
 }
 
+/**
+ * This is the only product type here, the rest are sum types.
+ * So please keep an eye on how many combinations object() produces.
+ *
+ * Right now it generates all possible valid combinations for all fields
+ * and per invalid field only one valid sub-combination.
+ */
 export function object<T>(
   obj: Record<string, ValueGenerator<T>>,
   optionalAttributes: Set<string>
@@ -149,6 +156,9 @@ function* rollObject<T>(
         optionalAttributes
       )) {
         yield [false, rest];
+        // We need only one valid combination per invalid property.
+        // All the valid combinations are checked separately.
+        break;
       }
     }
   }
@@ -166,6 +176,11 @@ function* rollObject<T>(
           ...rest,
         },
       ];
+      if (!isValidValue) {
+        // We need only one valid combination per invalid property.
+        // All the valid combinations are checked separately.
+        break;
+      }
     }
   }
 }
