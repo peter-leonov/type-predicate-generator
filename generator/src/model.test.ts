@@ -313,7 +313,8 @@ test("object with optional and non-optional props", () => {
           new LiteralType({}, undefined),
           new PrimitiveType({}, "number"),
         ]),
-      }
+      },
+      new Set(["b", "d"])
     )
   );
 });
@@ -343,7 +344,7 @@ test("object with primitive types", () => {
   );
 });
 
-test.only("object with optional attributes", () => {
+test("object with optional attributes", () => {
   expect(
     process(`
         export type X = {

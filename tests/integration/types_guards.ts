@@ -57,7 +57,7 @@ export function isPost(root: unknown): root is Post {
   if (!(typeof text === "string")) {
     return false;
   }
-  if (!(typeof link === "string")) {
+  if (!(typeof link === "undefined" || typeof link === "string")) {
     return false;
   }
   if (!(typeof published === "boolean")) {

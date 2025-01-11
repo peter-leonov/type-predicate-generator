@@ -26,6 +26,12 @@ test("object", () => {
   ).toMatchSnapshot();
 });
 
+test("object with optional attributes", () => {
+  expect(
+    process("export type X = { a: 1, b?: 2, c: 3, d?: 4 }")
+  ).toMatchSnapshot();
+});
+
 test("union", () => {
   expect(
     process("export type X = string | number")

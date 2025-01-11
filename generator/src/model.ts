@@ -59,16 +59,16 @@ export class ObjectType implements BaseType {
   nameForErrors: string;
   options: TypeOptions;
   attributes: { [key: string]: TypeModel };
-  optional: Set<string>;
+  optionalAttributes: Set<string>;
   constructor(
     options: typeof this.options,
     attributes: typeof this.attributes,
-    optional: typeof this.optional = new Set()
+    optional: typeof this.optionalAttributes = new Set()
   ) {
     this.nameForErrors = "object type";
     this.options = normilizeOptions(options);
     this.attributes = attributes;
-    this.optional = optional;
+    this.optionalAttributes = optional;
   }
 }
 

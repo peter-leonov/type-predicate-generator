@@ -99,19 +99,25 @@ export function array<T>(
 }
 
 export function object<T>(
-  obj: Record<string, ValueGenerator<T>>
+  obj: Record<string, ValueGenerator<T>>,
+  optionalAttributes: Set<string>
 ): ValueGenerator<T> {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, null];
     }
-    yield* rollObject(doInvalid, obj) as Generator<any>;
+    yield* rollObject(
+      doInvalid,
+      obj,
+      optionalAttributes
+    ) as Generator<any>;
   };
 }
 
 function* rollObject<T>(
   doInvalid: boolean,
-  obj: Record<string, ValueGenerator<T>>
+  obj: Record<string, ValueGenerator<T>>,
+  optionalAttributes: Set<string>
 ): Generator<[boolean, Record<string, T>]> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
@@ -127,16 +133,31 @@ function* rollObject<T>(
   const value = obj[key];
   assert(value);
 
-  if (doInvalid) {
-    for (const [_, rest] of rollObject(false, restObj)) {
-      yield [false, rest];
+  if (optionalAttributes.has(key)) {
+    for (const [_, rest] of rollObject(
+      false,
+      restObj,
+      optionalAttributes
+    )) {
+      yield [true, rest];
+    }
+  } else {
+    if (doInvalid) {
+      for (const [_, rest] of rollObject(
+        false,
+        restObj,
+        optionalAttributes
+      )) {
+        yield [false, rest];
+      }
     }
   }
 
   for (const [isValidValue, v] of value(doInvalid)) {
     for (const [isValidRest, rest] of rollObject(
       doInvalid && isValidValue,
-      restObj
+      restObj,
+      optionalAttributes
     )) {
       yield [
         isValidValue && isValidRest,
@@ -205,7 +226,8 @@ export function modelToCombinator(
     );
   } else if (model instanceof ObjectType) {
     return object(
-      mapObjectValues(model.attributes, modelToCombinator)
+      mapObjectValues(model.attributes, modelToCombinator),
+      model.optionalAttributes
     );
   } else if (model instanceof UnionType) {
     return union(model.types.map(modelToCombinator));

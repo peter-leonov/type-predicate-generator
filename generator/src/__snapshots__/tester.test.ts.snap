@@ -102,6 +102,50 @@ describe("X", () => {
 "
 `;
 
+exports[`object with optional attributes 1`] = `
+"import { expect, describe, it } from "vitest";
+import { isX } from "guards.ts";
+const invalidValue: any = Symbol("invalidValue");
+const valid_X = [
+    { "a": 1, "c": 3 },
+    { "a": 1, "c": 3, "d": 4 },
+    { "a": 1, "b": 2, "c": 3 },
+    { "a": 1, "b": 2, "c": 3, "d": 4 }
+];
+const invalid_X = [
+    null,
+    { "c": 3 },
+    { "c": 3, "d": 4 },
+    { "b": 2, "c": 3 },
+    { "b": 2, "c": 3, "d": 4 },
+    { "a": invalidValue, "c": 3 },
+    { "a": invalidValue, "c": 3, "d": 4 },
+    { "a": invalidValue, "b": 2, "c": 3 },
+    { "a": invalidValue, "b": 2, "c": 3, "d": 4 },
+    { "a": 1, "b": invalidValue, "c": 3 },
+    { "a": 1, "b": invalidValue, "c": 3, "d": 4 },
+    { "a": 1 },
+    { "a": 1, "d": 4 },
+    { "a": 1, "c": invalidValue },
+    { "a": 1, "c": invalidValue, "d": 4 },
+    { "a": 1, "c": 3, "d": invalidValue },
+    { "a": 1, "b": 2 },
+    { "a": 1, "b": 2, "d": 4 },
+    { "a": 1, "b": 2, "c": invalidValue },
+    { "a": 1, "b": 2, "c": invalidValue, "d": 4 },
+    { "a": 1, "b": 2, "c": 3, "d": invalidValue }
+];
+describe("X", () => {
+    it.for(valid_X)("valid", value => {
+        expect(isX(value)).toBe(true);
+    });
+    it.for(invalid_X)("invalid", value => {
+        expect(isX(value)).toBe(false);
+    });
+});
+"
+`;
+
 exports[`primitive 1`] = `
 "import { expect, describe, it } from "vitest";
 import { isX } from "guards.ts";

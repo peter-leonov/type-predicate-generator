@@ -2596,6 +2596,85 @@ exports[`invalid > object > of a single value property 1`] = `
 ]
 `;
 
+exports[`invalid > object > of several optional properties 1`] = `
+[
+  null,
+  {
+    "a": Symbol(invalidValue),
+    "b": 2,
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "a": Symbol(invalidValue),
+    "b": 2,
+    "c": 3,
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "a": Symbol(invalidValue),
+    "c": 3,
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "a": 1,
+    "b": Symbol(invalidValue),
+    "c": 3,
+  },
+  {
+    "a": 1,
+    "b": 2,
+    "c": Symbol(invalidValue),
+    "d": 4,
+  },
+  {
+    "a": 1,
+    "b": 2,
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": 2,
+    "c": 3,
+    "d": Symbol(invalidValue),
+  },
+  {
+    "a": 1,
+    "b": 2,
+    "d": 4,
+  },
+  {
+    "a": 1,
+    "b": 2,
+  },
+  {
+    "b": 2,
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "b": 2,
+    "c": 3,
+  },
+  {
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "c": 3,
+  },
+]
+`;
+
 exports[`invalid > union > of a single value 1`] = `
 [
   Symbol(invalidValue),
@@ -3178,6 +3257,31 @@ exports[`valid > object > of a single value property 1`] = `
 [
   {
     "a": "A",
+  },
+]
+`;
+
+exports[`valid > object > of several optional properties 1`] = `
+[
+  {
+    "a": 1,
+    "b": 2,
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "a": 1,
+    "b": 2,
+    "c": 3,
+  },
+  {
+    "a": 1,
+    "c": 3,
+    "d": 4,
+  },
+  {
+    "a": 1,
+    "c": 3,
   },
 ]
 `;

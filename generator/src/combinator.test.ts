@@ -54,14 +54,20 @@ for (const [name, f] of [
 ]) {
   describe(name, () => {
     it("all at once", () => {
-      const obj = object<Value>({
-        a: union([value(1), value(2)]),
-        b: union([value(true), value(false)]),
-        c: array(union([value("a"), value("b")])),
-        d: object({
-          d2: union([value(null), value(undefined)]),
-        }),
-      });
+      const obj = object<Value>(
+        {
+          a: union([value(1), value(2)]),
+          b: union([value(true), value(false)]),
+          c: array(union([value("a"), value("b")])),
+          d: object(
+            {
+              d2: union([value(null), value(undefined)]),
+            },
+            new Set()
+          ),
+        },
+        new Set()
+      );
 
       expect(f(obj)).toMatchSnapshot();
     });
@@ -131,33 +137,64 @@ for (const [name, f] of [
 
     describe("object", () => {
       it("empty", () => {
-        expect(f(object({}))).toMatchSnapshot();
+        expect(f(object({}, new Set()))).toMatchSnapshot();
       });
 
       it("of a single value property", () => {
-        expect(f(object({ a: value("A") }))).toMatchSnapshot();
+        expect(
+          f(object({ a: value("A") }, new Set()))
+        ).toMatchSnapshot();
       });
 
       it("of a several value properties", () => {
         expect(
-          f(object({ a: value("A"), b: value("B"), c: value("C") }))
+          f(
+            object(
+              { a: value("A"), b: value("B"), c: value("C") },
+              new Set()
+            )
+          )
         ).toMatchSnapshot();
       });
 
       it("of a single union property", () => {
         expect(
-          f(object({ a: union([value("A1"), value("A2")]) }))
+          f(
+            object(
+              { a: union([value("A1"), value("A2")]) },
+              new Set()
+            )
+          )
         ).toMatchSnapshot();
       });
 
       it("of a several union properties", () => {
         expect(
           f(
-            object({
-              a: union([value("A1")]),
-              b: union([value("B1"), value("B2")]),
-              c: union([value("C1"), value("C2"), value("C3")]),
-            })
+            object(
+              {
+                a: union([value("A1")]),
+                b: union([value("B1"), value("B2")]),
+                c: union([value("C1"), value("C2"), value("C3")]),
+              },
+              new Set()
+            )
+          )
+        ).toMatchSnapshot();
+      });
+
+      it("of several optional properties", () => {
+        expect(
+          f(
+            object(
+              {
+                a: value(1),
+                b: value(2),
+                c: value(3),
+                d: value(4),
+              },
+              new Set(["b", "d"])
+            )
           )
         ).toMatchSnapshot();
       });
@@ -165,11 +202,23 @@ for (const [name, f] of [
       it("of a several objects with value properties", () => {
         expect(
           f(
-            object({
-              a: object({ a1: value("A1"), a2: value("A2") }),
-              b: object({ b1: value("B1"), b2: value("B2") }),
-              c: object({ c1: value("C1"), c2: value("C2") }),
-            })
+            object(
+              {
+                a: object(
+                  { a1: value("A1"), a2: value("A2") },
+                  new Set()
+                ),
+                b: object(
+                  { b1: value("B1"), b2: value("B2") },
+                  new Set()
+                ),
+                c: object(
+                  { c1: value("C1"), c2: value("C2") },
+                  new Set()
+                ),
+              },
+              new Set()
+            )
           )
         ).toMatchSnapshot();
       });
@@ -177,11 +226,23 @@ for (const [name, f] of [
       it("of a several objects with union properties", () => {
         expect(
           f(
-            object({
-              a: object({ aa: union([value("AA1"), value("AA2")]) }),
-              b: object({ bb: union([value("BB1"), value("BB2")]) }),
-              c: object({ cc: union([value("CC1"), value("CC2")]) }),
-            })
+            object(
+              {
+                a: object(
+                  { aa: union([value("AA1"), value("AA2")]) },
+                  new Set()
+                ),
+                b: object(
+                  { bb: union([value("BB1"), value("BB2")]) },
+                  new Set()
+                ),
+                c: object(
+                  { cc: union([value("CC1"), value("CC2")]) },
+                  new Set()
+                ),
+              },
+              new Set()
+            )
           )
         ).toMatchSnapshot();
       });
@@ -189,11 +250,20 @@ for (const [name, f] of [
       it("of a several nested objects with a value property", () => {
         expect(
           f(
-            object({
-              a: object({
-                b: object({ c: object({ d: value("D") }) }),
-              }),
-            })
+            object(
+              {
+                a: object(
+                  {
+                    b: object(
+                      { c: object({ d: value("D") }, new Set()) },
+                      new Set()
+                    ),
+                  },
+                  new Set()
+                ),
+              },
+              new Set()
+            )
           )
         ).toMatchSnapshot();
       });
@@ -201,13 +271,25 @@ for (const [name, f] of [
       it("of a several nested objects with a union property", () => {
         expect(
           f(
-            object({
-              a: object({
-                b: object({
-                  c: object({ d: union([value("D1"), value("D2")]) }),
-                }),
-              }),
-            })
+            object(
+              {
+                a: object(
+                  {
+                    b: object(
+                      {
+                        c: object(
+                          { d: union([value("D1"), value("D2")]) },
+                          new Set()
+                        ),
+                      },
+                      new Set()
+                    ),
+                  },
+                  new Set()
+                ),
+              },
+              new Set()
+            )
           )
         ).toMatchSnapshot();
       });
@@ -354,6 +436,35 @@ describe(modelToCombinator.name, () => {
             "a": 1,
             "b": "foo",
             "c": true,
+          },
+        ]
+      `);
+    });
+    it("optional attributes", () => {
+      expect(
+        combineValid(
+          modelToCombinator(
+            new ObjectType(
+              {},
+              {
+                a: new LiteralType({}, 1),
+                b: new LiteralType({}, 2),
+                c: new LiteralType({}, 3),
+              },
+              new Set(["b"])
+            )
+          )
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          {
+            "a": 1,
+            "c": 3,
+          },
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
           },
         ]
       `);
