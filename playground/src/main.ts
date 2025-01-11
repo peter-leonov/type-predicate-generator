@@ -20,6 +20,13 @@ export function ok(value: unknown): asserts value {
   }
 }
 
+function must<T>(v: T | null): T {
+  if (!v) {
+    throw new Error("must not be null");
+  }
+  return v;
+}
+
 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   strict: true,
   noImplicitAny: true,
@@ -103,8 +110,7 @@ const testsModel = monaco.editor.createModel(
   monaco.Uri.file("/example_guards.test.ts")
 );
 
-const sourceNode = $("#source");
-ok(sourceNode);
+const sourceNode = must($("#source"));
 const sourceEditor = monaco.editor.create(sourceNode, {
   theme: "vs-dark",
   minimap: { enabled: false },
@@ -113,8 +119,7 @@ const sourceEditor = monaco.editor.create(sourceNode, {
 });
 sourceEditor.setModel(sourceModel);
 
-const predicatesNode = $("#predicates");
-ok(predicatesNode);
+const predicatesNode = must($("#predicates"));
 const predicatesEditor = monaco.editor.create(predicatesNode, {
   theme: "vs-dark",
   minimap: { enabled: false },
@@ -123,8 +128,7 @@ const predicatesEditor = monaco.editor.create(predicatesNode, {
 });
 predicatesEditor.setModel(predicateModel);
 
-const testsNode = $("#tests");
-ok(testsNode);
+const testsNode = must($("#tests"));
 const testsEditor = monaco.editor.create(testsNode, {
   theme: "vs-dark",
   minimap: { enabled: false },
