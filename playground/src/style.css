@@ -62,7 +62,7 @@ h1 {
   line-height: 1.1;
 }
 
-#source, #predicates {
+#source, #predicates, #tests {
   height: 600px;
   resize: both;
   overflow: auto;
@@ -74,7 +74,7 @@ h1 {
   max-width: 400px;
 }
 
-#predicates {
+#predicates, #tests {
   flex-grow: 3;
 }
 

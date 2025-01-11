@@ -1,5 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`generateForPlayground 1`] = `
+{
+  "predicatesCode": "import { type X } from "./foo";
+type SafeShallowShape<Type> = {
+    [_ in keyof Type]?: unknown;
+};
+const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
+export function isX(root: unknown): root is X {
+    if (!(typeof root === "number")) {
+        return false;
+    }
+    (root) satisfies X;
+    return true;
+}
+",
+  "testsCode": "",
+}
+`;
+
 exports[`generateTypeGuards 1`] = `
 "import { type X } from "./foo";
 type SafeShallowShape<Type> = {

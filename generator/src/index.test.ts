@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
-import { generateTypeGuards } from "./index";
+import { generateForPlayground } from "./index";
 
-test(generateTypeGuards, () => {
+test(generateForPlayground, () => {
   expect(
-    generateTypeGuards("export type X = number", "./foo")
+    generateForPlayground("export type X = number", "./foo")
   ).toMatchSnapshot();
 });

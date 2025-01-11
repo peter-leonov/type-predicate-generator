@@ -2,16 +2,23 @@ import ts, { factory } from "typescript";
 import { assert } from "./helpers";
 import {
   ensureNoErrors,
-  generateFullFileBodyForAllTypes,
   newVFSProgram,
+  nodesToString,
+  sourceFileToModels,
 } from "./compile";
+import { TypeGuardGenerator } from "./generator";
+import { hydrateTokens, modelsToTests } from "./tester";
 
 export * from "./errors";
 
-export function generateTypeGuards(
+type Result = { predicatesCode?: string; testsCode?: string };
+
+export function generateForPlayground(
   source: string,
-  importFrom = "./example"
-): string {
+  sourceFilePath: string,
+  guardsFilePath: string,
+  unitTests: boolean = false
+): Result {
   const program = newVFSProgram(source);
   ensureNoErrors(program);
 
@@ -24,26 +31,32 @@ export function generateTypeGuards(
   // Get the checker, we will use it to find more about classes
   let checker = program.getTypeChecker();
 
-  const predicateFileBody = generateFullFileBodyForAllTypes(
-    checker,
-    sourceFile,
-    importFrom
-  );
+  const generator = new TypeGuardGenerator();
 
-  const resultFile = factory.updateSourceFile(
-    ts.createSourceFile(
-      `example_guards.ts`,
-      "",
-      ts.ScriptTarget.Latest,
-      /*setParentNodes*/ false,
-      ts.ScriptKind.TS
-    ),
-    predicateFileBody
-  );
+  const models = sourceFileToModels(checker, sourceFile);
 
-  const printer = ts.createPrinter({
-    newLine: ts.NewLineKind.LineFeed,
-  });
+  let predicatesCode: string, testsCode: string;
 
-  return printer.printFile(resultFile);
+  {
+    for (const model of models) {
+      generator.addRootTypeGuardFor(model);
+    }
+
+    const predicateFileBody =
+      generator.getFullFileBody(sourceFilePath);
+
+    predicatesCode = nodesToString(guardsFilePath, predicateFileBody);
+  }
+
+  if (unitTests) {
+    const [tokens, nodes] = modelsToTests(guardsFilePath, models);
+    testsCode = hydrateTokens(
+      nodesToString("tests.test.ts", nodes),
+      tokens
+    );
+  } else {
+    testsCode = "";
+  }
+
+  return { predicatesCode, testsCode };
 }

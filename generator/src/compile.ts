@@ -145,20 +145,6 @@ export function sourceFileToModels(
   );
 }
 
-export function generateFullFileBodyForAllTypes(
-  checker: ts.TypeChecker,
-  sourceFile: ts.SourceFile,
-  importFrom: string
-): ts.Statement[] {
-  const generator = new TypeGuardGenerator();
-
-  for (const model of sourceFileToModels(checker, sourceFile)) {
-    generator.addRootTypeGuardFor(model);
-  }
-
-  return generator.getFullFileBody(importFrom);
-}
-
 export function nodesToString(
   fileName: string,
   nodes: ts.Statement[]

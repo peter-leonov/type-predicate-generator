@@ -1,9 +1,6 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import {
-  generateTypeGuards,
-  UnimplementedError,
-  UnsupportedError,
-  TypeScriptError,
+  generateForPlayground,
   explainError,
 } from "type-predicate-generator/src";
 import {
@@ -78,6 +75,12 @@ function loadState(): string {
   return defaultExample;
 }
 
+const vitestModel = monaco.editor.createModel(
+  "export function it(){}",
+  "typescript",
+  monaco.Uri.file("vitest")
+);
+
 const sourceModel = monaco.editor.createModel(
   loadState(),
   "typescript",
@@ -90,33 +93,60 @@ const predicateModel = monaco.editor.createModel(
   monaco.Uri.file("/example_guards.ts")
 );
 
-const sourceRoot = $("#source");
-ok(sourceRoot);
-const source = monaco.editor.create(sourceRoot, {
-  theme: "vs-dark",
-  minimap: { enabled: false },
-  automaticLayout: true,
-  scrollBeyondLastLine: false,
-});
-source.setModel(sourceModel);
+const testsModel = monaco.editor.createModel(
+  ``,
+  "typescript",
+  monaco.Uri.file("/example_guards.test.ts")
+);
 
-const predicatesRoot = $("#predicates");
-ok(predicatesRoot);
-const predicates = monaco.editor.create(predicatesRoot, {
+const sourceNode = $("#source");
+ok(sourceNode);
+const sourceEditor = monaco.editor.create(sourceNode, {
   theme: "vs-dark",
   minimap: { enabled: false },
   automaticLayout: true,
   scrollBeyondLastLine: false,
 });
-predicates.setModel(predicateModel);
+sourceEditor.setModel(sourceModel);
+
+const predicatesNode = $("#predicates");
+ok(predicatesNode);
+const predicatesEditor = monaco.editor.create(predicatesNode, {
+  theme: "vs-dark",
+  minimap: { enabled: false },
+  automaticLayout: true,
+  scrollBeyondLastLine: false,
+});
+predicatesEditor.setModel(predicateModel);
+
+const testsNode = $("#tests");
+ok(testsNode);
+const testsEditor = monaco.editor.create(testsNode, {
+  theme: "vs-dark",
+  minimap: { enabled: false },
+  automaticLayout: true,
+  scrollBeyondLastLine: false,
+});
+testsEditor.setModel(testsModel);
 
 function onChange() {
   try {
     const sourceCode = sourceModel.getValue();
     saveState(sourceCode);
-    predicates.setValue(generateTypeGuards(sourceCode));
+    const { predicatesCode, testsCode } = generateForPlayground(
+      sourceCode,
+      "./example",
+      "./example_guards",
+      true
+    );
+    if (predicatesCode) {
+      predicatesEditor.setValue(predicatesCode);
+    }
+    if (testsCode) {
+      testsEditor.setValue(testsCode);
+    }
   } catch (err) {
-    predicates.setValue(
+    predicatesEditor.setValue(
       `/*
 ${explainError(err, true)}*/
 `
@@ -125,6 +155,6 @@ ${explainError(err, true)}*/
   }
 }
 
-source.onDidChangeModelContent(onChange);
+sourceEditor.onDidChangeModelContent(onChange);
 
 onChange();
