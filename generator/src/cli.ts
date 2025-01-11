@@ -11,6 +11,7 @@ import { TypeGuardGenerator } from "./generator";
 import { hydrateTokens, modelsToTests } from "./tester";
 
 type Flags = {
+  help?: boolean;
   keepExtension?: boolean;
   withStacktrace?: boolean;
   unitTests?: boolean;
@@ -77,7 +78,7 @@ function processFile(fileName: string, flags: Flags): boolean {
 
 function usage() {
   console.error(
-    `Usage: type-predicate-generator [--keepExtension] [--withStacktrace] source.ts`
+    `Usage: type-predicate-generator [--help] [--keepExtension] [--withStacktrace] [--unitTests] source.ts`
   );
 }
 
@@ -91,6 +92,11 @@ function main(argv: string[]): number {
   }
 
   const filenames = args.filter((arg) => !arg.startsWith("--"));
+
+  if (flags.help) {
+    usage();
+    return 0;
+  }
 
   if (filenames.length >= 2) {
     console.error(
