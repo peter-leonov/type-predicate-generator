@@ -110,31 +110,27 @@ const testsModel = monaco.editor.createModel(
   monaco.Uri.file("/example_guards.test.ts")
 );
 
-const sourceNode = must($("#source"));
-const sourceEditor = monaco.editor.create(sourceNode, {
+const editorConfig = {
   theme: "vs-dark",
   minimap: { enabled: false },
   automaticLayout: true,
   scrollBeyondLastLine: false,
-});
+  stickyScroll: { enabled: false },
+};
+
+const sourceNode = must($("#source"));
+const sourceEditor = monaco.editor.create(sourceNode, editorConfig);
 sourceEditor.setModel(sourceModel);
 
 const predicatesNode = must($("#predicates"));
-const predicatesEditor = monaco.editor.create(predicatesNode, {
-  theme: "vs-dark",
-  minimap: { enabled: false },
-  automaticLayout: true,
-  scrollBeyondLastLine: false,
-});
+const predicatesEditor = monaco.editor.create(
+  predicatesNode,
+  editorConfig
+);
 predicatesEditor.setModel(predicateModel);
 
 const testsNode = must($("#tests"));
-const testsEditor = monaco.editor.create(testsNode, {
-  theme: "vs-dark",
-  minimap: { enabled: false },
-  automaticLayout: true,
-  scrollBeyondLastLine: false,
-});
+const testsEditor = monaco.editor.create(testsNode, editorConfig);
 testsEditor.setModel(testsModel);
 
 function onChange() {
