@@ -31,14 +31,14 @@ export function modelsToTests(
     stringToToken.set(`valid:${typeName}`, validID);
     tokenToString.set(
       validID,
-      `${validVarNameFromType(typeName)}[1]`
+      `${validVarNameFromType(typeName)}[0]`
     );
 
     const invalidID = crypto.randomUUID();
     stringToToken.set(`invalid:${typeName}`, invalidID);
     tokenToString.set(
       invalidID,
-      `${invalidVarNameFromType(typeName)}[1]`
+      `${invalidVarNameFromType(typeName)}[0]`
     );
   }
 

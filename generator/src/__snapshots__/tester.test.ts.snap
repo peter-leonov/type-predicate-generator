@@ -189,12 +189,12 @@ describe("A", () => {
     });
 });
 const valid_B = [
-    { "b": valid_A[1] }
+    { "b": valid_A[0] }
 ];
 const invalid_B = [
     null,
     {},
-    { "b": invalid_A[1] }
+    { "b": invalid_A[0] }
 ];
 describe("B", () => {
     it.for(valid_B)("valid", (value: unknown) => {
