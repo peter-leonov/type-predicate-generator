@@ -238,6 +238,20 @@ Most of the below is gonna be eventually fixed.
 
 1. No support for extended schema verification. This is mostly to stay simple and fast to evolve while in alpha/beta. It's trivial to add more value checkers with the current design.
 
+1. To also generate type predicates for imported types simply reexport them using type export:
+
+```ts
+import { ExternalType } from "some-lib";
+
+// Like this. Please not that this is a type only export.
+// This is the only syntax supported atm.
+export { type ExternalType };
+
+export type MyType = {
+  field1: ExternalType;
+};
+```
+
 1. Does not produce error messages yet. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema checker on error.
 
 1. No support for generics atm, but the code is designed with them in mind, so also coming soon.

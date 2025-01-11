@@ -1,34 +1,137 @@
 import { expect, describe, it } from "vitest";
-import { isUser, isPost } from "./types_guards";
+import { isExternalType, isUser, isPost } from "./types_guards";
 const invalidValue: any = Symbol("invalidValue");
+const valid_ExternalType = [{ id: "string", body: "string" }];
+const invalid_ExternalType = [
+  null,
+  { body: "string" },
+  { id: invalidValue, body: "string" },
+  { id: "string" },
+  { id: "string", body: invalidValue },
+];
+describe("ExternalType", () => {
+  it.for(valid_ExternalType)("valid", (value: unknown) => {
+    expect(isExternalType(value)).toBe(true);
+  });
+  it.for(invalid_ExternalType)("invalid", (value: unknown) => {
+    expect(isExternalType(value)).toBe(false);
+  });
+});
 const valid_User = [
-  { id: 0, login: "string", bio: { first: "string", last: "string" } },
-  { id: 42, login: "string", bio: { first: "string", last: "string" } },
+  {
+    id: 0,
+    login: "string",
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[0],
+  },
+  {
+    id: 42,
+    login: "string",
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[0],
+  },
 ];
 const invalid_User = [
   null,
-  { login: "string", bio: { first: "string", last: "string" } },
+  {
+    login: "string",
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[1],
+  },
   {
     id: invalidValue,
     login: "string",
     bio: { first: "string", last: "string" },
+    external: valid_ExternalType[1],
   },
-  { id: 0, bio: { first: "string", last: "string" } },
-  { id: 0, login: invalidValue, bio: { first: "string", last: "string" } },
-  { id: 0, login: "string" },
-  { id: 0, login: "string", bio: null },
-  { id: 0, login: "string", bio: { last: "string" } },
-  { id: 0, login: "string", bio: { first: invalidValue, last: "string" } },
-  { id: 0, login: "string", bio: { first: "string" } },
-  { id: 0, login: "string", bio: { first: "string", last: invalidValue } },
-  { id: 42, bio: { first: "string", last: "string" } },
-  { id: 42, login: invalidValue, bio: { first: "string", last: "string" } },
-  { id: 42, login: "string" },
-  { id: 42, login: "string", bio: null },
-  { id: 42, login: "string", bio: { last: "string" } },
-  { id: 42, login: "string", bio: { first: invalidValue, last: "string" } },
-  { id: 42, login: "string", bio: { first: "string" } },
-  { id: 42, login: "string", bio: { first: "string", last: invalidValue } },
+  {
+    id: 0,
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 0,
+    login: invalidValue,
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[1],
+  },
+  { id: 0, login: "string", external: valid_ExternalType[1] },
+  { id: 0, login: "string", bio: null, external: valid_ExternalType[1] },
+  {
+    id: 0,
+    login: "string",
+    bio: { last: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 0,
+    login: "string",
+    bio: { first: invalidValue, last: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 0,
+    login: "string",
+    bio: { first: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 0,
+    login: "string",
+    bio: { first: "string", last: invalidValue },
+    external: valid_ExternalType[1],
+  },
+  { id: 0, login: "string", bio: { first: "string", last: "string" } },
+  {
+    id: 0,
+    login: "string",
+    bio: { first: "string", last: "string" },
+    external: invalid_ExternalType[1],
+  },
+  {
+    id: 42,
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 42,
+    login: invalidValue,
+    bio: { first: "string", last: "string" },
+    external: valid_ExternalType[1],
+  },
+  { id: 42, login: "string", external: valid_ExternalType[1] },
+  { id: 42, login: "string", bio: null, external: valid_ExternalType[1] },
+  {
+    id: 42,
+    login: "string",
+    bio: { last: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 42,
+    login: "string",
+    bio: { first: invalidValue, last: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 42,
+    login: "string",
+    bio: { first: "string" },
+    external: valid_ExternalType[1],
+  },
+  {
+    id: 42,
+    login: "string",
+    bio: { first: "string", last: invalidValue },
+    external: valid_ExternalType[1],
+  },
+  { id: 42, login: "string", bio: { first: "string", last: "string" } },
+  {
+    id: 42,
+    login: "string",
+    bio: { first: "string", last: "string" },
+    external: invalid_ExternalType[1],
+  },
 ];
 describe("User", () => {
   it.for(valid_User)("valid", (value: unknown) => {
@@ -102,62 +205,6 @@ const valid_Post = [
     published: true,
     author: valid_User[1],
     more: [],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: true,
-    author: valid_User[1],
-    more: ["string"],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: true,
-    author: valid_User[1],
-    more: [0],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: true,
-    author: valid_User[1],
-    more: [42],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: false,
-    author: valid_User[1],
-    more: [],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: false,
-    author: valid_User[1],
-    more: ["string"],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: false,
-    author: valid_User[1],
-    more: [0],
-  },
-  {
-    title: "string",
-    text: "string",
-    link: "string",
-    published: false,
-    author: valid_User[1],
-    more: [42],
   },
 ];
 const invalid_Post = [

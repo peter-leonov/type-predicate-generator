@@ -113,13 +113,28 @@ export function sourceFileToDeclarationSymbols(
 
   // Walk the tree to search for types
   ts.forEachChild(sourceFile, (node) => {
+    if (ts.isExportDeclaration(node)) {
+      const exportClause = node.exportClause;
+      if (exportClause && ts.isNamedExports(exportClause)) {
+        for (const es of exportClause.elements) {
+          if (es.isTypeOnly) {
+            const symbol = checker.getSymbolAtLocation(es.name);
+            assert(
+              symbol,
+              "an export declaration must have a symbol"
+            );
+            symbols.push(symbol);
+          }
+        }
+      }
+    }
     if (
       ts.isTypeAliasDeclaration(node) ||
       ts.isInterfaceDeclaration(node) ||
       ts.isEnumDeclaration(node)
     ) {
       if (!hasExportModifier(node)) return;
-      let symbol = checker.getSymbolAtLocation(node.name);
+      const symbol = checker.getSymbolAtLocation(node.name);
       assert(symbol, "a node declaration must have a symbol");
       symbols.push(symbol);
     }

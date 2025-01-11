@@ -545,3 +545,12 @@ test("nested arrays of a primitive type", () => {
     )
   );
 });
+
+test("exported private or imported type", () => {
+  expect(
+    process(`
+        type X = 1
+        export { type X }
+      `)
+  ).toEqual(new LiteralType({ aliasName: "X" }, 1));
+});

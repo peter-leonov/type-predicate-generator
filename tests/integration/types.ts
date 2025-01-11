@@ -1,3 +1,7 @@
+import { ExternalType } from "./external_types";
+
+export { type ExternalType };
+
 export type User = {
   id: number;
   login: string;
@@ -5,6 +9,7 @@ export type User = {
     first: string;
     last: string;
   };
+  external: ExternalType;
 };
 
 export type Post = {
