@@ -61,9 +61,12 @@ h1 {
   font-size: 1.1em;
   line-height: 1.1;
 }
-
+h1 .subtitle {
+  font-weight: normal;
+}
+  
 #source, #predicates, #tests {
-  height: 600px;
+  height: calc(100vh - 100px);
   resize: both;
   overflow: auto;
 }
