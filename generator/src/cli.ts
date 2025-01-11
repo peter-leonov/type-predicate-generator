@@ -13,6 +13,7 @@ import { hydrateTokens, modelsToTests } from "./tester";
 type Flags = {
   keepExtension?: boolean;
   withStacktrace?: boolean;
+  unitTests?: boolean;
 };
 
 function processFile(fileName: string, flags: Flags): boolean {
@@ -59,7 +60,7 @@ function processFile(fileName: string, flags: Flags): boolean {
       fs.writeFileSync(guardsFile, content);
     }
 
-    {
+    if (flags.unitTests) {
       const [tokens, nodes] = modelsToTests(guardsFileNoExt, models);
       const content = hydrateTokens(
         nodesToString("tests.test.ts", nodes),

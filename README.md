@@ -10,6 +10,8 @@ A TypeScript code generator that produces strictly type safe readable and extrem
 
 Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and checked by TS as part of your project setup.
 
+To verify that the guards properly reject invalid values while accepting valid ones the generator also produces a set of unit tests (atm Vitest only) next to the guard file if run with `--unitTests` switch (experimental).
+
 ## Status
 
 Beta. Most of the key distinctive features are proven to work, but there are still some rough edges to polish (see [Known Limitations](#known-limitations) and [TODO](#todo)).
