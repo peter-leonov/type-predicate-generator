@@ -124,6 +124,45 @@ describe("X", () => {
 "
 `;
 
+exports[`reference type 1`] = `
+"import { expect, describe, it } from "vitest";
+import { isA, isB } from "guards.ts";
+const invalidValue: any = Symbol("invalidValue");
+const valid_A = [
+    { "a": "string" }
+];
+const invalid_A = [
+    null,
+    {},
+    { "a": invalidValue }
+];
+describe("A", () => {
+    it.for(valid_A)("valid", value => {
+        expect(isA(value)).toBe(true);
+    });
+    it.for(invalid_A)("invalid", value => {
+        expect(isA(value)).toBe(false);
+    });
+});
+const valid_B = [
+    { "b": valid_A[1] }
+];
+const invalid_B = [
+    null,
+    {},
+    { "b": invalid_A[1] }
+];
+describe("B", () => {
+    it.for(valid_B)("valid", value => {
+        expect(isB(value)).toBe(true);
+    });
+    it.for(invalid_B)("invalid", value => {
+        expect(isB(value)).toBe(false);
+    });
+});
+"
+`;
+
 exports[`union 1`] = `
 "import { expect, describe, it } from "vitest";
 import { isX } from "guards.ts";

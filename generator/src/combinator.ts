@@ -47,6 +47,7 @@ export type Value =
   | boolean
   | { [key: string]: Value }
   | PseudoBigInt
+  | Token
   | Value[];
 
 export type ValueGenerator<T> = (
@@ -59,6 +60,17 @@ export function value<T>(value: T): ValueGenerator<T> {
       yield [false, invalidValue];
     }
     yield [true, value];
+  };
+}
+
+export function reference<T>(
+  typeName: string
+): ValueGenerator<Token> {
+  return function* (doInvalid: boolean) {
+    if (doInvalid) {
+      yield [false, new Token(`invalid:${typeName}`)];
+    }
+    yield [true, new Token(`valid:${typeName}`)];
   };
 }
 
@@ -161,6 +173,13 @@ export function combineInvalid(fn: ValueGenerator<Value>) {
   ];
 }
 
+export class Token {
+  token: string;
+  constructor(token: string) {
+    this.token = token;
+  }
+}
+
 export function modelToCombinator(
   model: TypeModel
 ): ValueGenerator<Value> {
@@ -193,9 +212,7 @@ export function modelToCombinator(
   } else if (model instanceof ArrayType) {
     return array(modelToCombinator(model.element));
   } else if (model instanceof AliasType) {
-    unimplemented(
-      "AliasType test generation is to be implemented soon"
-    );
+    return reference(model.name);
   }
 
   model satisfies never;

@@ -4,17 +4,44 @@ import {
   combineValid,
   invalidValue,
   modelToCombinator,
+  Token,
 } from "./combinator";
 import { type TypeModel } from "./model";
 import { assert } from "./helpers";
+
+type TokenMap = Map<string, string>;
 
 export function modelsToTests(
   predicatesFileName: string,
   models: TypeModel[],
   testingLibraryname: string = "vitest"
-): ts.Statement[] {
+): [TokenMap, ts.Statement[]] {
   const predicateNames: string[] = [];
   const tests = [];
+  const stringToToken: TokenMap = new Map();
+  const tokenToString: TokenMap = new Map();
+  for (const model of models) {
+    const typeName = model.options.aliasName;
+    assert(
+      typeName,
+      "root type model has to have the type aliasName defined"
+    );
+
+    const validID = crypto.randomUUID();
+    stringToToken.set(`valid:${typeName}`, validID);
+    tokenToString.set(
+      validID,
+      `${validVarNameFromType(typeName)}[1]`
+    );
+
+    const invalidID = crypto.randomUUID();
+    stringToToken.set(`invalid:${typeName}`, invalidID);
+    tokenToString.set(
+      invalidID,
+      `${invalidVarNameFromType(typeName)}[1]`
+    );
+  }
+
   for (const model of models) {
     const typeName = model.options.aliasName;
     assert(
@@ -23,33 +50,47 @@ export function modelsToTests(
     );
     const predicateName = `is${typeName}`;
     predicateNames.push(predicateName);
-    tests.push(...modelToTests(typeName, predicateName, model));
+    tests.push(
+      ...modelToTests(typeName, predicateName, model, stringToToken)
+    );
   }
 
   return [
-    testFunctionsImport(testingLibraryname),
-    getImports(predicatesFileName, predicateNames),
-    defineInvalidValue(),
-    ...tests,
+    tokenToString,
+    [
+      testFunctionsImport(testingLibraryname),
+      getImports(predicatesFileName, predicateNames),
+      defineInvalidValue(),
+      ...tests,
+    ],
   ];
+}
+
+function validVarNameFromType(typeName: string) {
+  return `valid_${typeName}`;
+}
+
+function invalidVarNameFromType(typeName: string) {
+  return `invalid_${typeName}`;
 }
 
 export function modelToTests(
   typeName: string,
   predicateName: string,
-  model: TypeModel
+  model: TypeModel,
+  stringToToken: Map<string, string>
 ): ts.Statement[] {
   const combinator = modelToCombinator(model);
 
   const valids = combineValid(combinator);
-  const validsName = `valid_${typeName}`;
+  const validsName = validVarNameFromType(typeName);
 
   const invalids = combineInvalid(combinator);
-  const invalidsName = `invalid_${typeName}`;
+  const invalidsName = invalidVarNameFromType(typeName);
 
   return [
-    valuesVar(validsName, valids),
-    valuesVar(invalidsName, invalids),
+    valuesVar(validsName, valids, stringToToken),
+    valuesVar(invalidsName, invalids, stringToToken),
     describeItFor(typeName, validsName, invalidsName, predicateName),
   ];
 }
@@ -79,7 +120,11 @@ function getImports(
   );
 }
 
-function valuesVar(name: string, values: unknown[]): ts.Statement {
+function valuesVar(
+  name: string,
+  values: unknown[],
+  stringToToken: Map<string, string>
+): ts.Statement {
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -89,7 +134,7 @@ function valuesVar(name: string, values: unknown[]): ts.Statement {
           undefined,
           undefined,
           factory.createArrayLiteralExpression(
-            valuesToExpression(values),
+            valuesToExpression(values, stringToToken),
             true
           )
         ),
@@ -125,13 +170,25 @@ function defineInvalidValue(): ts.Statement {
 export const invalidValueToken =
   "80D79A5A-5D38-4302-BA04-F5AC748C1464";
 
-function valuesToExpression(values: unknown[]): ts.Expression[] {
+function valuesToExpression(
+  values: unknown[],
+  stringToToken: Map<string, string>
+): ts.Expression[] {
   const res: ts.Expression[] = [];
 
   const seen = new Set();
   for (const value of values) {
-    const json = JSON.stringify(value, (_, v) => {
-      return v === invalidValue ? invalidValueToken : v;
+    const json = JSON.stringify(value, (_, v): string => {
+      if (v === invalidValue) return invalidValueToken;
+      if (v instanceof Token) {
+        const token = stringToToken.get(v.token);
+        assert(
+          token,
+          `the token for type reference ${v.token} must be present`
+        );
+        return token;
+      }
+      return v;
     });
     if (seen.has(json)) {
       continue;
@@ -147,24 +204,19 @@ function valuesToExpression(values: unknown[]): ts.Expression[] {
 }
 
 /**
- * Dirty hack to avoid wirting a JS value to Node parser just to cover
- * the invalid value symbol.
+ * Dirty hack to avoid wirting a JS value to Node serializer just to cover
+ * the invalid value symbol and reference types.
  */
 export function hydrateTokens(
   code: string,
-  tokens: Record<string, string>
+  tokens: TokenMap
 ): string {
-  tokens[invalidValueToken] = invalidValueVarName;
-
-  const keys = Object.keys(tokens);
+  tokens.set(invalidValueToken, invalidValueVarName);
+  const keys = [...tokens.keys()];
   const rex = new RegExp(`"(${keys.join("|")})"`, "g");
-
   return code.replaceAll(rex, (_, p1) => {
-    const value = tokens[p1];
-    assert(
-      value !== undefined,
-      "the replacing value must be present"
-    );
+    const value = tokens.get(p1);
+    assert(value, "the replacing value must be present");
     return value;
   });
 }

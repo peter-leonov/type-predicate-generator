@@ -7,13 +7,9 @@ function process(code: string): string {
   const [checker, symbols] = compile(code);
   const models = symbolsToModels(checker, symbols);
 
-  return hydrateTokens(
-    nodesToString(
-      "guards.tests.ts",
-      modelsToTests("guards.ts", models)
-    ),
-    {}
-  );
+  const [map, nodes] = modelsToTests("guards.ts", models);
+
+  return hydrateTokens(nodesToString("guards.tests.ts", nodes), map);
 }
 
 test("primitive", () => {
@@ -41,6 +37,15 @@ test("multiple types", () => {
     process(`
       export type X = string | number
       export type Y = boolean | null
+      `)
+  ).toMatchSnapshot();
+});
+
+test("reference type", () => {
+  expect(
+    process(`
+      export type A = { a: string }
+      export type B = { b: A }
       `)
   ).toMatchSnapshot();
 });

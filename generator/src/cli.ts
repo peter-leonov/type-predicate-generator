@@ -60,11 +60,10 @@ function processFile(fileName: string, flags: Flags): boolean {
     }
 
     {
+      const [tokens, nodes] = modelsToTests(guardsFileNoExt, models);
       const content = hydrateTokens(
-        nodesToString(
-          "tests.test.ts",
-          modelsToTests(guardsFileNoExt, models)
-        )
+        nodesToString("tests.test.ts", nodes),
+        tokens
       );
 
       const testsFile = `${fileNameNoExt}_guards.test.ts`;

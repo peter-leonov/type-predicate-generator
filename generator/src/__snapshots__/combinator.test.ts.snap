@@ -2645,6 +2645,25 @@ exports[`invalid > value > string 1`] = `
 ]
 `;
 
+exports[`modelToCombinator > AliasType > simple 1`] = `
+[
+  Token {
+    "token": "valid:Foo",
+  },
+]
+`;
+
+exports[`modelToCombinator > AliasType > two in a union 1`] = `
+[
+  Token {
+    "token": "valid:Foo",
+  },
+  Token {
+    "token": "valid:bar",
+  },
+]
+`;
+
 exports[`valid > all at once 1`] = `
 [
   {

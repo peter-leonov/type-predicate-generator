@@ -409,10 +409,22 @@ describe(modelToCombinator.name, () => {
     });
   });
 
-  describe.skip("AliasType", () => {
-    it("empty", () => {
+  describe("AliasType", () => {
+    it("simple", () => {
       expect(
         combineValid(modelToCombinator(new AliasType({}, "Foo")))
+      ).toMatchSnapshot();
+    });
+    it("two in a union", () => {
+      expect(
+        combineValid(
+          modelToCombinator(
+            new UnionType({}, [
+              new AliasType({}, "Foo"),
+              new AliasType({}, "bar"),
+            ])
+          )
+        )
       ).toMatchSnapshot();
     });
   });
