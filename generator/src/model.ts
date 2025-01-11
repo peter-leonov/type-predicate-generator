@@ -59,13 +59,16 @@ export class ObjectType implements BaseType {
   nameForErrors: string;
   options: TypeOptions;
   attributes: { [key: string]: TypeModel };
+  optional: Set<string>;
   constructor(
     options: typeof this.options,
-    attributes: typeof this.attributes
+    attributes: typeof this.attributes,
+    optional: typeof this.optional = new Set()
   ) {
     this.nameForErrors = "object type";
     this.options = normilizeOptions(options);
     this.attributes = attributes;
+    this.optional = optional;
   }
 }
 
@@ -189,16 +192,26 @@ export function typeToModelInner(
   } else if (tsTypeIsObject(type)) {
     const attributes: Record<string, TypeModel> = {};
     // console.log(`- object: ${checker.typeToString(type)}`);
+    const optionalAttributes = new Set<string>();
     for (const attr of checker.getPropertiesOfType(type)) {
       // console.log(`- attr: ${attr.escapedName}`);
-      attributes[String(attr.escapedName)] = typeToModelInner(
+      const model = typeToModelInner(
         checker,
         checker.getTypeOfSymbol(attr),
         attr,
         depth + 1
       );
+      const attrName = String(attr.escapedName);
+      if (model.options.isOptional) {
+        optionalAttributes.add(attrName);
+      }
+      attributes[attrName] = model;
     }
-    return new ObjectType({ isOptional, aliasName }, attributes);
+    return new ObjectType(
+      { isOptional, aliasName },
+      attributes,
+      optionalAttributes
+    );
   } else if (tsTypeIsPrimitive(type)) {
     const intrinsicName = (type as IntrinsicType)?.intrinsicName;
     const primitive = intrinsicName || checker.typeToString(type);

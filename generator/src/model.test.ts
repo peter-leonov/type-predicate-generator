@@ -343,6 +343,36 @@ test("object with primitive types", () => {
   );
 });
 
+test.only("object with optional attributes", () => {
+  expect(
+    process(`
+        export type X = {
+          a: 1
+          b?: 2
+          c: 3
+          d?: 4
+        }
+      `)
+  ).toEqual(
+    new ObjectType(
+      { aliasName: "X" },
+      {
+        a: new LiteralType({}, 1),
+        b: new UnionType({ isOptional: true }, [
+          new LiteralType({}, undefined),
+          new LiteralType({}, 2),
+        ]),
+        c: new LiteralType({}, 3),
+        d: new UnionType({ isOptional: true }, [
+          new LiteralType({}, undefined),
+          new LiteralType({}, 4),
+        ]),
+      },
+      new Set(["b", "d"])
+    )
+  );
+});
+
 test("nested object", () => {
   expect(
     process(`
