@@ -34,7 +34,10 @@ monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   // exactOptionalPropertyTypes: true,
 });
 
-const defaultExample = `export type User = {
+const defaultExample = `// This is an example set of types,
+// play with them or paste your own.
+
+export type User = {
   id: number;
   login: string;
   bio: {
@@ -53,7 +56,20 @@ export type Post = {
 };
 `;
 
+const predicatesComment = `// Here go the type predicates
+// generated for the types on the left.
+
+`;
+
+const testsComment = `// And below you can find the unit tests
+// generated for the predicates on the left.
+
+`;
+
 function saveState(source: string) {
+  if (source == defaultExample) {
+    return;
+  }
   try {
     history.replaceState(
       null,
@@ -144,11 +160,11 @@ function onChange() {
       true
     );
     if (predicatesCode) {
-      predicatesEditor.setValue(predicatesCode);
+      predicatesEditor.setValue(predicatesComment + predicatesCode);
     }
     if (testsCode) {
       testsNode.style.display = "";
-      testsEditor.setValue(testsCode);
+      testsEditor.setValue(testsComment + testsCode);
     }
   } catch (err) {
     predicatesEditor.setValue(
