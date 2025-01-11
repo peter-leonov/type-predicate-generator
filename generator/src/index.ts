@@ -49,7 +49,11 @@ export function generateForPlayground(
   }
 
   if (unitTests) {
-    const [tokens, nodes] = modelsToTests(guardsFilePath, models);
+    const [tokens, nodes] = modelsToTests(
+      guardsFilePath,
+      models,
+      "./vitest"
+    );
     testsCode = hydrateTokens(
       nodesToString("tests.test.ts", nodes),
       tokens

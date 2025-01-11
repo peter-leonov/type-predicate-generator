@@ -263,7 +263,9 @@ function describeItFor(
                           undefined,
                           factory.createIdentifier("value"),
                           undefined,
-                          undefined,
+                          factory.createKeywordTypeNode(
+                            ts.SyntaxKind.UnknownKeyword
+                          ),
                           undefined
                         ),
                       ],
@@ -328,7 +330,9 @@ function describeItFor(
                           undefined,
                           factory.createIdentifier("value"),
                           undefined,
-                          undefined,
+                          factory.createKeywordTypeNode(
+                            ts.SyntaxKind.UnknownKeyword
+                          ),
                           undefined
                         ),
                       ],

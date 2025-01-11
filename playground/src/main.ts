@@ -76,9 +76,13 @@ function loadState(): string {
 }
 
 const vitestModel = monaco.editor.createModel(
-  "export function it(){}",
+  `
+  export const describe: any = null;
+  export const it: any = null;
+  export const expect: any = null;
+  `,
   "typescript",
-  monaco.Uri.file("vitest")
+  monaco.Uri.file("/vitest.ts")
 );
 
 const sourceModel = monaco.editor.createModel(
@@ -143,6 +147,7 @@ function onChange() {
       predicatesEditor.setValue(predicatesCode);
     }
     if (testsCode) {
+      testsNode.style.display = "";
       testsEditor.setValue(testsCode);
     }
   } catch (err) {
@@ -151,6 +156,8 @@ function onChange() {
 ${explainError(err, true)}*/
 `
     );
+    testsEditor.setValue("");
+    testsNode.style.display = "none";
     throw err;
   }
 }
