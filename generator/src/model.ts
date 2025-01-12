@@ -186,10 +186,8 @@ export function typeToModelInner(
     console.log(type);
   } else if (tsTypeIsObject(type)) {
     const attributes: Record<string, TypeModel> = {};
-    // console.log(`- object: ${checker.typeToString(type)}`);
     const optionalAttributes = new Set<string>();
     for (const attr of checker.getPropertiesOfType(type)) {
-      // console.log(`- attr: ${attr.escapedName}`);
       const model = typeToModelInner(
         checker,
         checker.getTypeOfSymbol(attr),
@@ -219,7 +217,6 @@ export function typeToModelInner(
     }
     return new PrimitiveType({ isOptional, aliasName }, primitive);
   } else if (type.isLiteral()) {
-    // console.log(`- literal: ${checker.typeToString(type)}`);
     if (
       typeof type.value === "object" &&
       "base10Value" in type.value
@@ -228,7 +225,6 @@ export function typeToModelInner(
     }
     return new LiteralType({ isOptional, aliasName }, type.value);
   } else if (tsTypeIsLiteral(type)) {
-    // console.log(`- literal: ${checker.typeToString(type)}`);
     return new LiteralType(
       { isOptional, aliasName },
       type.intrinsicName === "undefined"
@@ -236,17 +232,15 @@ export function typeToModelInner(
         : JSON.parse(type.intrinsicName)
     );
   } else if (type.isUnion()) {
-    // console.log(`- inion: ${checker.typeToString(type)}`);
     return new UnionType(
       { isOptional, aliasName },
       type.types.map((member) => {
-        // console.log(`- member`);
         return typeToModelInner(checker, member, null, depth + 1);
       })
     );
   } else if (tsTypeIsEnum(type)) {
     const exports = type.symbol.exports;
-    // empty enum
+    // Error on a simingly impossible empty enum.
     if (exports && exports.size == 0) {
       throw new UnsupportedEmptyEnum(checker.typeToString(type));
     }
