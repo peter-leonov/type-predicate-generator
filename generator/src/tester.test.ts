@@ -1,15 +1,13 @@
 import { expect, test } from "vitest";
-import { hydrateTokens, modelsToTests } from "./tester";
+import { modelsToTests } from "./tester";
 import { compile } from "./tests_helpers";
 import { symbolsToModels, nodesToString } from "./compile";
 
 function process(code: string): string {
   const [checker, symbols] = compile(code);
   const models = symbolsToModels(checker, symbols);
-
-  const [map, nodes] = modelsToTests("guards.ts", models);
-
-  return hydrateTokens(nodesToString("guards.tests.ts", nodes), map);
+  const nodes = modelsToTests("guards.ts", models);
+  return nodesToString("guards.tests.ts", nodes);
 }
 
 test("primitive", () => {

@@ -4,10 +4,12 @@ import {
   combineValid,
   invalidValue,
   modelToCombinator,
-  Token,
+  Reference,
+  type Value,
 } from "./combinator";
 import { type TypeModel } from "./model";
 import { assert } from "./helpers";
+import { valueToNode } from "./serializer";
 
 type TokenMap = Map<string, string>;
 
@@ -19,31 +21,8 @@ export function modelsToTests(
   predicatesFileName: string,
   models: TypeModel[],
   testingLibraryname: string = "vitest"
-): [TokenMap, ts.Statement[]] {
+): ts.Statement[] {
   const predicateNames: string[] = [];
-  const stringToToken: TokenMap = new Map();
-  const tokenToString: TokenMap = new Map();
-  for (const model of models) {
-    const typeName = model.options.aliasName;
-    assert(
-      typeName,
-      "root type model has to have the type aliasName defined"
-    );
-
-    const validID = randomID();
-    stringToToken.set(`valid:${typeName}`, validID);
-    tokenToString.set(
-      validID,
-      `${validVarNameFromType(typeName)}[0]`
-    );
-
-    const invalidID = randomID();
-    stringToToken.set(`invalid:${typeName}`, invalidID);
-    tokenToString.set(
-      invalidID,
-      `${invalidVarNameFromType(typeName)}[0]`
-    );
-  }
 
   const tests = [];
   for (const model of models) {
@@ -54,35 +33,29 @@ export function modelsToTests(
     );
     const predicateName = `is${typeName}`;
     predicateNames.push(predicateName);
-    tests.push(
-      ...modelToTests(typeName, predicateName, model, stringToToken)
-    );
+    tests.push(...modelToTests(typeName, predicateName, model));
   }
 
   return [
-    tokenToString,
-    [
-      testFunctionsImport(testingLibraryname),
-      getImports(predicatesFileName, predicateNames),
-      defineInvalidValue(),
-      ...tests,
-    ],
+    testFunctionsImport(testingLibraryname),
+    getImports(predicatesFileName, predicateNames),
+    defineInvalidValue(),
+    ...tests,
   ];
 }
 
-function validVarNameFromType(typeName: string) {
+export function validVarNameFromType(typeName: string) {
   return `valid_${typeName}`;
 }
 
-function invalidVarNameFromType(typeName: string) {
+export function invalidVarNameFromType(typeName: string) {
   return `invalid_${typeName}`;
 }
 
 export function modelToTests(
   typeName: string,
   predicateName: string,
-  model: TypeModel,
-  stringToToken: Map<string, string>
+  model: TypeModel
 ): ts.Statement[] {
   const combinator = modelToCombinator(model);
 
@@ -93,8 +66,8 @@ export function modelToTests(
   const invalidsName = invalidVarNameFromType(typeName);
 
   return [
-    valuesVar(validsName, valids, stringToToken),
-    valuesVar(invalidsName, invalids, stringToToken),
+    valuesVar(validsName, valids),
+    valuesVar(invalidsName, invalids),
     describeItFor(typeName, validsName, invalidsName, predicateName),
   ];
 }
@@ -124,11 +97,7 @@ function getImports(
   );
 }
 
-function valuesVar(
-  name: string,
-  values: unknown[],
-  stringToToken: Map<string, string>
-): ts.Statement {
+function valuesVar(name: string, values: Value[]): ts.Statement {
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -138,7 +107,7 @@ function valuesVar(
           undefined,
           undefined,
           factory.createArrayLiteralExpression(
-            valuesToExpression(values, stringToToken),
+            valuesToExpression(values),
             true
           )
         ),
@@ -148,7 +117,7 @@ function valuesVar(
   );
 }
 
-const invalidValueVarName = "invalidValue";
+export const invalidValueVarName = "invalidValue";
 
 function defineInvalidValue(): ts.Statement {
   return factory.createVariableStatement(
@@ -171,26 +140,17 @@ function defineInvalidValue(): ts.Statement {
   );
 }
 
-export const invalidValueToken =
-  "80D79A5A-5D38-4302-BA04-F5AC748C1464";
-
-function valuesToExpression(
-  values: unknown[],
-  stringToToken: Map<string, string>
-): ts.Expression[] {
+function valuesToExpression(values: Value[]): ts.Expression[] {
   const res: ts.Expression[] = [];
 
   const seen = new Set();
   for (const value of values) {
-    const json = JSON.stringify(value, (_, v): string => {
-      if (v === invalidValue) return invalidValueToken;
-      if (v instanceof Token) {
-        const token = stringToToken.get(v.token);
-        assert(
-          token,
-          `the token for type reference ${v.token} must be present`
-        );
-        return token;
+    const json = JSON.stringify(value, (_, v: unknown) => {
+      if (typeof v === "symbol") {
+        return String(v);
+      }
+      if (v instanceof Reference) {
+        return { __type: "Reference", ...v };
       }
       return v;
     });
@@ -198,31 +158,11 @@ function valuesToExpression(
       continue;
     }
     seen.add(json);
-    const file = ts.parseJsonText("valueToJSONExpression", json);
-    const statement = file.statements[0];
-    assert(statement, "must have a single statement");
-    res.push(statement.expression);
+
+    res.push(valueToNode(value));
   }
 
   return res;
-}
-
-/**
- * Dirty hack to avoid wirting a JS value to Node serializer just to cover
- * the invalid value symbol and reference types.
- */
-export function hydrateTokens(
-  code: string,
-  tokens: TokenMap
-): string {
-  tokens.set(invalidValueToken, invalidValueVarName);
-  const keys = [...tokens.keys()];
-  const rex = new RegExp(`"(${keys.join("|")})"`, "g");
-  return code.replaceAll(rex, (_, p1) => {
-    const value = tokens.get(p1);
-    assert(value, "the replacing value must be present");
-    return value;
-  });
 }
 
 function describeItFor(

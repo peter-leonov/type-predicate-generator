@@ -8,7 +8,7 @@ import {
 } from "./compile";
 import { explainError } from "./errors";
 import { TypeGuardGenerator } from "./generator";
-import { hydrateTokens, modelsToTests } from "./tester";
+import { modelsToTests } from "./tester";
 
 type Flags = {
   help?: boolean;
@@ -62,11 +62,8 @@ function processFile(fileName: string, flags: Flags): boolean {
     }
 
     if (flags.unitTests) {
-      const [tokens, nodes] = modelsToTests(guardsFileNoExt, models);
-      const content = hydrateTokens(
-        nodesToString("tests.test.ts", nodes),
-        tokens
-      );
+      const nodes = modelsToTests(guardsFileNoExt, models);
+      const content = nodesToString("tests.test.ts", nodes);
 
       const testsFile = `${fileNameNoExt}_guards.test.ts`;
       fs.writeFileSync(testsFile, content);

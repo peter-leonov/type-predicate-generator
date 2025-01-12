@@ -67,21 +67,21 @@ exports[`object 1`] = `
 import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
-    { "a": "string", "b": 0, "c": true },
-    { "a": "string", "b": 0, "c": false },
-    { "a": "string", "b": 42, "c": true },
-    { "a": "string", "b": 42, "c": false }
+    { a: "string", b: 0, c: true },
+    { a: "string", b: 0, c: false },
+    { a: "string", b: 42, c: true },
+    { a: "string", b: 42, c: false }
 ];
 const invalid_X = [
     null,
-    { "b": 0, "c": true },
-    { "a": invalidValue, "b": 0, "c": true },
-    { "a": "string", "c": true },
-    { "a": "string", "b": invalidValue, "c": true },
-    { "a": "string", "b": 0 },
-    { "a": "string", "b": 0, "c": invalidValue },
-    { "a": "string", "b": 42 },
-    { "a": "string", "b": 42, "c": invalidValue }
+    { b: 0, c: true },
+    { a: invalidValue, b: 0, c: true },
+    { a: "string", c: true },
+    { a: "string", b: invalidValue, c: true },
+    { a: "string", b: 0 },
+    { a: "string", b: 0, c: invalidValue },
+    { a: "string", b: 42 },
+    { a: "string", b: 42, c: invalidValue }
 ];
 describe("X", () => {
     it.for(valid_X)("valid", (value: unknown) => {
@@ -99,22 +99,22 @@ exports[`object with optional attributes 1`] = `
 import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
-    { "a": 1, "c": 3 },
-    { "a": 1, "c": 3, "d": 4 },
-    { "a": 1, "b": 2, "c": 3 },
-    { "a": 1, "b": 2, "c": 3, "d": 4 }
+    { a: 1, c: 3 },
+    { a: 1, c: 3, d: 4 },
+    { a: 1, b: 2, c: 3 },
+    { a: 1, b: 2, c: 3, d: 4 }
 ];
 const invalid_X = [
     null,
-    { "c": 3 },
-    { "a": invalidValue, "c": 3 },
-    { "a": 1, "b": invalidValue, "c": 3 },
-    { "a": 1 },
-    { "a": 1, "c": invalidValue },
-    { "a": 1, "c": 3, "d": invalidValue },
-    { "a": 1, "b": 2 },
-    { "a": 1, "b": 2, "c": invalidValue },
-    { "a": 1, "b": 2, "c": 3, "d": invalidValue }
+    { c: 3 },
+    { a: invalidValue, c: 3 },
+    { a: 1, b: invalidValue, c: 3 },
+    { a: 1, b: undefined },
+    { a: 1, b: undefined, c: invalidValue },
+    { a: 1, b: undefined, c: 3, d: invalidValue },
+    { a: 1, b: 2 },
+    { a: 1, b: 2, c: invalidValue },
+    { a: 1, b: 2, c: 3, d: invalidValue }
 ];
 describe("X", () => {
     it.for(valid_X)("valid", (value: unknown) => {
@@ -154,12 +154,12 @@ exports[`reference type 1`] = `
 import { isA, isB } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_A = [
-    { "a": "string" }
+    { a: "string" }
 ];
 const invalid_A = [
     null,
     {},
-    { "a": invalidValue }
+    { a: invalidValue }
 ];
 describe("A", () => {
     it.for(valid_A)("valid", (value: unknown) => {
@@ -170,12 +170,12 @@ describe("A", () => {
     });
 });
 const valid_B = [
-    { "b": valid_A[0] }
+    { b: valid_A[0] }
 ];
 const invalid_B = [
     null,
     {},
-    { "b": invalid_A[0] }
+    { b: invalid_A[0] }
 ];
 describe("B", () => {
     it.for(valid_B)("valid", (value: unknown) => {

@@ -1,6 +1,11 @@
 import ts, { factory } from "typescript";
-import { Token, type Value } from "./combinator";
+import { invalidValue, Reference, type Value } from "./combinator";
 import { unimplemented, unreachable } from "./helpers";
+import {
+  invalidValueVarName,
+  invalidVarNameFromType,
+  validVarNameFromType,
+} from "./tester";
 
 export function valueToNode(value: Value): ts.Expression {
   // built-ins
@@ -24,10 +29,20 @@ export function valueToNode(value: Value): ts.Expression {
     );
   }
 
-  if (value instanceof Token) {
-    unimplemented();
+  if (value instanceof Reference) {
+    const varName = value.isValid
+      ? validVarNameFromType(value.typeName)
+      : invalidVarNameFromType(value.typeName);
+
+    return factory.createElementAccessExpression(
+      factory.createIdentifier(varName),
+      factory.createNumericLiteral("0")
+    );
   }
-  // TODO: custom types
+
+  if (value === invalidValue) {
+    return factory.createIdentifier(invalidValueVarName);
+  }
 
   // catch-all object
   if (typeof value === "object") {

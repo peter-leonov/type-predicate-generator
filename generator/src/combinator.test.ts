@@ -531,7 +531,7 @@ describe(modelToCombinator.name, () => {
           modelToCombinator(
             new UnionType({}, [
               new AliasType({}, "Foo"),
-              new AliasType({}, "bar"),
+              new AliasType({}, "Bar"),
             ])
           )
         )
