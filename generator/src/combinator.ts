@@ -1,4 +1,3 @@
-import { PseudoBigInt } from "typescript";
 import { assert, unimplemented } from "./helpers";
 import {
   AliasType,
@@ -37,7 +36,7 @@ import {
  * inspect the union values in the generator and infer a safe invalid value
  * per union.
  */
-export const invalidValue: any = Symbol("invalidValue");
+export const invalidValue = Symbol("invalidValue");
 
 export type Value =
   | number
@@ -46,14 +45,15 @@ export type Value =
   | undefined
   | boolean
   | { [key: string]: Value }
-  | Token
-  | Value[];
+  | Reference
+  | Value[]
+  | typeof invalidValue;
 
-export type ValueGenerator<T> = (
+export type Combinator = (
   doInvalid: boolean
-) => Generator<[boolean, T]>;
+) => Generator<[boolean, Value]>;
 
-export function value<T>(value: T): ValueGenerator<T> {
+export function value(value: Value): Combinator {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, invalidValue];
@@ -62,20 +62,25 @@ export function value<T>(value: T): ValueGenerator<T> {
   };
 }
 
-export function reference<T>(
-  typeName: string
-): ValueGenerator<Token> {
+export class Reference {
+  typeName: string;
+  isValid: boolean;
+  constructor(typeName: string, isValid: boolean) {
+    this.typeName = typeName;
+    this.isValid = isValid;
+  }
+}
+
+export function reference(typeName: string): Combinator {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
-      yield [false, new Token(`invalid:${typeName}`)];
+      yield [false, new Reference(typeName, false)];
     }
-    yield [true, new Token(`valid:${typeName}`)];
+    yield [true, new Reference(typeName, true)];
   };
 }
 
-export function union<T>(
-  members: ValueGenerator<T>[]
-): ValueGenerator<T> {
+export function union(members: Combinator[]): Combinator {
   return function* (doInvalid: boolean) {
     for (const m of members) {
       yield* m(doInvalid);
@@ -83,9 +88,7 @@ export function union<T>(
   };
 }
 
-export function array<T>(
-  value: ValueGenerator<T>
-): ValueGenerator<T[]> {
+export function array(value: Combinator): Combinator {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, invalidValue];
@@ -104,27 +107,23 @@ export function array<T>(
  * Right now it generates all possible valid combinations for all fields
  * and per invalid field only one valid sub-combination.
  */
-export function object<T>(
-  obj: Record<string, ValueGenerator<T>>,
+export function object(
+  obj: Record<string, Combinator>,
   optionalAttributes: Set<string>
-): ValueGenerator<T> {
+): Combinator {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, null];
     }
-    yield* rollObject(
-      doInvalid,
-      obj,
-      optionalAttributes
-    ) as Generator<any>;
+    yield* rollObject(doInvalid, obj, optionalAttributes);
   };
 }
 
-function* rollObject<T>(
+function* rollObject(
   doInvalid: boolean,
-  obj: Record<string, ValueGenerator<T>>,
+  obj: Record<string, Combinator>,
   optionalAttributes: Set<string>
-): Generator<[boolean, Record<string, T>]> {
+): Generator<[boolean, Record<string, Value>]> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
     yield [true, {}];
@@ -196,26 +195,17 @@ function pick<T>(
   }, {});
 }
 
-export function combineValid(fn: ValueGenerator<Value>) {
+export function combineValid(fn: Combinator) {
   return [...fn(false)].map(([isValid, v]) => (assert(isValid), v));
 }
 
-export function combineInvalid(fn: ValueGenerator<Value>) {
+export function combineInvalid(fn: Combinator) {
   return [...fn(true)]
     .filter(([isValid, _]) => !isValid)
     .map(([_, v]) => v);
 }
 
-export class Token {
-  token: string;
-  constructor(token: string) {
-    this.token = token;
-  }
-}
-
-export function modelToCombinator(
-  model: TypeModel
-): ValueGenerator<Value> {
+export function modelToCombinator(model: TypeModel): Combinator {
   if (model instanceof LiteralType) {
     return value(model.value);
   } else if (model instanceof PrimitiveType) {

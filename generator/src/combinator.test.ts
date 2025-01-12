@@ -7,8 +7,7 @@ import {
   object,
   union,
   value,
-  ValueGenerator,
-  type Value,
+  Combinator,
 } from "./combinator";
 import {
   AliasType,
@@ -40,11 +39,11 @@ function sort(combinations: unknown[]) {
   return combinations.sort(compareCombinations);
 }
 
-function valid(v: ValueGenerator<Value>) {
+function valid(v: Combinator) {
   return sort(combineValid(v));
 }
 
-function invalid(v: ValueGenerator<Value>) {
+function invalid(v: Combinator) {
   return sort(combineInvalid(v));
 }
 
@@ -54,7 +53,7 @@ for (const [name, f] of [
 ]) {
   describe(name, () => {
     it("all at once", () => {
-      const obj = object<Value>(
+      const obj = object(
         {
           a: union([value(1), value(2)]),
           b: union([value(true), value(false)]),
