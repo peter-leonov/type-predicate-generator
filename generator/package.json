@@ -3,7 +3,7 @@
   "version": "0.1.10",
   "main": "dist/index.js",
   "engines": {
-    "node": ">=22"
+    "node": ">=16"
   },
   "bin": "dist/cli.js",
   "repository": {

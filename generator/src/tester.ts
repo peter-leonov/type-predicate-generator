@@ -11,6 +11,10 @@ import { assert } from "./helpers";
 
 type TokenMap = Map<string, string>;
 
+function randomID(): string {
+  return `${Date.now()}${Math.random()}`;
+}
+
 export function modelsToTests(
   predicatesFileName: string,
   models: TypeModel[],
@@ -26,14 +30,14 @@ export function modelsToTests(
       "root type model has to have the type aliasName defined"
     );
 
-    const validID = crypto.randomUUID();
+    const validID = randomID();
     stringToToken.set(`valid:${typeName}`, validID);
     tokenToString.set(
       validID,
       `${validVarNameFromType(typeName)}[0]`
     );
 
-    const invalidID = crypto.randomUUID();
+    const invalidID = randomID();
     stringToToken.set(`invalid:${typeName}`, invalidID);
     tokenToString.set(
       invalidID,
