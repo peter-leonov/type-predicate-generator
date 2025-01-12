@@ -46,7 +46,6 @@ export type Value =
   | undefined
   | boolean
   | { [key: string]: Value }
-  | PseudoBigInt
   | Token
   | Value[];
 

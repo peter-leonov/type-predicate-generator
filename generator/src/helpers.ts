@@ -1,9 +1,13 @@
-import { UnimplementedError } from "./errors";
+import { UnimplementedError, UnreachableError } from "./errors";
 
 export function unimplemented(
   message: string = "unimplemented"
 ): never {
   throw new UnimplementedError(message);
+}
+
+export function unreachable(message: string = "unreachable"): never {
+  throw new UnreachableError(message);
 }
 
 class AssertionError extends Error {}

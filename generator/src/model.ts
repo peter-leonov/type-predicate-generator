@@ -3,6 +3,7 @@ import { assert, unimplemented } from "./helpers";
 import {
   UnsupportedEmptyEnum,
   UnsupportedPrimitiveType,
+  UnsupportedPseudoBigInt,
 } from "./errors";
 
 export type TypeOptions = {
@@ -24,13 +25,7 @@ interface BaseType {
 export class LiteralType implements BaseType {
   nameForErrors: string;
   options: TypeOptions;
-  value:
-    | undefined
-    | null
-    | string
-    | number
-    | boolean
-    | ts.PseudoBigInt;
+  value: undefined | null | string | number | boolean;
   constructor(
     options: typeof this.options,
     value: typeof this.value
@@ -225,6 +220,12 @@ export function typeToModelInner(
     return new PrimitiveType({ isOptional, aliasName }, primitive);
   } else if (type.isLiteral()) {
     // console.log(`- literal: ${checker.typeToString(type)}`);
+    if (
+      typeof type.value === "object" &&
+      "base10Value" in type.value
+    ) {
+      throw new UnsupportedPseudoBigInt();
+    }
     return new LiteralType({ isOptional, aliasName }, type.value);
   } else if (tsTypeIsLiteral(type)) {
     // console.log(`- literal: ${checker.typeToString(type)}`);

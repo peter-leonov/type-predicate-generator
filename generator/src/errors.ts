@@ -1,6 +1,7 @@
 import { type TypeModel } from "./model";
 
 export class UnimplementedError extends Error {}
+export class UnreachableError extends Error {}
 
 export class TypeScriptError extends Error {}
 
@@ -18,6 +19,14 @@ export class UnsupportedEmptyEnum extends UnsupportedError {
   constructor(aliasName: string) {
     super(
       `The ${aliasName} type is defined as an empty enum (enum with no members). This type is not supported by the generator as it has no values to match against (much like never). See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/11`
+    );
+  }
+}
+
+export class UnsupportedPseudoBigInt extends UnsupportedError {
+  constructor() {
+    super(
+      `The PseudoBigInt TS built-in type is currently not supported. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/14`
     );
   }
 }
