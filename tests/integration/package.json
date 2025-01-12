@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && CI=true npm run test"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

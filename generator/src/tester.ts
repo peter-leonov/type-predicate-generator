@@ -17,7 +17,6 @@ export function modelsToTests(
   testingLibraryname: string = "vitest"
 ): [TokenMap, ts.Statement[]] {
   const predicateNames: string[] = [];
-  const tests = [];
   const stringToToken: TokenMap = new Map();
   const tokenToString: TokenMap = new Map();
   for (const model of models) {
@@ -42,6 +41,7 @@ export function modelsToTests(
     );
   }
 
+  const tests = [];
   for (const model of models) {
     const typeName = model.options.aliasName;
     assert(
