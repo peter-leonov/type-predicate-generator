@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`array 1`] = `
+"([]);
+"
+`;
+
+exports[`array 2`] = `
+"([1, 2, 3]);
+"
+`;
+
+exports[`boolean 1`] = `
+"(true);
+"
+`;
+
+exports[`boolean 2`] = `
+"(false);
+"
+`;
+
+exports[`nested 1`] = `
+"({ a: [1], b: { c: { d: 4 } } });
+"
+`;
+
+exports[`number 1`] = `
+"(42);
+"
+`;
+
+exports[`object 1`] = `
+"({});
+"
+`;
+
+exports[`object 2`] = `
+"({ a: 1, b: 2, c: 3 });
+"
+`;
+
+exports[`string 1`] = `
+"("foo");
+"
+`;
