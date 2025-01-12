@@ -100,8 +100,13 @@ import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     { a: 1, c: 3 },
+    { a: 1, c: 3, d: undefined },
     { a: 1, c: 3, d: 4 },
+    { a: 1, b: undefined, c: 3 },
+    { a: 1, b: undefined, c: 3, d: undefined },
+    { a: 1, b: undefined, c: 3, d: 4 },
     { a: 1, b: 2, c: 3 },
+    { a: 1, b: 2, c: 3, d: undefined },
     { a: 1, b: 2, c: 3, d: 4 }
 ];
 const invalid_X = [

@@ -142,6 +142,9 @@ function valuesToExpression(values: Value[]): ts.Expression[] {
       if (typeof v === "symbol") {
         return String(v);
       }
+      if (typeof v === "undefined") {
+        return String(v);
+      }
       if (v instanceof Reference) {
         return { __type: "Reference", ...v };
       }

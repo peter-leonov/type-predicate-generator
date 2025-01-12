@@ -16,4 +16,4 @@ set -eux -o pipefail
 git diff --exit-code
 
 set +x
-echo "✅ Ci run is successfull"
+echo "✅ CI run is successfull"
