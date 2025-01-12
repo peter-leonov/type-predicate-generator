@@ -2,7 +2,6 @@ import ts, { factory } from "typescript";
 import {
   combineInvalid,
   combineValid,
-  invalidValue,
   modelToCombinator,
   Reference,
   type Value,
@@ -10,12 +9,6 @@ import {
 import { type TypeModel } from "./model";
 import { assert } from "./helpers";
 import { valueToNode } from "./serializer";
-
-type TokenMap = Map<string, string>;
-
-function randomID(): string {
-  return `${Date.now()}${Math.random()}`;
-}
 
 export function modelsToTests(
   predicatesFileName: string,

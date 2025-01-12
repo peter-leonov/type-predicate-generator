@@ -1,4 +1,3 @@
-import ts, { factory } from "typescript";
 import { assert } from "./helpers";
 import {
   ensureNoErrors,
@@ -7,7 +6,7 @@ import {
   sourceFileToModels,
 } from "./compile";
 import { TypeGuardGenerator } from "./generator";
-import { hydrateTokens, modelsToTests } from "./tester";
+import { modelsToTests } from "./tester";
 
 export * from "./errors";
 
@@ -49,15 +48,8 @@ export function generateForPlayground(
   }
 
   if (unitTests) {
-    const [tokens, nodes] = modelsToTests(
-      guardsFilePath,
-      models,
-      "./vitest"
-    );
-    testsCode = hydrateTokens(
-      nodesToString("tests.test.ts", nodes),
-      tokens
-    );
+    const nodes = modelsToTests(guardsFilePath, models, "./vitest");
+    testsCode = nodesToString("tests.test.ts", nodes);
   } else {
     testsCode = "";
   }

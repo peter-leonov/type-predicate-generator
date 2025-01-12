@@ -1,6 +1,6 @@
 import ts, { factory } from "typescript";
 import { invalidValue, Reference, type Value } from "./combinator";
-import { unimplemented, unreachable } from "./helpers";
+import { unreachable } from "./helpers";
 import {
   invalidValueVarName,
   invalidVarNameFromType,
