@@ -10,8 +10,8 @@ import {
 import "./style.css";
 import "./worker";
 
-function $(selector: string) {
-  return document.querySelector<HTMLElement>(selector);
+function $<T extends Element>(selector: string) {
+  return document.querySelector<T>(selector);
 }
 
 export function ok(value: unknown): asserts value {
@@ -134,22 +134,25 @@ const editorConfig = {
   stickyScroll: { enabled: false },
 };
 
-const sourceNode = must($("#source"));
+const sourceNode = must($<HTMLElement>("#source"));
 const sourceEditor = monaco.editor.create(sourceNode, editorConfig);
 sourceEditor.setModel(sourceModel);
 
-const predicatesNode = must($("#predicates"));
+const predicatesNode = must($<HTMLElement>("#predicates"));
 const predicatesEditor = monaco.editor.create(
   predicatesNode,
   editorConfig
 );
 predicatesEditor.setModel(predicateModel);
 
-const testsNode = must($("#tests"));
+const testsNode = must($<HTMLElement>("#tests"));
 const testsEditor = monaco.editor.create(testsNode, editorConfig);
 testsEditor.setModel(testsModel);
 
+const flagTypesNode = must($<HTMLInputElement>("#flag-types"));
+
 function onChange() {
+  const flagTypes = flagTypesNode.checked;
   try {
     const sourceCode = sourceModel.getValue();
     saveState(sourceCode);
@@ -157,7 +160,7 @@ function onChange() {
       sourceCode,
       "./example",
       "./example_guards",
-      true
+      flagTypes
     );
     if (predicatesCode) {
       predicatesEditor.setValue(predicatesComment + predicatesCode);
@@ -165,6 +168,9 @@ function onChange() {
     if (testsCode) {
       testsNode.style.display = "";
       testsEditor.setValue(testsComment + testsCode);
+    } else {
+      testsEditor.setValue("");
+      testsNode.style.display = "none";
     }
   } catch (err) {
     predicatesEditor.setValue(
@@ -179,5 +185,6 @@ ${explainError(err, true)}*/
 }
 
 sourceEditor.onDidChangeModelContent(onChange);
+flagTypesNode.addEventListener("change", onChange);
 
 onChange();
