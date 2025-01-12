@@ -53,12 +53,14 @@ export type Combinator = (
   doInvalid: boolean
 ) => Generator<[boolean, Value]>;
 
-export function value(value: Value): Combinator {
+export function values(values: Value[]): Combinator {
   return function* (doInvalid: boolean) {
     if (doInvalid) {
       yield [false, invalidValue];
     }
-    yield [true, value];
+    for (const value of values) {
+      yield [true, value];
+    }
   };
 }
 
@@ -207,20 +209,17 @@ export function combineInvalid(fn: Combinator) {
 
 export function modelToCombinator(model: TypeModel): Combinator {
   if (model instanceof LiteralType) {
-    return value(model.value);
+    return values([model.value]);
   } else if (model instanceof PrimitiveType) {
     switch (model.primitive) {
       case "string":
-        return value("string");
+        // adding "" to cover for checks like `!x` where `""` would mean `false`
+        return values(["", "string"]);
       case "number":
-        return union([
-          // adding 0 to cover for checks like `!x` where `0` would meant `false`
-          value(0),
-          // any arbitrary number
-          value(42),
-        ]);
+        // adding 0 to cover for checks like `!x` where `0` would mean `false`
+        return values([0, 42]);
       case "boolean":
-        return union([value(true), value(false)]);
+        return values([true, false]);
     }
     model.primitive satisfies never;
     unimplemented(

@@ -6,6 +6,7 @@ import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     [],
+    [""],
     ["string"]
 ];
 const invalid_X = [
@@ -28,6 +29,7 @@ exports[`multiple types 1`] = `
 import { isX, isY } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
+    "",
     "string",
     0,
     42
@@ -67,6 +69,10 @@ exports[`object 1`] = `
 import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
+    { a: "", b: 0, c: true },
+    { a: "", b: 0, c: false },
+    { a: "", b: 42, c: true },
+    { a: "", b: 42, c: false },
     { a: "string", b: 0, c: true },
     { a: "string", b: 0, c: false },
     { a: "string", b: 42, c: true },
@@ -76,6 +82,12 @@ const invalid_X = [
     null,
     { b: 0, c: true },
     { a: invalidValue, b: 0, c: true },
+    { a: "", c: true },
+    { a: "", b: invalidValue, c: true },
+    { a: "", b: 0 },
+    { a: "", b: 0, c: invalidValue },
+    { a: "", b: 42 },
+    { a: "", b: 42, c: invalidValue },
     { a: "string", c: true },
     { a: "string", b: invalidValue, c: true },
     { a: "string", b: 0 },
@@ -159,6 +171,7 @@ exports[`reference type 1`] = `
 import { isA, isB } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_A = [
+    { a: "" },
     { a: "string" }
 ];
 const invalid_A = [
@@ -198,6 +211,7 @@ exports[`union 1`] = `
 import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
+    "",
     "string",
     0,
     42

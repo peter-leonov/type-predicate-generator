@@ -6,7 +6,7 @@ import {
   modelToCombinator,
   object,
   union,
-  value,
+  values,
   Combinator,
 } from "./combinator";
 import {
@@ -55,12 +55,12 @@ for (const [name, f] of [
     it("all at once", () => {
       const obj = object(
         {
-          a: union([value(1), value(2)]),
-          b: union([value(true), value(false)]),
-          c: array(union([value("a"), value("b")])),
+          a: union([values([1]), values([2])]),
+          b: union([values([true]), values([false])]),
+          c: array(union([values(["a"]), values(["b"])])),
           d: object(
             {
-              d2: union([value(null), value(undefined)]),
+              d2: union([values([null]), values([undefined])]),
             },
             new Set()
           ),
@@ -73,30 +73,30 @@ for (const [name, f] of [
 
     describe("value", () => {
       it("number", () => {
-        expect(f(value(1))).toMatchSnapshot();
+        expect(f(values([1]))).toMatchSnapshot();
       });
       it("string", () => {
-        expect(f(value("a"))).toMatchSnapshot();
+        expect(f(values(["a"]))).toMatchSnapshot();
       });
       it("null", () => {
-        expect(f(value(null))).toMatchSnapshot();
+        expect(f(values([null]))).toMatchSnapshot();
       });
     });
 
     describe("union", () => {
       it("of a single value", () => {
-        expect(f(union([value(1)]))).toMatchSnapshot();
+        expect(f(union([values([1])]))).toMatchSnapshot();
       });
 
       it("of several values", () => {
         expect(
-          f(union([value(1), value(2), value(3)]))
+          f(union([values([1]), values([2]), values([3])]))
         ).toMatchSnapshot();
       });
 
       it("of a union", () => {
         expect(
-          f(union([union([value(1), value(2), value(3)])]))
+          f(union([union([values([1]), values([2]), values([3])])]))
         ).toMatchSnapshot();
       });
 
@@ -104,8 +104,8 @@ for (const [name, f] of [
         expect(
           f(
             union([
-              union([value(1), value(2)]),
-              union([value(3), value(4)]),
+              union([values([1]), values([2])]),
+              union([values([3]), values([4])]),
             ])
           )
         ).toMatchSnapshot();
@@ -114,22 +114,22 @@ for (const [name, f] of [
 
     describe("array", () => {
       it("of a single value", () => {
-        expect(f(array(value(1)))).toMatchSnapshot();
+        expect(f(array(values([1])))).toMatchSnapshot();
       });
 
       it("of a union", () => {
         expect(
-          f(array(union([value(1), value(2)])))
+          f(array(union([values([1]), values([2])])))
         ).toMatchSnapshot();
       });
 
       it("of an array of an array of a value", () => {
-        expect(f(array(array(array(value(1)))))).toMatchSnapshot();
+        expect(f(array(array(array(values([1])))))).toMatchSnapshot();
       });
 
       it("of an array of an array of a union", () => {
         expect(
-          f(array(array(array(union([value(1), value(2)])))))
+          f(array(array(array(union([values([1]), values([2])])))))
         ).toMatchSnapshot();
       });
     });
@@ -141,7 +141,7 @@ for (const [name, f] of [
 
       it("of a single value property", () => {
         expect(
-          f(object({ a: value("A") }, new Set()))
+          f(object({ a: values(["A"]) }, new Set()))
         ).toMatchSnapshot();
       });
 
@@ -149,7 +149,11 @@ for (const [name, f] of [
         expect(
           f(
             object(
-              { a: value("A"), b: value("B"), c: value("C") },
+              {
+                a: values(["A"]),
+                b: values(["B"]),
+                c: values(["C"]),
+              },
               new Set()
             )
           )
@@ -160,7 +164,7 @@ for (const [name, f] of [
         expect(
           f(
             object(
-              { a: union([value("A1"), value("A2")]) },
+              { a: union([values(["A1"]), values(["A2"])]) },
               new Set()
             )
           )
@@ -172,9 +176,13 @@ for (const [name, f] of [
           f(
             object(
               {
-                a: union([value("A1")]),
-                b: union([value("B1"), value("B2")]),
-                c: union([value("C1"), value("C2"), value("C3")]),
+                a: union([values(["A1"])]),
+                b: union([values(["B1"]), values(["B2"])]),
+                c: union([
+                  values(["C1"]),
+                  values(["C2"]),
+                  values(["C3"]),
+                ]),
               },
               new Set()
             )
@@ -187,10 +195,10 @@ for (const [name, f] of [
           f(
             object(
               {
-                a: value(1),
-                b: value(2),
-                c: value(3),
-                d: value(4),
+                a: values([1]),
+                b: values([2]),
+                c: values([3]),
+                d: values([4]),
               },
               new Set(["b", "d"])
             )
@@ -204,15 +212,15 @@ for (const [name, f] of [
             object(
               {
                 a: object(
-                  { a1: value("A1"), a2: value("A2") },
+                  { a1: values(["A1"]), a2: values(["A2"]) },
                   new Set()
                 ),
                 b: object(
-                  { b1: value("B1"), b2: value("B2") },
+                  { b1: values(["B1"]), b2: values(["B2"]) },
                   new Set()
                 ),
                 c: object(
-                  { c1: value("C1"), c2: value("C2") },
+                  { c1: values(["C1"]), c2: values(["C2"]) },
                   new Set()
                 ),
               },
@@ -228,15 +236,15 @@ for (const [name, f] of [
             object(
               {
                 a: object(
-                  { aa: union([value("AA1"), value("AA2")]) },
+                  { aa: union([values(["AA1"]), values(["AA2"])]) },
                   new Set()
                 ),
                 b: object(
-                  { bb: union([value("BB1"), value("BB2")]) },
+                  { bb: union([values(["BB1"]), values(["BB2"])]) },
                   new Set()
                 ),
                 c: object(
-                  { cc: union([value("CC1"), value("CC2")]) },
+                  { cc: union([values(["CC1"]), values(["CC2"])]) },
                   new Set()
                 ),
               },
@@ -254,7 +262,7 @@ for (const [name, f] of [
                 a: object(
                   {
                     b: object(
-                      { c: object({ d: value("D") }, new Set()) },
+                      { c: object({ d: values(["D"]) }, new Set()) },
                       new Set()
                     ),
                   },
@@ -277,7 +285,12 @@ for (const [name, f] of [
                     b: object(
                       {
                         c: object(
-                          { d: union([value("D1"), value("D2")]) },
+                          {
+                            d: union([
+                              values(["D1"]),
+                              values(["D2"]),
+                            ]),
+                          },
                           new Set()
                         ),
                       },
@@ -361,6 +374,7 @@ describe(modelToCombinator.name, () => {
         )
       ).toMatchInlineSnapshot(`
         [
+          "",
           "string",
         ]
       `);
