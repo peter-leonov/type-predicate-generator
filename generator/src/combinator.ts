@@ -54,9 +54,14 @@ export type Combinator = (
 ) => Generator<[boolean, Value]>;
 
 export function values(values: Value[]): Combinator {
-  return function* (doInvalid: boolean) {
+  assert(
+    values.length > 0,
+    "values() has to have at least one value"
+  );
+  return function* (doInvalid) {
     if (doInvalid) {
       yield [false, invalidValue];
+      return;
     }
     for (const value of values) {
       yield [true, value];
@@ -74,16 +79,17 @@ export class Reference {
 }
 
 export function reference(typeName: string): Combinator {
-  return function* (doInvalid: boolean) {
+  return function* (doInvalid) {
     if (doInvalid) {
       yield [false, new Reference(typeName, false)];
+    } else {
+      yield [true, new Reference(typeName, true)];
     }
-    yield [true, new Reference(typeName, true)];
   };
 }
 
 export function union(members: Combinator[]): Combinator {
-  return function* (doInvalid: boolean) {
+  return function* (doInvalid) {
     for (const m of members) {
       yield* m(doInvalid);
     }
@@ -91,13 +97,19 @@ export function union(members: Combinator[]): Combinator {
 }
 
 export function array(value: Combinator): Combinator {
-  return function* (doInvalid: boolean) {
+  return function* (doInvalid) {
     if (doInvalid) {
       yield [false, invalidValue];
-    }
-    yield [true, []];
-    for (const [isValid, v] of value(doInvalid)) {
-      yield [isValid, [v]];
+      for (const [isValid, v] of value(true)) {
+        assert(!isValid, "must be an invalid value");
+        yield [isValid, [v]];
+      }
+    } else {
+      yield [true, []];
+      for (const [isValid, v] of value(false)) {
+        assert(isValid, "must be a valid value");
+        yield [isValid, [v]];
+      }
     }
   };
 }
@@ -106,18 +118,25 @@ export function array(value: Combinator): Combinator {
  * This is the only product type here, the rest are sum types.
  * So please keep an eye on how many combinations object() produces.
  *
- * Right now it generates all possible valid combinations for all fields
- * and per invalid field only one valid sub-combination.
+ * Right now it generates all valid / invalid values per field without
+ * permuting them. This does not cover the whole exponential space of
+ * values, but still gives 100% test coverage for the predicates.
+ * Effectively it linearizes object() into a sum type.
  */
 export function object(
   obj: Record<string, Combinator>,
   optionalAttributes: Set<string>
 ): Combinator {
-  return function* (doInvalid: boolean) {
+  return function* (doInvalid) {
     if (doInvalid) {
+      // testing `typeof v === "object"`
+      yield [false, invalidValue];
+      // testing `v !== null`
       yield [false, null];
+      yield* rollObject(true, obj, optionalAttributes);
+    } else {
+      yield* rollObject(false, obj, optionalAttributes);
     }
-    yield* rollObject(doInvalid, obj, optionalAttributes);
   };
 }
 
@@ -128,57 +147,134 @@ function* rollObject(
 ): Generator<[boolean, Record<string, Value>]> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
-    yield [true, {}];
-    return;
+    if (doInvalid) {
+      return;
+    } else {
+      yield [true, {}];
+      return;
+    }
   }
 
   const [key, ...restKeys] = keys;
-  assert(key, "at least one property must be present at this point");
+  assert(key, "at least one property is present");
 
   const restObj = pick(obj, restKeys);
 
   const value = obj[key];
   assert(value);
 
-  if (optionalAttributes.has(key)) {
-    for (const [_, rest] of rollObject(
-      false,
-      restObj,
-      optionalAttributes
-    )) {
-      yield [true, rest];
-    }
-  } else {
-    if (doInvalid) {
-      for (const [_, rest] of rollObject(
+  const isOptional = optionalAttributes.has(key);
+
+  if (doInvalid) {
+    // 1. without non-optional key + one of the valid rest
+    if (!isOptional) {
+      for (const [isValidRest, rest] of rollObject(
         false,
         restObj,
         optionalAttributes
       )) {
-        yield [false, rest];
-        // We need only one valid combination per invalid property.
-        // All the valid combinations are checked separately.
+        assert(isValidRest, "must be a valid rest");
+        yield [
+          false,
+          {
+            ...rest,
+          },
+        ];
         break;
       }
     }
-  }
 
-  for (const [isValidValue, v] of value(doInvalid)) {
+    // 2. with the key + all invalid values * one of the valid rest
+    for (const [isValidValue, v] of value(true)) {
+      assert(!isValidValue, "must be an invalid value");
+      for (const [isValidRest, rest] of rollObject(
+        false,
+        restObj,
+        optionalAttributes
+      )) {
+        assert(isValidRest, "must be a valid rest");
+        yield [
+          isValidValue && isValidRest,
+          {
+            [key]: v,
+            ...rest,
+          },
+        ];
+        break;
+      }
+    }
+
+    // 3. with the key + one valid value * all of the invalid rest
+    for (const [isValidValue, v] of value(false)) {
+      assert(isValidValue, "must be a valid value");
+      for (const [isValidRest, rest] of rollObject(
+        true,
+        restObj,
+        optionalAttributes
+      )) {
+        assert(!isValidRest, "must be an invalid rest");
+        yield [
+          isValidValue && isValidRest,
+          {
+            [key]: v,
+            ...rest,
+          },
+        ];
+      }
+      break;
+    }
+  } else {
+    // 1. without the optional key + one of the rest
+    if (isOptional) {
+      for (const [isValidRest, rest] of rollObject(
+        false,
+        restObj,
+        optionalAttributes
+      )) {
+        assert(isValidRest, "must be a valid rest");
+        yield [true, rest];
+        break;
+      }
+    }
+
+    // 2. with the key + one value * all of the rest
+    const valueG = value(false);
+    const valueIR = valueG.next();
+    assert(!valueIR.done, "an empty generator is a bug");
+    const [isValidValue, v] = valueIR.value;
+    assert(isValidValue, "must be a valid value");
     for (const [isValidRest, rest] of rollObject(
-      doInvalid && isValidValue,
+      false,
       restObj,
       optionalAttributes
     )) {
+      assert(isValidRest, "must be a valid rest");
       yield [
-        isValidValue && isValidRest,
+        true,
         {
           [key]: v,
           ...rest,
         },
       ];
-      if (!isValidValue) {
-        // We need only one valid combination per invalid property.
-        // All the valid combinations are checked separately.
+    }
+
+    // 3. with the key + all the values * one of the rest
+    for (const [isValidValue, v] of valueG) {
+      assert(isValidValue, "must be a valid value");
+      // TODO: decorate rollObject() generator with a looped generator
+      for (const [isValidRest, rest] of rollObject(
+        false,
+        restObj,
+        optionalAttributes
+      )) {
+        assert(isValidRest, "must be a valid rest");
+        yield [
+          true,
+          {
+            [key]: v,
+            ...rest,
+          },
+        ];
         break;
       }
     }
@@ -202,9 +298,7 @@ export function combineValid(fn: Combinator) {
 }
 
 export function combineInvalid(fn: Combinator) {
-  return [...fn(true)]
-    .filter(([isValid, _]) => !isValid)
-    .map(([_, v]) => v);
+  return [...fn(true)].map(([isValid, v]) => (assert(!isValid), v));
 }
 
 export function modelToCombinator(model: TypeModel): Combinator {

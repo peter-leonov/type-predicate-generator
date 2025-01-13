@@ -72,28 +72,17 @@ const valid_X = [
     { a: "", b: 0, c: true },
     { a: "", b: 0, c: false },
     { a: "", b: 42, c: true },
-    { a: "", b: 42, c: false },
-    { a: "string", b: 0, c: true },
-    { a: "string", b: 0, c: false },
-    { a: "string", b: 42, c: true },
-    { a: "string", b: 42, c: false }
+    { a: "string", b: 0, c: true }
 ];
 const invalid_X = [
+    invalidValue,
     null,
     { b: 0, c: true },
     { a: invalidValue, b: 0, c: true },
     { a: "", c: true },
     { a: "", b: invalidValue, c: true },
     { a: "", b: 0 },
-    { a: "", b: 0, c: invalidValue },
-    { a: "", b: 42 },
-    { a: "", b: 42, c: invalidValue },
-    { a: "string", c: true },
-    { a: "string", b: invalidValue, c: true },
-    { a: "string", b: 0 },
-    { a: "string", b: 0, c: invalidValue },
-    { a: "string", b: 42 },
-    { a: "string", b: 42, c: invalidValue }
+    { a: "", b: 0, c: invalidValue }
 ];
 describe("X", () => {
     it.for(valid_X)("valid", (value: unknown) => {
@@ -112,26 +101,20 @@ import { isX } from "guards.ts";
 const invalidValue: any = Symbol("invalidValue");
 const valid_X = [
     { a: 1, c: 3 },
-    { a: 1, c: 3, d: undefined },
-    { a: 1, c: 3, d: 4 },
     { a: 1, b: undefined, c: 3 },
     { a: 1, b: undefined, c: 3, d: undefined },
     { a: 1, b: undefined, c: 3, d: 4 },
-    { a: 1, b: 2, c: 3 },
-    { a: 1, b: 2, c: 3, d: undefined },
-    { a: 1, b: 2, c: 3, d: 4 }
+    { a: 1, b: 2, c: 3 }
 ];
 const invalid_X = [
+    invalidValue,
     null,
     { c: 3 },
     { a: invalidValue, c: 3 },
     { a: 1, b: invalidValue, c: 3 },
     { a: 1, b: undefined },
     { a: 1, b: undefined, c: invalidValue },
-    { a: 1, b: undefined, c: 3, d: invalidValue },
-    { a: 1, b: 2 },
-    { a: 1, b: 2, c: invalidValue },
-    { a: 1, b: 2, c: 3, d: invalidValue }
+    { a: 1, b: undefined, c: 3, d: invalidValue }
 ];
 describe("X", () => {
     it.for(valid_X)("valid", (value: unknown) => {
@@ -175,6 +158,7 @@ const valid_A = [
     { a: "string" }
 ];
 const invalid_A = [
+    invalidValue,
     null,
     {},
     { a: invalidValue }
@@ -191,6 +175,7 @@ const valid_B = [
     { b: valid_A[0] }
 ];
 const invalid_B = [
+    invalidValue,
     null,
     {},
     { b: invalid_A[0] }

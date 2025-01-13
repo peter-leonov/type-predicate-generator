@@ -2,6 +2,7 @@
 
 exports[`invalid > all at once 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": Symbol(invalidValue),
@@ -37,160 +38,6 @@ exports[`invalid > all at once 1`] = `
   },
   {
     "a": 1,
-    "b": false,
-    "c": Symbol(invalidValue),
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      Symbol(invalidValue),
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      Symbol(invalidValue),
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": null,
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {},
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "a",
-    ],
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": null,
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {},
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [],
-    "d": null,
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [],
-    "d": {},
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [],
-  },
-  {
-    "a": 1,
-    "b": false,
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
     "b": true,
     "c": Symbol(invalidValue),
     "d": {
@@ -220,88 +67,8 @@ exports[`invalid > all at once 1`] = `
   {
     "a": 1,
     "b": true,
-    "c": [
-      "a",
-    ],
-    "d": null,
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {},
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "a",
-    ],
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": null,
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {},
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
+    "c": [],
+    "d": Symbol(invalidValue),
   },
   {
     "a": 1,
@@ -345,337 +112,6 @@ exports[`invalid > all at once 1`] = `
   },
   {
     "a": 1,
-    "c": [],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": Symbol(invalidValue),
-    "c": [],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": Symbol(invalidValue),
-    "c": [],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": Symbol(invalidValue),
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      Symbol(invalidValue),
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      Symbol(invalidValue),
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": null,
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {},
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": null,
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {},
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-    "d": null,
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-    "d": {},
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-  },
-  {
-    "a": 2,
-    "b": false,
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": Symbol(invalidValue),
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      Symbol(invalidValue),
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      Symbol(invalidValue),
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": null,
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {},
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": null,
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {},
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [],
-    "d": null,
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [],
-    "d": {
-      "d2": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [],
-    "d": {},
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [],
-  },
-  {
-    "a": 2,
-    "b": true,
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
     "c": [],
     "d": {
       "d2": null,
@@ -763,19 +199,36 @@ exports[`invalid > array > of an array of an array of a value 1`] = `
 
 exports[`invalid > object > empty 1`] = `
 [
+  Symbol(invalidValue),
   null,
 ]
 `;
 
 exports[`invalid > object > of a several nested objects with a union property 1`] = `
 [
+  Symbol(invalidValue),
   null,
+  {
+    "a": Symbol(invalidValue),
+  },
   {
     "a": null,
   },
   {
     "a": {
+      "b": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
       "b": null,
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": Symbol(invalidValue),
+      },
     },
   },
   {
@@ -824,13 +277,29 @@ exports[`invalid > object > of a several nested objects with a union property 1`
 
 exports[`invalid > object > of a several nested objects with a value property 1`] = `
 [
+  Symbol(invalidValue),
   null,
+  {
+    "a": Symbol(invalidValue),
+  },
   {
     "a": null,
   },
   {
     "a": {
+      "b": Symbol(invalidValue),
+    },
+  },
+  {
+    "a": {
       "b": null,
+    },
+  },
+  {
+    "a": {
+      "b": {
+        "c": Symbol(invalidValue),
+      },
     },
   },
   {
@@ -870,7 +339,17 @@ exports[`invalid > object > of a several nested objects with a value property 1`
 
 exports[`invalid > object > of a several objects with union properties 1`] = `
 [
+  Symbol(invalidValue),
   null,
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "bb": "BB1",
+    },
+    "c": {
+      "cc": "CC1",
+    },
+  },
   {
     "a": null,
     "b": {
@@ -884,6 +363,15 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "a": {
       "aa": "AA1",
     },
+    "b": Symbol(invalidValue),
+    "c": {
+      "cc": "CC1",
+    },
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
     "b": null,
     "c": {
       "cc": "CC1",
@@ -896,6 +384,15 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     "b": {
       "bb": "BB1",
     },
+    "c": Symbol(invalidValue),
+  },
+  {
+    "a": {
+      "aa": "AA1",
+    },
+    "b": {
+      "bb": "BB1",
+    },
     "c": null,
   },
   {
@@ -935,54 +432,6 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
     },
     "b": {
       "bb": "BB1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA1",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": null,
-  },
-  {
-    "a": {
-      "aa": "AA1",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": {
-      "aa": "AA1",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": {
-      "aa": "AA1",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {},
-  },
-  {
-    "a": {
-      "aa": "AA1",
-    },
-    "b": {
-      "bb": "BB2",
     },
   },
   {
@@ -1019,150 +468,6 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
   {
     "a": {
       "aa": "AA1",
-    },
-    "c": {
-      "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": null,
-    "c": {
-      "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB1",
-    },
-    "c": null,
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB1",
-    },
-    "c": {
-      "cc": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB1",
-    },
-    "c": {
-      "cc": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB1",
-    },
-    "c": {},
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": null,
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": Symbol(invalidValue),
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {},
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": Symbol(invalidValue),
-    },
-    "c": {
-      "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": Symbol(invalidValue),
-    },
-    "c": {
-      "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {},
-    "c": {
-      "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
     },
     "c": {
       "cc": "CC1",
@@ -1212,7 +517,19 @@ exports[`invalid > object > of a several objects with union properties 1`] = `
 
 exports[`invalid > object > of a several objects with value properties 1`] = `
 [
+  Symbol(invalidValue),
   null,
+  {
+    "a": Symbol(invalidValue),
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
   {
     "a": null,
     "b": {
@@ -1229,11 +546,33 @@ exports[`invalid > object > of a several objects with value properties 1`] = `
       "a1": "A1",
       "a2": "A2",
     },
+    "b": Symbol(invalidValue),
+    "c": {
+      "c1": "C1",
+      "c2": "C2",
+    },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
     "b": null,
     "c": {
       "c1": "C1",
       "c2": "C2",
     },
+  },
+  {
+    "a": {
+      "a1": "A1",
+      "a2": "A2",
+    },
+    "b": {
+      "b1": "B1",
+      "b2": "B2",
+    },
+    "c": Symbol(invalidValue),
   },
   {
     "a": {
@@ -1443,6 +782,7 @@ exports[`invalid > object > of a several objects with value properties 1`] = `
 
 exports[`invalid > object > of a several union properties 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": "A1",
@@ -1462,25 +802,6 @@ exports[`invalid > object > of a several union properties 1`] = `
   {
     "a": "A1",
     "b": "B1",
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": Symbol(invalidValue),
-  },
-  {
-    "a": "A1",
-    "b": "B2",
   },
   {
     "a": "A1",
@@ -1510,6 +831,7 @@ exports[`invalid > object > of a several union properties 1`] = `
 
 exports[`invalid > object > of a several value properties 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": "A",
@@ -1543,6 +865,7 @@ exports[`invalid > object > of a several value properties 1`] = `
 
 exports[`invalid > object > of a single union property 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": Symbol(invalidValue),
@@ -1556,6 +879,7 @@ exports[`invalid > object > of a single union property 1`] = `
 
 exports[`invalid > object > of a single value property 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": Symbol(invalidValue),
@@ -1566,6 +890,7 @@ exports[`invalid > object > of a single value property 1`] = `
 
 exports[`invalid > object > of only optional properties 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": Symbol(invalidValue),
@@ -1605,6 +930,7 @@ exports[`invalid > object > of only optional properties 1`] = `
 
 exports[`invalid > object > of several optional properties 1`] = `
 [
+  Symbol(invalidValue),
   null,
   {
     "a": Symbol(invalidValue),
@@ -1712,46 +1038,6 @@ exports[`valid > all at once 1`] = `
   {
     "a": 1,
     "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 1,
-    "b": false,
     "c": [],
     "d": {
       "d2": null,
@@ -1759,14 +1045,6 @@ exports[`valid > all at once 1`] = `
   },
   {
     "a": 1,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 1,
     "b": true,
     "c": [
       "a",
@@ -1779,30 +1057,10 @@ exports[`valid > all at once 1`] = `
     "a": 1,
     "b": true,
     "c": [
-      "a",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
       "b",
     ],
     "d": {
       "d2": null,
-    },
-  },
-  {
-    "a": 1,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": undefined,
     },
   },
   {
@@ -1823,114 +1081,10 @@ exports[`valid > all at once 1`] = `
   },
   {
     "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": false,
-    "c": [],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "a",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [
-      "b",
-    ],
-    "d": {
-      "d2": undefined,
-    },
-  },
-  {
-    "a": 2,
     "b": true,
     "c": [],
     "d": {
       "d2": null,
-    },
-  },
-  {
-    "a": 2,
-    "b": true,
-    "c": [],
-    "d": {
-      "d2": undefined,
     },
   },
 ]
@@ -2086,17 +1240,6 @@ exports[`valid > object > of a several objects with union properties 1`] = `
   },
   {
     "a": {
-      "aa": "AA1",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": "CC2",
-    },
-  },
-  {
-    "a": {
       "aa": "AA2",
     },
     "b": {
@@ -2104,39 +1247,6 @@ exports[`valid > object > of a several objects with union properties 1`] = `
     },
     "c": {
       "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB1",
-    },
-    "c": {
-      "cc": "CC2",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": "CC1",
-    },
-  },
-  {
-    "a": {
-      "aa": "AA2",
-    },
-    "b": {
-      "bb": "BB2",
-    },
-    "c": {
-      "cc": "CC2",
     },
   },
 ]
@@ -2182,16 +1292,6 @@ exports[`valid > object > of a several union properties 1`] = `
     "a": "A1",
     "b": "B2",
     "c": "C1",
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": "C2",
-  },
-  {
-    "a": "A1",
-    "b": "B2",
-    "c": "C3",
   },
 ]
 `;
@@ -2247,32 +1347,6 @@ exports[`valid > object > of only optional properties 1`] = `
     "b": 2,
     "c": 3,
     "d": 4,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "c": 3,
-    "d": 4,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "c": 3,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "c": 3,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "c": 3,
-    "f": 6,
   },
   {
     "a": 1,
@@ -2282,268 +1356,9 @@ exports[`valid > object > of only optional properties 1`] = `
   {
     "a": 1,
     "b": 2,
-    "d": 4,
-    "e": 5,
-    "f": 6,
   },
   {
     "a": 1,
-    "b": 2,
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "d": 4,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "b": 2,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "b": 2,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "d": 4,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "d": 4,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "c": 3,
-  },
-  {
-    "a": 1,
-    "d": 4,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "d": 4,
-  },
-  {
-    "a": 1,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "a": 1,
-    "e": 5,
-  },
-  {
-    "a": 1,
-    "f": 6,
-  },
-  {
-    "a": 1,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "d": 4,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "d": 4,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "e": 5,
-  },
-  {
-    "b": 2,
-    "c": 3,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "c": 3,
-  },
-  {
-    "b": 2,
-    "d": 4,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "b": 2,
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "d": 4,
-  },
-  {
-    "b": 2,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "b": 2,
-    "e": 5,
-  },
-  {
-    "b": 2,
-    "f": 6,
-  },
-  {
-    "b": 2,
-  },
-  {
-    "c": 3,
-    "d": 4,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "c": 3,
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "c": 3,
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "c": 3,
-    "d": 4,
-  },
-  {
-    "c": 3,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "c": 3,
-    "e": 5,
-  },
-  {
-    "c": 3,
-    "f": 6,
-  },
-  {
-    "c": 3,
-  },
-  {
-    "d": 4,
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "d": 4,
-    "e": 5,
-  },
-  {
-    "d": 4,
-    "f": 6,
-  },
-  {
-    "d": 4,
-  },
-  {
-    "e": 5,
-    "f": 6,
-  },
-  {
-    "e": 5,
-  },
-  {
-    "f": 6,
   },
   {},
 ]
@@ -2561,11 +1376,6 @@ exports[`valid > object > of several optional properties 1`] = `
     "a": 1,
     "b": 2,
     "c": 3,
-  },
-  {
-    "a": 1,
-    "c": 3,
-    "d": 4,
   },
   {
     "a": 1,
