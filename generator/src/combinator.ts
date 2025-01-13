@@ -1,3 +1,12 @@
+/**
+ * A module wide comment here :)
+ *
+ * Main invariant: do not reuse the values produced by the value funtions
+ * (value, union, array, object), they are supposed to be used at the same
+ * nesting as the same attribute, union member, etc. The API is ever changing
+ * and relies on this invariant.
+ */
+
 import { assert, unimplemented } from "./helpers";
 import {
   AliasType,
@@ -8,15 +17,6 @@ import {
   TypeModel,
   UnionType,
 } from "./model";
-
-/**
- * Main invariant: do not reuse the values produced by the value funtions
- * (value, union, array, object), they each get a unique ID that is
- * used to remember if the value has produced a broken value.
- *
- * If this becomes a problem, the next in line solution is to again
- * use value paths as IDs and store per path state.
- */
 
 /**
  * A unique value used in tests to mark a wrong value that does not match
