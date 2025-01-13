@@ -213,10 +213,10 @@ export function modelToCombinator(model: TypeModel): Combinator {
   } else if (model instanceof PrimitiveType) {
     switch (model.primitive) {
       case "string":
-        // adding "" to cover for checks like `!x` where `""` would mean `false`
+        // using "" to cover for checks like `!x` where `""` would mean `false`
         return values(["", "string"]);
       case "number":
-        // adding 0 to cover for checks like `!x` where `0` would mean `false`
+        // using 0 to cover for checks like `!x` where `0` would mean `false`
         return values([0, 42]);
       case "boolean":
         return values([true, false]);
