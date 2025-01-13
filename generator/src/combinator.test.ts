@@ -206,6 +206,24 @@ for (const [name, f] of [
         ).toMatchSnapshot();
       });
 
+      it("of only optional properties", () => {
+        expect(
+          f(
+            object(
+              {
+                a: values([1]),
+                b: values([2]),
+                c: values([3]),
+                d: values([4]),
+                e: values([5]),
+                f: values([6]),
+              },
+              new Set(["a", "b", "c", "d", "e", "f"])
+            )
+          )
+        ).toMatchSnapshot();
+      });
+
       it("of a several objects with value properties", () => {
         expect(
           f(
