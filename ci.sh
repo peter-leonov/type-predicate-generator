@@ -4,7 +4,7 @@ set -eux -o pipefail
 
 (
   cd generator
-  npm i
+  npm i --no-audit
   npm run ci
 )
 

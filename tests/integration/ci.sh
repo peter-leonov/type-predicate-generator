@@ -7,7 +7,7 @@ set -eux -o pipefail
   npm run build
 )
 
-npm i
+npm i --no-audit
 
 rm -rf types_guards.ts types_guards.test.ts
 npx type-predicate-generator --unitTests "./types.ts"
