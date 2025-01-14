@@ -75,19 +75,11 @@ The file with the types:
 export type User = {
   id: number;
   login: string;
-  bio: {
-    first: string;
-    last: string;
+  email?: string;
+  address: {
+    street: string;
+    house: number;
   };
-};
-
-export type Post = {
-  title: string;
-  text: string;
-  link?: string;
-  published: boolean;
-  author: User;
-  more: Array<number | string>;
 };
 ```
 
@@ -101,7 +93,7 @@ This is the output with a readable and strictly type safe TS guard:
 
 ```ts
 // example_guards.ts
-import { type User, type Post } from "./types";
+import { type User } from "./example";
 type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
@@ -110,125 +102,165 @@ export function isUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  const { id, login, bio }: SafeShallowShape<User> = root;
+  root satisfies {};
+  const { id, login, email, address }: SafeShallowShape<User> = root;
   if (!(typeof id === "number")) {
     return false;
   }
   if (!(typeof login === "string")) {
     return false;
   }
-  if (!(typeof bio === "object" && bio !== null)) {
+  if (!(typeof email === "undefined" || typeof email === "string")) {
     return false;
   }
-  const { first, last }: SafeShallowShape<User["bio"]> = bio;
-  if (!(typeof first === "string")) {
+  if (!(typeof address === "object" && address !== null)) {
     return false;
   }
-  if (!(typeof last === "string")) {
+  address satisfies {};
+  const { street, house }: SafeShallowShape<User["address"]> =
+    address;
+  if (!(typeof street === "string")) {
+    return false;
+  }
+  if (!(typeof house === "number")) {
     return false;
   }
   ({
     id,
     login,
-    bio: {
-      first,
-      last,
+    email,
+    address: {
+      street,
+      house,
     },
   }) satisfies User;
   return true;
 }
-export function isPost(root: unknown): root is Post {
-  type Element = Post["more"][number];
-  function isElement(root: unknown): root is Element {
-    if (!(typeof root === "string" || typeof root === "number")) {
-      return false;
-    }
-    root satisfies Element;
-    return true;
-  }
-  if (!(typeof root === "object" && root !== null)) {
-    return false;
-  }
-  const {
-    title,
-    text,
-    link,
-    published,
-    author,
-    more,
-  }: SafeShallowShape<Post> = root;
-  if (!(typeof title === "string")) {
-    return false;
-  }
-  if (!(typeof text === "string")) {
-    return false;
-  }
-  if (!(typeof link === "undefined" || typeof link === "string")) {
-    return false;
-  }
-  if (!(typeof published === "boolean")) {
-    return false;
-  }
-  if (!isUser(author)) {
-    return false;
-  }
-  if (!(safeIsArray(more) && more.every(isElement))) {
-    return false;
-  }
-  ({
-    title,
-    text,
-    link,
-    published,
-    author,
-    more,
-  }) satisfies Post;
-  return true;
-}
 ```
 
-And this is what `esbuild` minifies it into (formatted for readability):
+Play with it in the [playground](http://localhost:5173/typescript-predicate-generator/?s=PTAEBUAsEsGdTqAhgO1AUwB5ILYAcAbdUWdAF1AHsAzUMgTz3VgBoAoEUQpe0Ad2hlIdSOhxUATlySwyxepQCuUynxQA6Nmyx5KEigyagAqqSkBeUAG82oBABMAXKBSKcAI3QSA3LdAFKAHNoFGdZCRDA3zsxJGgCAH4wsgiUKL8ke3sJZlhnGzs7cPRyZNT0wtBIJVJnVw8vaNAAX19WtiA). And this is what `esbuild` minifies it into (formatted for readability):
 
 ```js
 // example_guards.min.js
-const u = Array.isArray;
-export function isUser(e) {
+function o(e) {
   if (!(typeof e == "object" && e !== null)) return !1;
-  const { id: f, login: r, bio: t } = e;
+  let { id: n, login: f, email: r, address: s } = e;
   if (
-    typeof f != "number" ||
-    typeof r != "string" ||
-    !(typeof t == "object" && t !== null)
+    typeof n != "number" ||
+    typeof f != "string" ||
+    !(typeof r > "u" || typeof r == "string") ||
+    !(typeof s == "object" && s !== null)
   )
     return !1;
-  const { first: n, last: s } = t;
-  return !(typeof n != "string" || typeof s != "string");
-}
-export function isPost(e) {
-  function f(o) {
-    return typeof o == "string" || typeof o == "number";
-  }
-  if (!(typeof e == "object" && e !== null)) return !1;
-  const {
-    title: r,
-    text: t,
-    link: n,
-    published: s,
-    author: l,
-    more: i,
-  } = e;
-  return !(
-    typeof r != "string" ||
-    typeof t != "string" ||
-    !(typeof n > "u" || typeof n == "string") ||
-    typeof s != "boolean" ||
-    !isUser(l) ||
-    !(u(i) && i.every(f))
-  );
+  let { street: t, house: a } = s;
+  return !(typeof t != "string" || typeof a != "number");
 }
 ```
 
 As you can see, esbuild nicely merges all the `if`s for the same set of properties into just one combined check.
+
+The Tests generated for the predicate look like this:
+
+```ts
+// example_guards.test.js
+import { expect, describe, it } from "vitest";
+import { isUser } from "./example_guards";
+const invalidValue: any = Symbol("invalidValue");
+const valid_User = [
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
+  {
+    id: 42,
+    login: "",
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
+  {
+    id: 42,
+    login: "string",
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
+  {
+    id: 42,
+    login: "string",
+    email: "",
+    address: { street: "", house: 0 },
+  },
+  {
+    id: 42,
+    login: "string",
+    email: "string",
+    address: { street: "", house: 0 },
+  },
+  { id: 42, login: "string", address: { street: "", house: 0 } },
+  {
+    id: 42,
+    login: "string",
+    email: "string",
+    address: { street: "string", house: 0 },
+  },
+  {
+    id: 42,
+    login: "string",
+    email: "string",
+    address: { street: "string", house: 42 },
+  },
+];
+const invalid_User = [
+  invalidValue,
+  null,
+  {
+    id: invalidValue,
+    login: "",
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
+  { login: "", email: undefined, address: { street: "", house: 0 } },
+  {
+    id: 0,
+    login: invalidValue,
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
+  { id: 0, email: undefined, address: { street: "", house: 0 } },
+  {
+    id: 0,
+    login: "",
+    email: invalidValue,
+    address: { street: "", house: 0 },
+  },
+  { id: 0, login: "", email: undefined, address: invalidValue },
+  { id: 0, login: "", email: undefined, address: null },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: { street: invalidValue, house: 0 },
+  },
+  { id: 0, login: "", email: undefined, address: { house: 0 } },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: { street: "", house: invalidValue },
+  },
+  { id: 0, login: "", email: undefined, address: { street: "" } },
+  { id: 0, login: "", email: undefined },
+];
+describe("User", () => {
+  it.for(valid_User)("valid", (value: unknown) => {
+    expect(isUser(value)).toBe(true);
+  });
+  it.for(invalid_User)("invalid", (value: unknown) => {
+    expect(isUser(value)).toBe(false);
+  });
+});
+```
 
 ## Known Limitations
 
