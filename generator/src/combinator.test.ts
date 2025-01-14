@@ -46,35 +46,15 @@ describe("valid", () => {
           },
         },
         {
-          "a": 1,
+          "a": 2,
           "b": true,
           "c": [],
           "d": {
-            "d2": undefined,
-          },
-        },
-        {
-          "a": 1,
-          "b": true,
-          "c": [
-            "a",
-          ],
-          "d": {
             "d2": null,
           },
         },
         {
-          "a": 1,
-          "b": true,
-          "c": [
-            "b",
-          ],
-          "d": {
-            "d2": null,
-          },
-        },
-        {
-          "a": 1,
+          "a": 2,
           "b": false,
           "c": [],
           "d": {
@@ -83,10 +63,32 @@ describe("valid", () => {
         },
         {
           "a": 2,
-          "b": true,
-          "c": [],
+          "b": false,
+          "c": [
+            "a",
+          ],
           "d": {
             "d2": null,
+          },
+        },
+        {
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
+          "d": {
+            "d2": null,
+          },
+        },
+        {
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
+          "d": {
+            "d2": undefined,
           },
         },
       ]
@@ -332,7 +334,7 @@ describe("valid", () => {
       `);
     });
 
-    it.only("of several union properties", () => {
+    it("of several union properties", () => {
       expect(
         combineValid(
           object(
@@ -420,13 +422,13 @@ describe("valid", () => {
           },
           {
             "a": 1,
-            "b": 2,
             "c": 3,
+            "d": 4,
           },
           {
             "a": 1,
+            "b": 2,
             "c": 3,
-            "d": 4,
           },
         ]
       `);
@@ -458,29 +460,8 @@ describe("valid", () => {
             "f": 6,
           },
           {
-            "a": 1,
             "b": 2,
             "c": 3,
-            "d": 4,
-            "e": 5,
-          },
-          {
-            "a": 1,
-            "b": 2,
-            "c": 3,
-            "d": 4,
-            "f": 6,
-          },
-          {
-            "a": 1,
-            "b": 2,
-            "c": 3,
-            "e": 5,
-            "f": 6,
-          },
-          {
-            "a": 1,
-            "b": 2,
             "d": 4,
             "e": 5,
             "f": 6,
@@ -493,11 +474,82 @@ describe("valid", () => {
             "f": 6,
           },
           {
+            "a": 1,
+            "b": 2,
+            "d": 4,
+            "e": 5,
+            "f": 6,
+          },
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "e": 5,
+            "f": 6,
+          },
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "d": 4,
+            "f": 6,
+          },
+          {
+            "a": 1,
             "b": 2,
             "c": 3,
             "d": 4,
             "e": 5,
-            "f": 6,
+          },
+        ]
+      `);
+    });
+
+    it("of only optional properties of multiple values", () => {
+      expect(
+        combineValid(
+          object(
+            {
+              a: values(["A1", "A2"]),
+              b: values(["B1", "B2"]),
+              c: values(["C1", "C2"]),
+            },
+            new Set(["a", "b", "c"])
+          )
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          {
+            "a": "A1",
+            "b": "B1",
+            "c": "C1",
+          },
+          {
+            "a": "A2",
+            "b": "B1",
+            "c": "C1",
+          },
+          {
+            "b": "B1",
+            "c": "C1",
+          },
+          {
+            "a": "A2",
+            "b": "B2",
+            "c": "C1",
+          },
+          {
+            "a": "A2",
+            "c": "C1",
+          },
+          {
+            "a": "A2",
+            "b": "B2",
+            "c": "C2",
+          },
+          {
+            "a": "A2",
+            "b": "B2",
           },
         ]
       `);
@@ -580,18 +632,18 @@ describe("valid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
               "bb": "BB1",
             },
             "c": {
-              "cc": "CC2",
+              "cc": "CC1",
             },
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
               "bb": "BB2",
@@ -605,10 +657,10 @@ describe("valid", () => {
               "aa": "AA2",
             },
             "b": {
-              "bb": "BB1",
+              "bb": "BB2",
             },
             "c": {
-              "cc": "CC1",
+              "cc": "CC2",
             },
           },
         ]

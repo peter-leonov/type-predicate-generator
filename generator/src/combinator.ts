@@ -251,8 +251,13 @@ function* rollObject(
             },
           ];
         }
+
+        // 2. without the optional key + first of the rest
+        if (isOptional) {
+          yield [true, rest];
+        }
       } else {
-        // 2. with the key + last value * the rest of the rest
+        // 3. with the key + last value * the rest of the rest
         if (hasLastValue) {
           yield [
             true,
@@ -262,19 +267,6 @@ function* rollObject(
             },
           ];
         }
-      }
-    }
-
-    // 3. without the optional key + first of the rest
-    if (isOptional) {
-      for (const [isValidRest, rest] of rollObject(
-        false,
-        restObj,
-        optionalAttributes
-      )) {
-        assert(isValidRest, "must be a valid rest");
-        yield [true, rest];
-        break;
       }
     }
   }
