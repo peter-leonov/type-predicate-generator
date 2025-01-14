@@ -296,14 +296,14 @@ Feel free to pick any of the tasks here or in the GH issues.
 - [x] Report TS errors before running
 - [ ] Report errors nicely
 - [x] Implement installing as a CLI
-- [ ] Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
-- [ ] Generate unit tests with example data
+- [x] Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
+- [x] Generate unit tests with example data
 
 ### Architecture
 
 This tool is simple if not trivial. The code generator uses the TypeScript public API to emit valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
 
-What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type in [generator/src/model.ts](generator/src/model.ts)). The type parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed to the generator to actually produce the resulting TS code. This way both subsystems can be developed and tested independently. This resembles the viewmodel from [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) and in general promotes clean domain boundaries inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
+What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type in [generator/src/model.ts](generator/src/model.ts)). The type parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed to the generator to actually produce the resulting TS code and to the tests generator to produce unit tests. This way both subsystems can be developed and tested relatively independently. This resembles the viewmodel from [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) and in general promotes clean domain boundaries inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 
 ### Design
 
