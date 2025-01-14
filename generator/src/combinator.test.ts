@@ -115,6 +115,16 @@ describe("valid", () => {
         ]
       `);
     });
+    it("multiple", () => {
+      expect(combineValid(values([1, "A", true])))
+        .toMatchInlineSnapshot(`
+          [
+            1,
+            "A",
+            true,
+          ]
+        `);
+    });
   });
 
   describe("union", () => {
@@ -816,6 +826,14 @@ describe("invalid", () => {
           Symbol(invalidValue),
         ]
       `);
+    });
+    it("multiple", () => {
+      expect(combineInvalid(values([1, "A", true])))
+        .toMatchInlineSnapshot(`
+          [
+            Symbol(invalidValue),
+          ]
+        `);
     });
   });
 
