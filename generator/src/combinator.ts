@@ -7,7 +7,7 @@
  * and relies on this invariant.
  */
 
-import { assert, unimplemented } from "./helpers";
+import { assert, unimplemented, unreachable } from "./helpers";
 import {
   AliasType,
   ArrayType,
@@ -49,9 +49,9 @@ export type Value =
   | Value[]
   | typeof invalidValue;
 
-type Mode = "valid" | "invalid";
-const MODE_VALID: Mode = "valid";
-const MODE_INVALID: Mode = "invalid";
+const MODE_VALID = "valid";
+const MODE_INVALID = "invalid";
+type Mode = typeof MODE_VALID | typeof MODE_INVALID;
 
 export type Combinator = (mode: Mode) => Generator<[Mode, Value]>;
 
@@ -102,11 +102,14 @@ export function union(members: Combinator[]): Combinator {
             continue;
           }
           seenValid.add(v);
-        } else {
+        } else if (mode === MODE_INVALID) {
           if (seenInvalid.has(v)) {
             continue;
           }
           seenInvalid.add(v);
+        } else {
+          mode satisfies never;
+          unreachable();
         }
 
         yield tuple;
@@ -117,18 +120,21 @@ export function union(members: Combinator[]): Combinator {
 
 export function array(value: Combinator): Combinator {
   return function* (mode) {
-    if (mode == MODE_INVALID) {
+    if (mode === MODE_VALID) {
+      yield [MODE_VALID, []];
+      for (const [mode, v] of value(MODE_VALID)) {
+        assert(mode === MODE_VALID, "must be a valid value");
+        yield [mode, [v]];
+      }
+    } else if (mode === MODE_INVALID) {
       yield [MODE_INVALID, invalidValue];
       for (const [mode, v] of value(MODE_INVALID)) {
         assert(mode === MODE_INVALID, "must be an invalid value");
         yield [mode, [v]];
       }
     } else {
-      yield [MODE_VALID, []];
-      for (const [mode, v] of value(MODE_VALID)) {
-        assert(mode === MODE_VALID, "must be a valid value");
-        yield [mode, [v]];
-      }
+      mode satisfies never;
+      unreachable();
     }
   };
 }
@@ -147,14 +153,17 @@ export function object(
   optionalAttributes: Set<string>
 ): Combinator {
   return function* (mode) {
-    if (mode === MODE_INVALID) {
+    if (mode === MODE_VALID) {
+      yield* rollObject(MODE_VALID, obj, optionalAttributes);
+    } else if (mode === MODE_INVALID) {
       // testing `typeof v === "object"`
       yield [MODE_INVALID, invalidValue];
       // testing `v !== null`
       yield [MODE_INVALID, null];
       yield* rollObject(MODE_INVALID, obj, optionalAttributes);
     } else {
-      yield* rollObject(MODE_VALID, obj, optionalAttributes);
+      mode satisfies never;
+      unreachable();
     }
   };
 }
@@ -166,11 +175,14 @@ function* rollObject(
 ): Generator<[Mode, Record<string, Value>]> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
-    if (mode === MODE_INVALID) {
-      return;
-    } else {
+    if (mode === MODE_VALID) {
       yield [MODE_VALID, {}];
       return;
+    } else if (mode === MODE_INVALID) {
+      return;
+    } else {
+      mode satisfies never;
+      unreachable();
     }
   }
 
@@ -184,7 +196,53 @@ function* rollObject(
 
   const isOptional = optionalAttributes.has(key);
 
-  if (mode === MODE_INVALID) {
+  if (mode === MODE_VALID) {
+    let first = true;
+    let hasLastValue = false;
+    let lastValue: Value;
+    for (const [modeRest, rest] of rollObject(
+      MODE_VALID,
+      restObj,
+      optionalAttributes
+    )) {
+      assert(modeRest === MODE_VALID, "must be a valid rest");
+
+      // 1. with the key + all the values * first of the rest
+      if (first) {
+        first = false;
+        for (const [modeValue, v] of value(MODE_VALID)) {
+          assert(modeValue === MODE_VALID, "must be a valid value");
+
+          hasLastValue = true;
+          lastValue = v;
+
+          yield [
+            MODE_VALID,
+            {
+              [key]: v,
+              ...rest,
+            },
+          ];
+        }
+
+        // 2. without the optional key + first of the rest
+        if (isOptional) {
+          yield [MODE_VALID, rest];
+        }
+      } else {
+        // 3. with the key + last value * the rest of the rest
+        if (hasLastValue) {
+          yield [
+            MODE_VALID,
+            {
+              [key]: lastValue,
+              ...rest,
+            },
+          ];
+        }
+      }
+    }
+  } else if (mode === MODE_INVALID) {
     for (const [modeRest, rest] of rollObject(
       MODE_VALID,
       restObj,
@@ -256,51 +314,8 @@ function* rollObject(
       }
     }
   } else {
-    let first = true;
-    let hasLastValue = false;
-    let lastValue: Value;
-    for (const [modeRest, rest] of rollObject(
-      MODE_VALID,
-      restObj,
-      optionalAttributes
-    )) {
-      assert(modeRest === MODE_VALID, "must be a valid rest");
-
-      // 1. with the key + all the values * first of the rest
-      if (first) {
-        first = false;
-        for (const [modeValue, v] of value(MODE_VALID)) {
-          assert(modeValue === MODE_VALID, "must be a valid value");
-
-          hasLastValue = true;
-          lastValue = v;
-
-          yield [
-            MODE_VALID,
-            {
-              [key]: v,
-              ...rest,
-            },
-          ];
-        }
-
-        // 2. without the optional key + first of the rest
-        if (isOptional) {
-          yield [MODE_VALID, rest];
-        }
-      } else {
-        // 3. with the key + last value * the rest of the rest
-        if (hasLastValue) {
-          yield [
-            MODE_VALID,
-            {
-              [key]: lastValue,
-              ...rest,
-            },
-          ];
-        }
-      }
-    }
+    mode satisfies never;
+    unreachable();
   }
 }
 
