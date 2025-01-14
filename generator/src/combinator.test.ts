@@ -332,13 +332,21 @@ describe("valid", () => {
       `);
     });
 
-    it("of a several union properties", () => {
+    it.only("of several union properties", () => {
       expect(
         combineValid(
           object(
             {
-              a: union([values(["A1"])]),
-              b: union([values(["B1"]), values(["B2"])]),
+              a: union([
+                values(["A1"]),
+                values(["A2"]),
+                values(["A3"]),
+              ]),
+              b: union([
+                values(["B1"]),
+                values(["B2"]),
+                values(["B3"]),
+              ]),
               c: union([
                 values(["C1"]),
                 values(["C2"]),
@@ -356,19 +364,34 @@ describe("valid", () => {
             "c": "C1",
           },
           {
-            "a": "A1",
+            "a": "A2",
             "b": "B1",
+            "c": "C1",
+          },
+          {
+            "a": "A3",
+            "b": "B1",
+            "c": "C1",
+          },
+          {
+            "a": "A3",
+            "b": "B2",
+            "c": "C1",
+          },
+          {
+            "a": "A3",
+            "b": "B3",
+            "c": "C1",
+          },
+          {
+            "a": "A3",
+            "b": "B3",
             "c": "C2",
           },
           {
-            "a": "A1",
-            "b": "B1",
+            "a": "A3",
+            "b": "B3",
             "c": "C3",
-          },
-          {
-            "a": "A1",
-            "b": "B2",
-            "c": "C1",
           },
         ]
       `);
@@ -1091,7 +1114,7 @@ describe("invalid", () => {
       `);
     });
 
-    it("of a several union properties", () => {
+    it("of several union properties", () => {
       expect(
         combineInvalid(
           object(

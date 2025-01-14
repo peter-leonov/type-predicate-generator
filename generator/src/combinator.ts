@@ -224,49 +224,48 @@ function* rollObject(
       break;
     }
   } else {
-    // 1. with the key + one value * all of the rest
-    const valueG = value(false);
-    const valueIR = valueG.next();
-    assert(!valueIR.done, "an empty generator is a bug");
-    const [isValidValue, v] = valueIR.value;
-    assert(isValidValue, "must be a valid value");
+    let first = true;
+    let hasLastValue = false;
+    let lastValue: Value;
     for (const [isValidRest, rest] of rollObject(
       false,
       restObj,
       optionalAttributes
     )) {
       assert(isValidRest, "must be a valid rest");
-      yield [
-        true,
-        {
-          [key]: v,
-          ...rest,
-        },
-      ];
-    }
 
-    // 2. with the key + all the values * one of the rest
-    for (const [isValidValue, v] of valueG) {
-      assert(isValidValue, "must be a valid value");
-      // TODO: decorate rollObject() generator with a looped generator
-      for (const [isValidRest, rest] of rollObject(
-        false,
-        restObj,
-        optionalAttributes
-      )) {
-        assert(isValidRest, "must be a valid rest");
-        yield [
-          true,
-          {
-            [key]: v,
-            ...rest,
-          },
-        ];
-        break;
+      // 1. with the key + all the values * first of the rest
+      if (first) {
+        first = false;
+        for (const [isValidValue, v] of value(false)) {
+          assert(isValidValue, "must be a valid value");
+
+          hasLastValue = true;
+          lastValue = v;
+
+          yield [
+            true,
+            {
+              [key]: v,
+              ...rest,
+            },
+          ];
+        }
+      } else {
+        // 2. with the key + last value * the rest of the rest
+        if (hasLastValue) {
+          yield [
+            true,
+            {
+              [key]: lastValue,
+              ...rest,
+            },
+          ];
+        }
       }
     }
 
-    // 3. without the optional key + one of the rest
+    // 3. without the optional key + first of the rest
     if (isOptional) {
       for (const [isValidRest, rest] of rollObject(
         false,
