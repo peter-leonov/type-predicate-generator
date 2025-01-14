@@ -1,6 +1,6 @@
 {
   "name": "type-predicate-generator",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "main": "dist/index.js",
   "engines": {
     "node": ">=16"
