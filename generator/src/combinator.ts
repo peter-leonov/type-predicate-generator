@@ -183,32 +183,16 @@ function* rollObject(
   const isOptional = optionalAttributes.has(key);
 
   if (doInvalid) {
-    // 1. without non-optional key + one of the valid rest
-    if (!isOptional) {
-      for (const [isValidRest, rest] of rollObject(
-        false,
-        restObj,
-        optionalAttributes
-      )) {
-        assert(isValidRest, "must be a valid rest");
-        yield [
-          false,
-          {
-            ...rest,
-          },
-        ];
-        break;
-      }
-    }
+    for (const [isValidRest, rest] of rollObject(
+      false,
+      restObj,
+      optionalAttributes
+    )) {
+      assert(isValidRest, "must be a valid rest");
 
-    // 2. with the key + all invalid values * one of the valid rest
-    for (const [isValidValue, v] of value(true)) {
-      assert(!isValidValue, "must be an invalid value");
-      for (const [isValidRest, rest] of rollObject(
-        false,
-        restObj,
-        optionalAttributes
-      )) {
+      // 1. with the key + all invalid values * first of the valid rest
+      for (const [isValidValue, v] of value(true)) {
+        assert(!isValidValue, "must be an invalid value");
         assert(isValidRest, "must be a valid rest");
         yield [
           isValidValue && isValidRest,
@@ -217,9 +201,22 @@ function* rollObject(
             ...rest,
           },
         ];
-        break;
       }
+
+      // 2. without non-optional key + first of the valid rest
+      if (!isOptional) {
+        yield [
+          false,
+          {
+            ...rest,
+          },
+        ];
+      }
+
+      break;
     }
+
+    // 4. with the key + all valid values * first of the invalid rest
 
     // 3. with the key + one valid value * all of the invalid rest
     for (const [isValidValue, v] of value(false)) {
