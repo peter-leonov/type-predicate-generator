@@ -49,22 +49,24 @@ export type Value =
   | Value[]
   | typeof invalidValue;
 
-export type Combinator = (
-  doInvalid: boolean
-) => Generator<[boolean, Value]>;
+type Mode = "valid" | "invalid";
+const MODE_VALID: Mode = "valid";
+const MODE_INVALID: Mode = "invalid";
+
+export type Combinator = (mode: Mode) => Generator<[Mode, Value]>;
 
 export function values(values: Value[]): Combinator {
   assert(
     values.length > 0,
     "values() has to have at least one value"
   );
-  return function* (doInvalid) {
-    if (doInvalid) {
-      yield [false, invalidValue];
-      return;
-    }
-    for (const value of values) {
-      yield [true, value];
+  return function* (mode) {
+    if (mode == MODE_VALID) {
+      for (const value of values) {
+        yield [MODE_VALID, value];
+      }
+    } else {
+      yield [MODE_INVALID, invalidValue];
     }
   };
 }
@@ -79,23 +81,23 @@ export class Reference {
 }
 
 export function reference(typeName: string): Combinator {
-  return function* (doInvalid) {
-    if (doInvalid) {
-      yield [false, new Reference(typeName, false)];
+  return function* (mode) {
+    if (mode === MODE_VALID) {
+      yield [MODE_VALID, new Reference(typeName, true)];
     } else {
-      yield [true, new Reference(typeName, true)];
+      yield [MODE_INVALID, new Reference(typeName, false)];
     }
   };
 }
 
 export function union(members: Combinator[]): Combinator {
-  return function* (doInvalid) {
+  return function* (mode) {
     const seenValid = new Set();
     const seenInvalid = new Set();
     for (const m of members) {
-      for (const tuple of m(doInvalid)) {
-        const [isValid, v] = tuple;
-        if (isValid) {
+      for (const tuple of m(mode)) {
+        const [mode, v] = tuple;
+        if (mode === MODE_VALID) {
           if (seenValid.has(v)) {
             continue;
           }
@@ -114,18 +116,18 @@ export function union(members: Combinator[]): Combinator {
 }
 
 export function array(value: Combinator): Combinator {
-  return function* (doInvalid) {
-    if (doInvalid) {
-      yield [false, invalidValue];
-      for (const [isValid, v] of value(true)) {
-        assert(!isValid, "must be an invalid value");
-        yield [isValid, [v]];
+  return function* (mode) {
+    if (mode == MODE_INVALID) {
+      yield [MODE_INVALID, invalidValue];
+      for (const [mode, v] of value(MODE_INVALID)) {
+        assert(mode === MODE_INVALID, "must be an invalid value");
+        yield [mode, [v]];
       }
     } else {
-      yield [true, []];
-      for (const [isValid, v] of value(false)) {
-        assert(isValid, "must be a valid value");
-        yield [isValid, [v]];
+      yield [MODE_VALID, []];
+      for (const [mode, v] of value(MODE_VALID)) {
+        assert(mode === MODE_VALID, "must be a valid value");
+        yield [mode, [v]];
       }
     }
   };
@@ -144,30 +146,30 @@ export function object(
   obj: Record<string, Combinator>,
   optionalAttributes: Set<string>
 ): Combinator {
-  return function* (doInvalid) {
-    if (doInvalid) {
+  return function* (mode) {
+    if (mode === MODE_INVALID) {
       // testing `typeof v === "object"`
-      yield [false, invalidValue];
+      yield [MODE_INVALID, invalidValue];
       // testing `v !== null`
-      yield [false, null];
-      yield* rollObject(true, obj, optionalAttributes);
+      yield [MODE_INVALID, null];
+      yield* rollObject(MODE_INVALID, obj, optionalAttributes);
     } else {
-      yield* rollObject(false, obj, optionalAttributes);
+      yield* rollObject(MODE_VALID, obj, optionalAttributes);
     }
   };
 }
 
 function* rollObject(
-  doInvalid: boolean,
+  mode: Mode,
   obj: Record<string, Combinator>,
   optionalAttributes: Set<string>
-): Generator<[boolean, Record<string, Value>]> {
+): Generator<[Mode, Record<string, Value>]> {
   const keys = Object.keys(obj);
   if (keys.length == 0) {
-    if (doInvalid) {
+    if (mode === MODE_INVALID) {
       return;
     } else {
-      yield [true, {}];
+      yield [MODE_VALID, {}];
       return;
     }
   }
@@ -182,20 +184,22 @@ function* rollObject(
 
   const isOptional = optionalAttributes.has(key);
 
-  if (doInvalid) {
-    for (const [isValidRest, rest] of rollObject(
-      false,
+  if (mode === MODE_INVALID) {
+    for (const [modeRest, rest] of rollObject(
+      MODE_VALID,
       restObj,
       optionalAttributes
     )) {
-      assert(isValidRest, "must be a valid rest");
+      assert(modeRest === MODE_VALID, "must be a valid rest");
 
       // 1. with the key + all invalid values * first of the valid rest
-      for (const [isValidValue, v] of value(true)) {
-        assert(!isValidValue, "must be an invalid value");
-        assert(isValidRest, "must be a valid rest");
+      for (const [modeValue, v] of value(MODE_INVALID)) {
+        assert(
+          modeValue === MODE_INVALID,
+          "must be an invalid value"
+        );
         yield [
-          false,
+          MODE_INVALID,
           {
             [key]: v,
             ...rest,
@@ -205,7 +209,7 @@ function* rollObject(
 
       // 2. without non-optional key + first of the valid rest
       if (!isOptional) {
-        yield [false, rest];
+        yield [MODE_INVALID, rest];
       }
 
       break;
@@ -214,24 +218,24 @@ function* rollObject(
     let first = true;
     let hasLastValue = false;
     let lastValue: Value;
-    for (const [isValidRest, rest] of rollObject(
-      true,
+    for (const [modeRest, rest] of rollObject(
+      MODE_INVALID,
       restObj,
       optionalAttributes
     )) {
-      assert(!isValidRest, "must be an invalid rest");
+      assert(modeRest === MODE_INVALID, "must be an invalid rest");
 
       // 4. with the key + all valid values * first of the invalid rest
       if (first) {
         first = false;
-        for (const [isValidValue, v] of value(false)) {
-          assert(isValidValue, "must be a valid value");
+        for (const [modeValue, v] of value(MODE_VALID)) {
+          assert(modeValue === MODE_VALID, "must be a valid value");
 
           hasLastValue = true;
           lastValue = v;
 
           yield [
-            isValidValue && isValidRest,
+            MODE_INVALID,
             {
               [key]: v,
               ...rest,
@@ -242,7 +246,7 @@ function* rollObject(
         // 3. with the key + one valid value * all of the invalid rest
         if (hasLastValue) {
           yield [
-            false,
+            MODE_INVALID,
             {
               [key]: lastValue,
               ...rest,
@@ -255,24 +259,24 @@ function* rollObject(
     let first = true;
     let hasLastValue = false;
     let lastValue: Value;
-    for (const [isValidRest, rest] of rollObject(
-      false,
+    for (const [modeRest, rest] of rollObject(
+      MODE_VALID,
       restObj,
       optionalAttributes
     )) {
-      assert(isValidRest, "must be a valid rest");
+      assert(modeRest === MODE_VALID, "must be a valid rest");
 
       // 1. with the key + all the values * first of the rest
       if (first) {
         first = false;
-        for (const [isValidValue, v] of value(false)) {
-          assert(isValidValue, "must be a valid value");
+        for (const [modeValue, v] of value(MODE_VALID)) {
+          assert(modeValue === MODE_VALID, "must be a valid value");
 
           hasLastValue = true;
           lastValue = v;
 
           yield [
-            true,
+            MODE_VALID,
             {
               [key]: v,
               ...rest,
@@ -282,13 +286,13 @@ function* rollObject(
 
         // 2. without the optional key + first of the rest
         if (isOptional) {
-          yield [true, rest];
+          yield [MODE_VALID, rest];
         }
       } else {
         // 3. with the key + last value * the rest of the rest
         if (hasLastValue) {
           yield [
-            true,
+            MODE_VALID,
             {
               [key]: lastValue,
               ...rest,
@@ -313,11 +317,15 @@ function pick<T>(
 }
 
 export function combineValid(fn: Combinator) {
-  return [...fn(false)].map(([isValid, v]) => (assert(isValid), v));
+  return [...fn(MODE_VALID)].map(
+    ([mode, v]) => (assert(mode === MODE_VALID), v)
+  );
 }
 
 export function combineInvalid(fn: Combinator) {
-  return [...fn(true)].map(([isValid, v]) => (assert(!isValid), v));
+  return [...fn(MODE_INVALID)].map(
+    ([mode, v]) => (assert(mode === MODE_INVALID), v)
+  );
 }
 
 export function modelToCombinator(model: TypeModel): Combinator {
