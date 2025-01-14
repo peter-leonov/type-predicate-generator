@@ -8,9 +8,12 @@ export class TypeScriptError extends Error {}
 export class UnsupportedError extends Error {}
 
 export class UnsupportedUnionMember extends UnsupportedError {
-  constructor(type: TypeModel) {
+  constructor(types: TypeModel[]) {
+    const names = types.map((t) => t.nameForErrors);
     super(
-      `The ${type.nameForErrors} is not supported in unions. Try extracting it into a separate type alias. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/1`
+      `The combination of types ${names.join(
+        ","
+      )} is not supported in unions. Try extracting object types into their separate type aliases. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/1`
     );
   }
 }

@@ -107,11 +107,11 @@ export class TypeGuardGenerator {
         ),
       };
     } else if (type instanceof UnionType) {
-      const unsafeUnionType = type.types.find(
+      const unsafeUnionTypes = type.types.filter(
         (t) => !safeToUseInAUnion(t)
       );
-      if (unsafeUnionType) {
-        throw new UnsupportedUnionMember(unsafeUnionType);
+      if (unsafeUnionTypes.length > 0) {
+        throw new UnsupportedUnionMember(unsafeUnionTypes);
       }
       return {
         hoist: [],
