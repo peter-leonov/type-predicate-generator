@@ -195,7 +195,7 @@ function* rollObject(
         assert(!isValidValue, "must be an invalid value");
         assert(isValidRest, "must be a valid rest");
         yield [
-          isValidValue && isValidRest,
+          false,
           {
             [key]: v,
             ...rest,
@@ -205,37 +205,51 @@ function* rollObject(
 
       // 2. without non-optional key + first of the valid rest
       if (!isOptional) {
-        yield [
-          false,
-          {
-            ...rest,
-          },
-        ];
+        yield [false, rest];
       }
 
       break;
     }
 
-    // 4. with the key + all valid values * first of the invalid rest
+    let first = true;
+    let hasLastValue = false;
+    let lastValue: Value;
+    for (const [isValidRest, rest] of rollObject(
+      true,
+      restObj,
+      optionalAttributes
+    )) {
+      assert(!isValidRest, "must be an invalid rest");
 
-    // 3. with the key + one valid value * all of the invalid rest
-    for (const [isValidValue, v] of value(false)) {
-      assert(isValidValue, "must be a valid value");
-      for (const [isValidRest, rest] of rollObject(
-        true,
-        restObj,
-        optionalAttributes
-      )) {
-        assert(!isValidRest, "must be an invalid rest");
-        yield [
-          isValidValue && isValidRest,
-          {
-            [key]: v,
-            ...rest,
-          },
-        ];
+      // 4. with the key + all valid values * first of the invalid rest
+      if (first) {
+        first = false;
+        for (const [isValidValue, v] of value(false)) {
+          assert(isValidValue, "must be a valid value");
+
+          hasLastValue = true;
+          lastValue = v;
+
+          yield [
+            isValidValue && isValidRest,
+            {
+              [key]: v,
+              ...rest,
+            },
+          ];
+        }
+      } else {
+        // 3. with the key + one valid value * all of the invalid rest
+        if (hasLastValue) {
+          yield [
+            false,
+            {
+              [key]: lastValue,
+              ...rest,
+            },
+          ];
+        }
       }
-      break;
     }
   } else {
     let first = true;

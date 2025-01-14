@@ -797,14 +797,22 @@ describe("invalid", () => {
           },
         },
         {
-          "a": 1,
+          "a": 2,
+          "b": Symbol(invalidValue),
           "c": [],
           "d": {
             "d2": null,
           },
         },
         {
-          "a": 1,
+          "a": 2,
+          "c": [],
+          "d": {
+            "d2": null,
+          },
+        },
+        {
+          "a": 2,
           "b": true,
           "c": Symbol(invalidValue),
           "d": {
@@ -812,8 +820,16 @@ describe("invalid", () => {
           },
         },
         {
-          "a": 1,
-          "b": true,
+          "a": 2,
+          "b": false,
+          "c": Symbol(invalidValue),
+          "d": {
+            "d2": null,
+          },
+        },
+        {
+          "a": 2,
+          "b": false,
           "c": [
             Symbol(invalidValue),
           ],
@@ -822,42 +838,66 @@ describe("invalid", () => {
           },
         },
         {
-          "a": 1,
-          "b": true,
+          "a": 2,
+          "b": false,
           "d": {
             "d2": null,
           },
         },
         {
-          "a": 1,
-          "b": true,
+          "a": 2,
+          "b": false,
           "c": [],
           "d": Symbol(invalidValue),
         },
         {
-          "a": 1,
-          "b": true,
-          "c": [],
+          "a": 2,
+          "b": false,
+          "c": [
+            "a",
+          ],
+          "d": Symbol(invalidValue),
+        },
+        {
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
+          "d": Symbol(invalidValue),
+        },
+        {
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
           "d": null,
         },
         {
-          "a": 1,
-          "b": true,
-          "c": [],
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
           "d": {
             "d2": Symbol(invalidValue),
           },
         },
         {
-          "a": 1,
-          "b": true,
-          "c": [],
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
           "d": {},
         },
         {
-          "a": 1,
-          "b": true,
-          "c": [],
+          "a": 2,
+          "b": false,
+          "c": [
+            "b",
+          ],
         },
       ]
     `);
@@ -1155,17 +1195,37 @@ describe("invalid", () => {
             "c": "C1",
           },
           {
-            "a": "A1",
+            "a": "A2",
+            "b": Symbol(invalidValue),
             "c": "C1",
           },
           {
-            "a": "A1",
+            "a": "A3",
+            "b": Symbol(invalidValue),
+            "c": "C1",
+          },
+          {
+            "a": "A3",
+            "c": "C1",
+          },
+          {
+            "a": "A3",
             "b": "B1",
             "c": Symbol(invalidValue),
           },
           {
-            "a": "A1",
-            "b": "B1",
+            "a": "A3",
+            "b": "B2",
+            "c": Symbol(invalidValue),
+          },
+          {
+            "a": "A3",
+            "b": "B3",
+            "c": Symbol(invalidValue),
+          },
+          {
+            "a": "A3",
+            "b": "B3",
           },
         ]
       `);
@@ -1666,7 +1726,16 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
+            },
+            "b": Symbol(invalidValue),
+            "c": {
+              "cc": "CC1",
+            },
+          },
+          {
+            "a": {
+              "aa": "AA2",
             },
             "b": null,
             "c": {
@@ -1675,7 +1744,7 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
               "bb": Symbol(invalidValue),
@@ -1686,7 +1755,7 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {},
             "c": {
@@ -1695,7 +1764,7 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "c": {
               "cc": "CC1",
@@ -1703,7 +1772,7 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
               "bb": "BB1",
@@ -1712,19 +1781,28 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
-              "bb": "BB1",
+              "bb": "BB2",
+            },
+            "c": Symbol(invalidValue),
+          },
+          {
+            "a": {
+              "aa": "AA2",
+            },
+            "b": {
+              "bb": "BB2",
             },
             "c": null,
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
-              "bb": "BB1",
+              "bb": "BB2",
             },
             "c": {
               "cc": Symbol(invalidValue),
@@ -1732,19 +1810,19 @@ describe("invalid", () => {
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
-              "bb": "BB1",
+              "bb": "BB2",
             },
             "c": {},
           },
           {
             "a": {
-              "aa": "AA1",
+              "aa": "AA2",
             },
             "b": {
-              "bb": "BB1",
+              "bb": "BB2",
             },
           },
         ]

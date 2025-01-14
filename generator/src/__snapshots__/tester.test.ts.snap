@@ -80,9 +80,11 @@ const invalid_X = [
     { a: invalidValue, b: 0, c: true },
     { b: 0, c: true },
     { a: "", b: invalidValue, c: true },
-    { a: "", c: true },
-    { a: "", b: 0, c: invalidValue },
-    { a: "", b: 0 }
+    { a: "string", b: invalidValue, c: true },
+    { a: "string", c: true },
+    { a: "string", b: 0, c: invalidValue },
+    { a: "string", b: 42, c: invalidValue },
+    { a: "string", b: 42 }
 ];
 describe("X", () => {
     it.for(valid_X)("valid", (value: unknown) => {
@@ -113,8 +115,9 @@ const invalid_X = [
     { b: undefined, c: 3, d: undefined },
     { a: 1, b: invalidValue, c: 3, d: undefined },
     { a: 1, b: undefined, c: invalidValue, d: undefined },
-    { a: 1, b: undefined, d: undefined },
-    { a: 1, b: undefined, c: 3, d: invalidValue }
+    { a: 1, b: 2, c: invalidValue, d: undefined },
+    { a: 1, b: 2, d: undefined },
+    { a: 1, b: 2, c: 3, d: invalidValue }
 ];
 describe("X", () => {
     it.for(valid_X)("valid", (value: unknown) => {
