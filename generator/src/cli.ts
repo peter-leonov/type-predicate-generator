@@ -111,42 +111,34 @@ function main(argv: string[]): number {
     return 0;
   }
 
-  if (filenames.length >= 2) {
-    console.error(
-      `Error: generator does not support multiple file input yet.`
-    );
+  if (filenames.length == 0) {
+    console.error("Error: no input file specified");
     usage();
     return 3;
   }
 
-  const fileName = filenames[0];
-  if (!fileName) {
-    console.error("Error: missing input file.");
-    usage();
-    return 2;
-  }
-
-  try {
-    const stats = fs.statSync(fileName);
-    if (!stats.isFile()) {
-      console.error(`error openning file ${fileName}: not a file`);
+  for (const fileName of filenames) {
+    try {
+      const stats = fs.statSync(fileName);
+      if (!stats.isFile()) {
+        console.error(`error openning file ${fileName}: not a file`);
+        return 3;
+      }
+    } catch (err) {
+      console.error(`error openning file ${fileName}: ${err}`);
       return 3;
     }
-  } catch (err) {
-    console.error(`error openning file ${fileName}: ${err}`);
-    return 3;
-  }
 
-  try {
-    processFile(fileName, flags);
-  } catch (err) {
-    if (flags.withStacktrace) {
-      console.error(err);
+    try {
+      processFile(fileName, flags);
+    } catch (err) {
+      if (flags.withStacktrace) {
+        console.error(err);
+      }
+      console.error(explainError(err, false));
+      return 1;
     }
-    console.error(explainError(err, false));
-    return 1;
   }
-
   return 0;
 }
 
