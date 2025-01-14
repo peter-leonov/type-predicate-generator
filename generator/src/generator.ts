@@ -704,7 +704,7 @@ function typeAliasForObjectAttribute(
       factory.createIdentifier("Extract"),
       [
         typePathToTypeSelector(path),
-        factory.createTypeLiteralNode([]),
+        factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword),
       ]
     )
   );
