@@ -49,8 +49,8 @@ export type Value =
   | Value[]
   | typeof invalidValue;
 
-const MODE_VALID = "valid";
-const MODE_INVALID = "invalid";
+const MODE_VALID = 1;
+const MODE_INVALID = 2;
 type Mode = typeof MODE_VALID | typeof MODE_INVALID;
 
 export type Combinator = (mode: Mode) => Generator<[Mode, Value]>;
