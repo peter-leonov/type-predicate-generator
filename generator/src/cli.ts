@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import ts from "typescript";
 import fs from "node:fs";
+import path from "node:path";
 import {
   ensureNoErrors,
   nodesToString,
@@ -17,9 +18,9 @@ type Flags = {
   unitTests?: boolean;
 };
 
-function processFile(fileName: string, flags: Flags): boolean {
+function processFile(typesPath: string, flags: Flags) {
   // Build a program using the set of root file names in fileNames
-  const program = ts.createProgram([fileName], {
+  const program = ts.createProgram([typesPath], {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.ESNext,
     strict: true,
@@ -41,36 +42,51 @@ function processFile(fileName: string, flags: Flags): boolean {
       continue;
     }
 
-    const fileNameNoExt = fileName.replace(/\.\w+$/, "");
-    const importFrom = flags.keepExtension ? fileName : fileNameNoExt;
+    const dirName = path.dirname(typesPath);
+    const typesFileName = path.basename(typesPath);
+    const typesFileNameNoExt = typesFileName.replace(/\.[^.]+$/, "");
+    const typesImportFrom = `./${
+      flags.keepExtension ? typesPath : typesFileNameNoExt
+    }`;
+    const guardsFileNameNoExt = `${typesFileNameNoExt}_guards`;
+    const guardsFileName = `${guardsFileNameNoExt}.ts`;
+    const guardsImportFrom = `./${
+      flags.keepExtension ? guardsFileName : guardsFileNameNoExt
+    }`;
+    const testsFileNameNoExt = `${typesFileNameNoExt}_guards.test`;
+    const testsFileName = `${testsFileNameNoExt}.ts`;
+    const testsPath = path.join(dirName, testsFileName);
+
+    const guardsPath = path.join(
+      dirName,
+      `${guardsFileNameNoExt}.ts`
+    );
 
     const generator = new TypeGuardGenerator();
 
     const models = sourceFileToModels(checker, sourceFile);
-    const guardsFileNoExt = `${fileNameNoExt}_guards`;
-    const guardsFile = `${guardsFileNoExt}.ts`;
 
     {
       for (const model of models) {
         generator.addRootTypeGuardFor(model);
       }
 
-      const predicateFileBody = generator.getFullFileBody(importFrom);
+      const predicateFileBody =
+        generator.getFullFileBody(typesImportFrom);
 
-      const content = nodesToString(guardsFile, predicateFileBody);
-      fs.writeFileSync(guardsFile, content);
+      const content = nodesToString(
+        guardsFileName,
+        predicateFileBody
+      );
+      fs.writeFileSync(guardsPath, content);
     }
 
     if (flags.unitTests) {
-      const nodes = modelsToTests(guardsFileNoExt, models);
-      const content = nodesToString("tests.test.ts", nodes);
-
-      const testsFile = `${fileNameNoExt}_guards.test.ts`;
-      fs.writeFileSync(testsFile, content);
+      const nodes = modelsToTests(guardsImportFrom, models);
+      const content = nodesToString(testsFileName, nodes);
+      fs.writeFileSync(testsPath, content);
     }
   }
-
-  return true;
 }
 
 function usage() {
@@ -108,6 +124,17 @@ function main(argv: string[]): number {
     console.error("Error: missing input file.");
     usage();
     return 2;
+  }
+
+  try {
+    const stats = fs.statSync(fileName);
+    if (!stats.isFile()) {
+      console.error(`error openning file ${fileName}: not a file`);
+      return 3;
+    }
+  } catch (err) {
+    console.error(`error openning file ${fileName}: ${err}`);
+    return 3;
   }
 
   try {
