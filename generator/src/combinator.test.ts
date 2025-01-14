@@ -391,7 +391,9 @@ describe("valid", () => {
         [
           {
             "a": 1,
+            "b": 2,
             "c": 3,
+            "d": 4,
           },
           {
             "a": 1,
@@ -400,7 +402,6 @@ describe("valid", () => {
           },
           {
             "a": 1,
-            "b": 2,
             "c": 3,
             "d": 4,
           },
@@ -425,24 +426,13 @@ describe("valid", () => {
         )
       ).toMatchInlineSnapshot(`
         [
-          {},
-          {
-            "a": 1,
-          },
-          {
-            "a": 1,
-            "b": 2,
-          },
-          {
-            "a": 1,
-            "b": 2,
-            "c": 3,
-          },
           {
             "a": 1,
             "b": 2,
             "c": 3,
             "d": 4,
+            "e": 5,
+            "f": 6,
           },
           {
             "a": 1,
@@ -453,6 +443,33 @@ describe("valid", () => {
           },
           {
             "a": 1,
+            "b": 2,
+            "c": 3,
+            "d": 4,
+            "f": 6,
+          },
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "e": 5,
+            "f": 6,
+          },
+          {
+            "a": 1,
+            "b": 2,
+            "d": 4,
+            "e": 5,
+            "f": 6,
+          },
+          {
+            "a": 1,
+            "c": 3,
+            "d": 4,
+            "e": 5,
+            "f": 6,
+          },
+          {
             "b": 2,
             "c": 3,
             "d": 4,
@@ -1158,25 +1175,32 @@ describe("invalid", () => {
           Symbol(invalidValue),
           null,
           {
+            "b": 2,
             "c": 3,
+            "d": 4,
           },
           {
             "a": Symbol(invalidValue),
+            "b": 2,
             "c": 3,
+            "d": 4,
           },
           {
             "a": 1,
             "b": Symbol(invalidValue),
             "c": 3,
+            "d": 4,
           },
           {
             "a": 1,
             "b": 2,
+            "d": 4,
           },
           {
             "a": 1,
             "b": 2,
             "c": Symbol(invalidValue),
+            "d": 4,
           },
           {
             "a": 1,
@@ -1209,21 +1233,35 @@ describe("invalid", () => {
           null,
           {
             "a": Symbol(invalidValue),
+            "b": 2,
+            "c": 3,
+            "d": 4,
+            "e": 5,
+            "f": 6,
           },
           {
             "a": 1,
             "b": Symbol(invalidValue),
+            "c": 3,
+            "d": 4,
+            "e": 5,
+            "f": 6,
           },
           {
             "a": 1,
             "b": 2,
             "c": Symbol(invalidValue),
+            "d": 4,
+            "e": 5,
+            "f": 6,
           },
           {
             "a": 1,
             "b": 2,
             "c": 3,
             "d": Symbol(invalidValue),
+            "e": 5,
+            "f": 6,
           },
           {
             "a": 1,
@@ -1231,6 +1269,7 @@ describe("invalid", () => {
             "c": 3,
             "d": 4,
             "e": Symbol(invalidValue),
+            "f": 6,
           },
           {
             "a": 1,
@@ -2074,11 +2113,11 @@ describe(modelToCombinator.name, () => {
         [
           {
             "a": 1,
+            "b": 2,
             "c": 3,
           },
           {
             "a": 1,
-            "b": 2,
             "c": 3,
           },
         ]

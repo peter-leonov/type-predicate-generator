@@ -224,20 +224,7 @@ function* rollObject(
       break;
     }
   } else {
-    // 1. without the optional key + one of the rest
-    if (isOptional) {
-      for (const [isValidRest, rest] of rollObject(
-        false,
-        restObj,
-        optionalAttributes
-      )) {
-        assert(isValidRest, "must be a valid rest");
-        yield [true, rest];
-        break;
-      }
-    }
-
-    // 2. with the key + one value * all of the rest
+    // 1. with the key + one value * all of the rest
     const valueG = value(false);
     const valueIR = valueG.next();
     assert(!valueIR.done, "an empty generator is a bug");
@@ -258,7 +245,7 @@ function* rollObject(
       ];
     }
 
-    // 3. with the key + all the values * one of the rest
+    // 2. with the key + all the values * one of the rest
     for (const [isValidValue, v] of valueG) {
       assert(isValidValue, "must be a valid value");
       // TODO: decorate rollObject() generator with a looped generator
@@ -275,6 +262,19 @@ function* rollObject(
             ...rest,
           },
         ];
+        break;
+      }
+    }
+
+    // 3. without the optional key + one of the rest
+    if (isOptional) {
+      for (const [isValidRest, rest] of rollObject(
+        false,
+        restObj,
+        optionalAttributes
+      )) {
+        assert(isValidRest, "must be a valid rest");
+        yield [true, rest];
         break;
       }
     }
