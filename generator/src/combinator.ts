@@ -90,8 +90,25 @@ export function reference(typeName: string): Combinator {
 
 export function union(members: Combinator[]): Combinator {
   return function* (doInvalid) {
+    const seenValid = new Set();
+    const seenInvalid = new Set();
     for (const m of members) {
-      yield* m(doInvalid);
+      for (const tuple of m(doInvalid)) {
+        const [isValid, v] = tuple;
+        if (isValid) {
+          if (seenValid.has(v)) {
+            continue;
+          }
+          seenValid.add(v);
+        } else {
+          if (seenInvalid.has(v)) {
+            continue;
+          }
+          seenInvalid.add(v);
+        }
+
+        yield tuple;
+      }
     }
   };
 }
