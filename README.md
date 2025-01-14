@@ -161,7 +161,7 @@ function o(e) {
 
 As you can see, esbuild nicely merges all the `if`s for the same set of properties into just one combined check.
 
-The Tests generated for the predicate look like this:
+The tests generated for the predicate look like this. They are not covering all possible combinations as it's growing exponential, instead the test generator yields each valid value for each field at least once while other values stay the same:
 
 ```ts
 // example_guards.test.js
