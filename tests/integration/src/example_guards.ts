@@ -1,5 +1,5 @@
 import { type User } from "./example";
-type SafeShallowShape<Type> = {
+type SafeShallowShape<Type extends {}> = {
   [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;

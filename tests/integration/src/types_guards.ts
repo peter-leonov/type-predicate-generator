@@ -4,7 +4,7 @@ import {
   type Post,
   type HugeOnCombinations,
 } from "./types";
-type SafeShallowShape<Type> = {
+type SafeShallowShape<Type extends {}> = {
   [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;

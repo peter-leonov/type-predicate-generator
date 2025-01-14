@@ -321,7 +321,7 @@ function typeSafeShallowShape(): ts.Statement[] {
         factory.createTypeParameterDeclaration(
           undefined,
           factory.createIdentifier("Type"),
-          undefined,
+          factory.createTypeLiteralNode([]),
           undefined
         ),
       ],
