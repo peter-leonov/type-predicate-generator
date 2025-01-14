@@ -138,7 +138,9 @@ export function isUser(root: unknown): root is User {
 }
 ```
 
-Play with it in the [playground](http://localhost:5173/typescript-predicate-generator/?s=PTAEBUAsEsGdTqAhgO1AUwB5ILYAcAbdUWdAF1AHsAzUMgTz3VgBoAoEUQpe0Ad2hlIdSOhxUATlySwyxepQCuUynxQA6Nmyx5KEigyagAqqSkBeUAG82oBABMAXKBSKcAI3QSA3LdAFKAHNoFGdZCRDA3zsxJGgCAH4wsgiUKL8ke3sJZlhnGzs7cPRyZNT0wtBIJVJnVw8vaNAAX19WtiA). And this is what `esbuild` minifies it into (formatted for readability):
+Play with it in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/?s=PTAEBUAsEsGdTqAhgO1AUwB5ILYAcAbdUAFwE890AaAKBFEKTNAHdoTIETkAnAewCuKACag+PBklgliZQRL4sUAOho0secd3KVQAVVjoJAXlABvGqATCAXKBQCcAIyMBuS6AJ8A5tBR3pHj9vdyt0HCRoAgB+AJIglBCPJGFhHnRYWDsLKytA9HQSOISk3NBIQUM7B2c3DwBfd0aaIA).
+
+This is what `esbuild --minify` reduces it to (formatted for readability):
 
 ```js
 // example_guards.min.js
