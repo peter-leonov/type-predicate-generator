@@ -2,7 +2,7 @@ export type User = {
   id: number;
   login: string;
   email?: string;
-  address: {
+  address?: {
     street: string;
     house: number;
   };

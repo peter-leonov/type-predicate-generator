@@ -88,6 +88,18 @@ test("union of object types", () => {
   ).toThrow(UnsupportedUnionMember);
 });
 
+test("union of object and safe union types", () => {
+  expect(
+    generate(
+      new UnionType({ aliasName: "Union" }, [
+        new ObjectType({}, { a: new PrimitiveType({}, "number") }),
+        new LiteralType({}, 1),
+        new PrimitiveType({}, "string"),
+      ])
+    )
+  ).toMatchSnapshot();
+});
+
 test("object with primitive types", () => {
   expect(
     generate(

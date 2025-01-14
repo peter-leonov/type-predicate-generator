@@ -11,7 +11,7 @@ import {
   type TypeModel,
 } from "./model.js";
 import { assert, unimplemented } from "./helpers";
-import { UnsupportedUnionMember } from "./errors";
+import { UnsupportedUnionMember as UnsupportedUnion } from "./errors";
 
 export class TypeGuardGenerator {
   guards: Map<string, ts.Statement>;
@@ -111,12 +111,57 @@ export class TypeGuardGenerator {
         (t) => !safeToUseInAUnion(t)
       );
       if (unsafeUnionTypes.length > 0) {
-        throw new UnsupportedUnionMember(unsafeUnionTypes);
+        if (unsafeUnionTypes.length > 1) {
+          throw new UnsupportedUnion(unsafeUnionTypes);
+        }
+
+        const unsafeType = unsafeUnionTypes[0];
+        assert(
+          unsafeType,
+          "expect at least one element to be present"
+        );
+        if (unsafeType instanceof ObjectType) {
+          const nestedTypeName = this.typeScope.newTypeName(
+            typePath.map(capitalise),
+            "Attribute"
+          );
+          const safeUnionTypes = type.types.filter((t) =>
+            safeToUseInAUnion(t)
+          );
+          const referenceType = new AliasType({}, nestedTypeName);
+          const guardName = scope.newLocalName(
+            [],
+            `is${nestedTypeName}`
+          );
+          return {
+            hoist: [
+              typeAliasForObjectAttribute(nestedTypeName, typePath),
+              this.createTypeGuardFor(
+                guardName,
+                nestedTypeName,
+                unsafeType
+              ),
+            ],
+            body: ifNotReturnFalse(
+              // assertionConditionForArrayType(target.local_name, guardName)
+              assertionConditionForUnionTypes(target.local_name, [
+                ...safeUnionTypes,
+                referenceType,
+              ])
+            ),
+          };
+        } else {
+          throw new UnsupportedUnion(unsafeUnionTypes);
+        }
       }
+
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          assertionConditionForType(target.local_name, type)
+          assertionConditionForUnionTypes(
+            target.local_name,
+            type.types
+          )
         ),
       };
     }
@@ -409,13 +454,7 @@ function assertionConditionForType(
   }
 
   if (type instanceof UnionType) {
-    // A union is a set of at least two types.
-    assert(type.types.length >= 2);
-    // Nested unions look like an error and are not supported.
-    assert(!type.types.some((t) => t instanceof UnionType));
-    return wrapListInOr(
-      type.types.map((t) => assertionConditionForType(target, t))
-    );
+    return assertionConditionForUnionTypes(target, type.types);
   }
 
   if (type instanceof ObjectType) {
@@ -423,6 +462,19 @@ function assertionConditionForType(
   }
 
   unimplemented(`${(type as Object).constructor.name}`);
+}
+
+function assertionConditionForUnionTypes(
+  target: string,
+  types: TypeModel[]
+): ts.Expression {
+  // A union is a set of at least two types.
+  assert(types.length >= 2);
+  // Nested unions look like an error and are not supported.
+  assert(!types.some((t) => t instanceof UnionType));
+  return wrapListInOr(
+    types.map((t) => assertionConditionForType(target, t))
+  );
 }
 
 function ifNotReturnFalse(
@@ -636,6 +688,24 @@ function typeAliasForArrayElement(
     factory.createIndexedAccessTypeNode(
       typePathToTypeSelector(path),
       factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+    )
+  );
+}
+
+function typeAliasForObjectAttribute(
+  newTypeName: string,
+  path: string[]
+): ts.Statement {
+  return factory.createTypeAliasDeclaration(
+    undefined,
+    factory.createIdentifier(newTypeName),
+    undefined,
+    factory.createTypeReferenceNode(
+      factory.createIdentifier("Extract"),
+      [
+        typePathToTypeSelector(path),
+        factory.createTypeLiteralNode([]),
+      ]
     )
   );
 }

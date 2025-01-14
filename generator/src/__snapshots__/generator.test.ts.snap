@@ -288,6 +288,32 @@ exports[`union of mixed safe types 1`] = `
 "
 `;
 
+exports[`union of object and safe union types 1`] = `
+"export function isUnion(root: unknown): root is Union {
+    type Attribute = Extract<Union, {}>;
+    function isAttribute(root: unknown): root is Attribute {
+        if (!(typeof root === "object" && root !== null)) {
+            return false;
+        }
+        (root) satisfies {};
+        const { a }: SafeShallowShape<Attribute> = root;
+        if (!(typeof a === "number")) {
+            return false;
+        }
+        ({
+            a
+        }) satisfies Attribute;
+        return true;
+    }
+    if (!((root === 1) || (typeof root === "string") || (isAttribute(root)))) {
+        return false;
+    }
+    (root) satisfies Union;
+    return true;
+}
+"
+`;
+
 exports[`union of primitive and literal types 1`] = `
 "export function isUnion(root: unknown): root is Union {
     if (!((typeof root === "string") || (typeof root === "number") || (root === null))) {
