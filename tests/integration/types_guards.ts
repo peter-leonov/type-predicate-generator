@@ -1,4 +1,9 @@
-import { type ExternalType, type User, type Post } from "./types";
+import {
+  type ExternalType,
+  type User,
+  type Post,
+  type HugeOnCombinations,
+} from "./types";
 type SafeShallowShape<Type> = {
   [_ in keyof Type]?: unknown;
 };
@@ -99,5 +104,103 @@ export function isPost(root: unknown): root is Post {
     author,
     more,
   }) satisfies Post;
+  return true;
+}
+export function isHugeOnCombinations(
+  root: unknown,
+): root is HugeOnCombinations {
+  if (!(typeof root === "object" && root !== null)) {
+    return false;
+  }
+  root satisfies {};
+  const {
+    a,
+    b,
+    c,
+    d,
+    e,
+    f,
+    g,
+    h,
+    i,
+    j,
+    k,
+    l,
+    m,
+    n,
+    o,
+    p,
+    q,
+  }: SafeShallowShape<HugeOnCombinations> = root;
+  if (!(typeof a === "undefined" || typeof a === "string")) {
+    return false;
+  }
+  if (!(typeof b === "undefined" || typeof b === "string")) {
+    return false;
+  }
+  if (!(typeof c === "undefined" || typeof c === "string")) {
+    return false;
+  }
+  if (!(typeof d === "undefined" || typeof d === "string")) {
+    return false;
+  }
+  if (!(typeof e === "undefined" || typeof e === "string")) {
+    return false;
+  }
+  if (!(typeof f === "undefined" || typeof f === "string")) {
+    return false;
+  }
+  if (!(typeof g === "undefined" || typeof g === "string")) {
+    return false;
+  }
+  if (!(typeof h === "undefined" || typeof h === "string")) {
+    return false;
+  }
+  if (!(typeof i === "undefined" || typeof i === "string")) {
+    return false;
+  }
+  if (!(typeof j === "undefined" || typeof j === "string")) {
+    return false;
+  }
+  if (!(typeof k === "undefined" || typeof k === "string")) {
+    return false;
+  }
+  if (!(typeof l === "undefined" || typeof l === "string")) {
+    return false;
+  }
+  if (!(typeof m === "undefined" || typeof m === "string")) {
+    return false;
+  }
+  if (!(typeof n === "undefined" || typeof n === "string")) {
+    return false;
+  }
+  if (!(typeof o === "undefined" || typeof o === "string")) {
+    return false;
+  }
+  if (!(typeof p === "undefined" || typeof p === "string")) {
+    return false;
+  }
+  if (!(typeof q === "undefined" || typeof q === "string")) {
+    return false;
+  }
+  ({
+    a,
+    b,
+    c,
+    d,
+    e,
+    f,
+    g,
+    h,
+    i,
+    j,
+    k,
+    l,
+    m,
+    n,
+    o,
+    p,
+    q,
+  }) satisfies HugeOnCombinations;
   return true;
 }
