@@ -18,16 +18,7 @@ import {
   UnionType,
 } from "./model";
 
-function valid(v: Combinator) {
-  return combineValid(v);
-}
-
-function invalid(v: Combinator) {
-  return combineInvalid(v);
-}
-
 describe("valid", () => {
-  const f = valid;
   it("all at once", () => {
     const obj = object(
       {
@@ -44,7 +35,7 @@ describe("valid", () => {
       new Set()
     );
 
-    expect(f(obj)).toMatchInlineSnapshot(`
+    expect(combineValid(obj)).toMatchInlineSnapshot(`
       [
         {
           "a": 1,
@@ -104,21 +95,21 @@ describe("valid", () => {
 
   describe("value", () => {
     it("number", () => {
-      expect(f(values([1]))).toMatchInlineSnapshot(`
+      expect(combineValid(values([1]))).toMatchInlineSnapshot(`
         [
           1,
         ]
       `);
     });
     it("string", () => {
-      expect(f(values(["a"]))).toMatchInlineSnapshot(`
+      expect(combineValid(values(["a"]))).toMatchInlineSnapshot(`
         [
           "a",
         ]
       `);
     });
     it("null", () => {
-      expect(f(values([null]))).toMatchInlineSnapshot(`
+      expect(combineValid(values([null]))).toMatchInlineSnapshot(`
         [
           null,
         ]
@@ -128,7 +119,8 @@ describe("valid", () => {
 
   describe("union", () => {
     it("of a single value", () => {
-      expect(f(union([values([1])]))).toMatchInlineSnapshot(`
+      expect(combineValid(union([values([1])])))
+        .toMatchInlineSnapshot(`
         [
           1,
         ]
@@ -136,8 +128,9 @@ describe("valid", () => {
     });
 
     it("of several values", () => {
-      expect(f(union([values([1]), values([2]), values([3])])))
-        .toMatchInlineSnapshot(`
+      expect(
+        combineValid(union([values([1]), values([2]), values([3])]))
+      ).toMatchInlineSnapshot(`
         [
           1,
           2,
@@ -148,7 +141,9 @@ describe("valid", () => {
 
     it("of a union", () => {
       expect(
-        f(union([union([values([1]), values([2]), values([3])])]))
+        combineValid(
+          union([union([values([1]), values([2]), values([3])])])
+        )
       ).toMatchInlineSnapshot(`
         [
           1,
@@ -160,7 +155,7 @@ describe("valid", () => {
 
     it("of unions", () => {
       expect(
-        f(
+        combineValid(
           union([
             union([values([1]), values([2])]),
             union([values([3]), values([4])]),
@@ -179,7 +174,7 @@ describe("valid", () => {
 
   describe("array", () => {
     it("of a single value", () => {
-      expect(f(array(values([1])))).toMatchInlineSnapshot(`
+      expect(combineValid(array(values([1])))).toMatchInlineSnapshot(`
         [
           [],
           [
@@ -190,7 +185,7 @@ describe("valid", () => {
     });
 
     it("of a union", () => {
-      expect(f(array(union([values([1]), values([2])]))))
+      expect(combineValid(array(union([values([1]), values([2])]))))
         .toMatchInlineSnapshot(`
           [
             [],
@@ -205,7 +200,7 @@ describe("valid", () => {
     });
 
     it("of an array of an array of a value", () => {
-      expect(f(array(array(array(values([1]))))))
+      expect(combineValid(array(array(array(values([1]))))))
         .toMatchInlineSnapshot(`
           [
             [],
@@ -230,7 +225,9 @@ describe("valid", () => {
 
     it("of an array of an array of a union", () => {
       expect(
-        f(array(array(array(union([values([1]), values([2])])))))
+        combineValid(
+          array(array(array(union([values([1]), values([2])]))))
+        )
       ).toMatchInlineSnapshot(`
         [
           [],
@@ -263,7 +260,8 @@ describe("valid", () => {
 
   describe("object", () => {
     it("empty", () => {
-      expect(f(object({}, new Set()))).toMatchInlineSnapshot(`
+      expect(combineValid(object({}, new Set())))
+        .toMatchInlineSnapshot(`
         [
           {},
         ]
@@ -271,7 +269,7 @@ describe("valid", () => {
     });
 
     it("of a single value property", () => {
-      expect(f(object({ a: values(["A"]) }, new Set())))
+      expect(combineValid(object({ a: values(["A"]) }, new Set())))
         .toMatchInlineSnapshot(`
         [
           {
@@ -283,7 +281,7 @@ describe("valid", () => {
 
     it("of a several value properties", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: values(["A"]),
@@ -306,7 +304,7 @@ describe("valid", () => {
 
     it("of a single union property", () => {
       expect(
-        f(
+        combineValid(
           object(
             { a: union([values(["A1"]), values(["A2"])]) },
             new Set()
@@ -326,7 +324,7 @@ describe("valid", () => {
 
     it("of a several union properties", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: union([values(["A1"])]),
@@ -368,7 +366,7 @@ describe("valid", () => {
 
     it("of several optional properties", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: values([1]),
@@ -402,7 +400,7 @@ describe("valid", () => {
 
     it("of only optional properties", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: values([1]),
@@ -457,7 +455,7 @@ describe("valid", () => {
 
     it("of a several objects with value properties", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: object(
@@ -498,7 +496,7 @@ describe("valid", () => {
 
     it("of a several objects with union properties", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: object(
@@ -569,7 +567,7 @@ describe("valid", () => {
 
     it("of a several nested objects with a value property", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: object(
@@ -602,7 +600,7 @@ describe("valid", () => {
 
     it("of a several nested objects with a union property", () => {
       expect(
-        f(
+        combineValid(
           object(
             {
               a: object(
@@ -653,7 +651,6 @@ describe("valid", () => {
 
 // copy pasting to use inline snapshots and get better error reporting
 describe("invalid", () => {
-  const f = invalid;
   it("all at once", () => {
     const obj = object(
       {
@@ -670,7 +667,7 @@ describe("invalid", () => {
       new Set()
     );
 
-    expect(f(obj)).toMatchInlineSnapshot(`
+    expect(combineInvalid(obj)).toMatchInlineSnapshot(`
       [
         Symbol(invalidValue),
         null,
@@ -800,21 +797,21 @@ describe("invalid", () => {
 
   describe("value", () => {
     it("number", () => {
-      expect(f(values([1]))).toMatchInlineSnapshot(`
+      expect(combineInvalid(values([1]))).toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
         ]
       `);
     });
     it("string", () => {
-      expect(f(values(["a"]))).toMatchInlineSnapshot(`
+      expect(combineInvalid(values(["a"]))).toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
         ]
       `);
     });
     it("null", () => {
-      expect(f(values([null]))).toMatchInlineSnapshot(`
+      expect(combineInvalid(values([null]))).toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
         ]
@@ -824,7 +821,8 @@ describe("invalid", () => {
 
   describe("union", () => {
     it("of a single value", () => {
-      expect(f(union([values([1])]))).toMatchInlineSnapshot(`
+      expect(combineInvalid(union([values([1])])))
+        .toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
         ]
@@ -832,8 +830,9 @@ describe("invalid", () => {
     });
 
     it("of several values", () => {
-      expect(f(union([values([1]), values([2]), values([3])])))
-        .toMatchInlineSnapshot(`
+      expect(
+        combineInvalid(union([values([1]), values([2]), values([3])]))
+      ).toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
           Symbol(invalidValue),
@@ -844,7 +843,9 @@ describe("invalid", () => {
 
     it("of a union", () => {
       expect(
-        f(union([union([values([1]), values([2]), values([3])])]))
+        combineInvalid(
+          union([union([values([1]), values([2]), values([3])])])
+        )
       ).toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
@@ -856,7 +857,7 @@ describe("invalid", () => {
 
     it("of unions", () => {
       expect(
-        f(
+        combineInvalid(
           union([
             union([values([1]), values([2])]),
             union([values([3]), values([4])]),
@@ -875,7 +876,8 @@ describe("invalid", () => {
 
   describe("array", () => {
     it("of a single value", () => {
-      expect(f(array(values([1])))).toMatchInlineSnapshot(`
+      expect(combineInvalid(array(values([1]))))
+        .toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
           [
@@ -886,7 +888,7 @@ describe("invalid", () => {
     });
 
     it("of a union", () => {
-      expect(f(array(union([values([1]), values([2])]))))
+      expect(combineInvalid(array(union([values([1]), values([2])]))))
         .toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
@@ -901,7 +903,7 @@ describe("invalid", () => {
     });
 
     it("of an array of an array of a value", () => {
-      expect(f(array(array(array(values([1]))))))
+      expect(combineInvalid(array(array(array(values([1]))))))
         .toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
@@ -926,7 +928,9 @@ describe("invalid", () => {
 
     it("of an array of an array of a union", () => {
       expect(
-        f(array(array(array(union([values([1]), values([2])])))))
+        combineInvalid(
+          array(array(array(union([values([1]), values([2])]))))
+        )
       ).toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
@@ -959,7 +963,8 @@ describe("invalid", () => {
 
   describe("object", () => {
     it("empty", () => {
-      expect(f(object({}, new Set()))).toMatchInlineSnapshot(`
+      expect(combineInvalid(object({}, new Set())))
+        .toMatchInlineSnapshot(`
         [
           Symbol(invalidValue),
           null,
@@ -968,7 +973,7 @@ describe("invalid", () => {
     });
 
     it("of a single value property", () => {
-      expect(f(object({ a: values(["A"]) }, new Set())))
+      expect(combineInvalid(object({ a: values(["A"]) }, new Set())))
         .toMatchInlineSnapshot(`
           [
             Symbol(invalidValue),
@@ -983,7 +988,7 @@ describe("invalid", () => {
 
     it("of a several value properties", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: values(["A"]),
@@ -1030,7 +1035,7 @@ describe("invalid", () => {
 
     it("of a single union property", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             { a: union([values(["A1"]), values(["A2"])]) },
             new Set()
@@ -1053,7 +1058,7 @@ describe("invalid", () => {
 
     it("of a several union properties", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: union([values(["A1"])]),
@@ -1119,7 +1124,7 @@ describe("invalid", () => {
 
     it("of several optional properties", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: values([1]),
@@ -1167,7 +1172,7 @@ describe("invalid", () => {
 
     it("of only optional properties", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: values([1]),
@@ -1223,7 +1228,7 @@ describe("invalid", () => {
 
     it("of a several objects with value properties", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: object(
@@ -1510,7 +1515,7 @@ describe("invalid", () => {
 
     it("of a several objects with union properties", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: object(
@@ -1710,7 +1715,7 @@ describe("invalid", () => {
 
     it("of a several nested objects with a value property", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: object(
@@ -1791,7 +1796,7 @@ describe("invalid", () => {
 
     it("of a several nested objects with a union property", () => {
       expect(
-        f(
+        combineInvalid(
           object(
             {
               a: object(
