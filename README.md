@@ -1,6 +1,6 @@
 # TypeScript Type Predicate Generator
 
-Check JSON data from APIs 100% type safe and at blazing speed.
+Check JSON data from APIs 100% type safe, tested and at blazing speed.
 
 Give it a try in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/).
 
@@ -10,11 +10,11 @@ A TypeScript code generator that produces strictly type safe readable and extrem
 
 Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and checked by TS as part of your project setup.
 
-To verify that the guards properly reject invalid values while accepting valid ones the generator also produces a set of unit tests (atm Vitest only) next to the guard file if run with `--unitTests` switch (experimental).
+To verify that the guards properly reject the invalid values while accepting the valid ones the generator also produces a set of unit tests (atm Vitest only) next to the guard file if run with `--unitTests` switch.
 
 ## Status
 
-Beta. Most of the key distinctive features are proven to work, but there are still some rough edges to polish (see [Known Limitations](#known-limitations) and [TODO](#todo)).
+Release candidate. Most of the key distinctive features are implemented, unit and integration tested. Got the initial third-party feedback, ran some benchmarks with good results (~80M OPS).
 
 ## Install
 
@@ -321,17 +321,7 @@ See more here [#1](https://github.com/peter-leonov/typescript-predicate-generato
 
 ## Contributing
 
-### TODO
-
-Feel free to pick any of the tasks here or in the GH issues.
-
-- [x] Support lists
-- [ ] Support tuples
-- [x] Report TS errors before running
-- [ ] Report errors nicely
-- [x] Implement installing as a CLI
-- [x] Implement a dynamic demo ([1](https://ts-ast-viewer.com/))
-- [x] Generate unit tests with example data
+After reading below please feel free to pick any of the [issues](https://github.com/peter-leonov/typescript-predicate-generator/issues). We can always pair on it!
 
 ### Architecture
 
