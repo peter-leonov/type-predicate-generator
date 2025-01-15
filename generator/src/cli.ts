@@ -2,6 +2,10 @@
 import ts from "typescript";
 import fs from "node:fs";
 import path from "node:path";
+import commandLineArgs, {
+  type OptionDefinition,
+} from "command-line-args";
+
 import {
   ensureNoErrors,
   nodesToString,
@@ -12,10 +16,11 @@ import { TypeGuardGenerator } from "./generator";
 import { modelsToTests } from "./tester";
 
 type Flags = {
-  help?: boolean;
+  sources: string[];
+  unitTests?: boolean;
   keepExtension?: boolean;
   withStacktrace?: boolean;
-  unitTests?: boolean;
+  help?: boolean;
 };
 
 function processFile(typesPath: string, flags: Flags) {
@@ -89,27 +94,46 @@ function processFile(typesPath: string, flags: Flags) {
   }
 }
 
+const optionDefinitions: OptionDefinition[] = [
+  {
+    name: "sources",
+    type: String,
+    multiple: true,
+    defaultOption: true,
+  },
+  { name: "unitTests", type: Boolean },
+  { name: "keepExtension", type: Boolean },
+  { name: "withStacktrace", type: Boolean },
+  { name: "help", type: Boolean },
+];
+
 function usage() {
   console.error(
-    `Usage: type-predicate-generator [--help] [--keepExtension] [--withStacktrace] [--unitTests] source.ts`
+    `Usage: type-predicate-generator [--unitTests] [--keepExtension] [--withStacktrace] [--help] source.ts...
+  --unitTests Emit the predicates unit tests next to the predicates file.
+  --keepExtension Keeps the imported files extensions (helpful for ESM projects).
+  --withStacktrace Does not suppress stack traces for known errors (helpful while debugging).
+  --help Prints this message.
+`
   );
 }
 
-function main(argv: string[]): number {
-  const args = argv.slice(2);
-
-  const opts = args.filter((arg) => arg.startsWith("--"));
-  const flags: Flags = {};
-  for (const flag of opts.map((opt) => opt.replace("--", ""))) {
-    flags[flag as unknown as keyof Flags] = true;
+function main(): number {
+  let flags;
+  try {
+    flags = commandLineArgs(optionDefinitions) as Flags;
+  } catch (err) {
+    console.error(`${err}\n`);
+    usage();
+    return 1;
   }
-
-  const filenames = args.filter((arg) => !arg.startsWith("--"));
 
   if (flags.help) {
     usage();
     return 0;
   }
+
+  const filenames = flags.sources;
 
   if (filenames.length == 0) {
     console.error("Error: no input file specified");
@@ -142,4 +166,4 @@ function main(argv: string[]): number {
   return 0;
 }
 
-process.exit(main(process.argv.slice()));
+process.exit(main());

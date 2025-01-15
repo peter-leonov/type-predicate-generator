@@ -27,9 +27,11 @@
   "license": "MIT",
   "description": "TypeScript Type Predicate Generator. It generates type safe TypeScript code out of a given TypeScript type that ensures the given type structure.",
   "dependencies": {
+    "command-line-args": "^6.0.1",
     "typescript": ">=5.7.0 <5.8.0"
   },
   "devDependencies": {
+    "@types/command-line-args": "^5.2.3",
     "@types/node": "^22.10.1",
     "esbuild": "^0.24.2",
     "vitest": "^2.1.8"
