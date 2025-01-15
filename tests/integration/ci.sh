@@ -9,6 +9,8 @@ set -eux -o pipefail
 
 npm i --no-audit
 
+npx type-predicate-generator --help
+
 rm -rf types_guards.ts types_guards.test.ts
 npx type-predicate-generator --unitTests src/types.ts
 npx esbuild --bundle --outfile=src/types_guards.min.js --minify "src/types_guards.ts"
