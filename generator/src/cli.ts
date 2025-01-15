@@ -16,7 +16,7 @@ import { TypeGuardGenerator } from "./generator";
 import { modelsToTests } from "./tester";
 
 type Flags = {
-  sources: string[];
+  sources?: string[];
   unitTests?: boolean;
   keepExtension?: boolean;
   withStacktrace?: boolean;
@@ -133,10 +133,11 @@ function main(): number {
     return 0;
   }
 
-  const filenames = flags.sources;
+  const filenames = flags.sources || [];
 
   if (filenames.length == 0) {
     console.error("Error: no input file specified");
+    console.error();
     usage();
     return 3;
   }
