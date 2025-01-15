@@ -290,7 +290,7 @@ exports[`union of mixed safe types 1`] = `
 
 exports[`union of object and safe union types 1`] = `
 "export function isUnion(root: unknown): root is Union {
-    type Attribute = Extract<Union, {}>;
+    type Attribute = Extract<Union, object>;
     function isAttribute(root: unknown): root is Attribute {
         if (!(typeof root === "object" && root !== null)) {
             return false;

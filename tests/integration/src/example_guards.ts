@@ -4,6 +4,25 @@ type SafeShallowShape<Type extends {}> = {
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isUser(root: unknown): root is User {
+  type Attribute = Extract<User["address"], object>;
+  function isAttribute(root: unknown): root is Attribute {
+    if (!(typeof root === "object" && root !== null)) {
+      return false;
+    }
+    root satisfies {};
+    const { street, house }: SafeShallowShape<Attribute> = root;
+    if (!(typeof street === "string")) {
+      return false;
+    }
+    if (!(typeof house === "number")) {
+      return false;
+    }
+    ({
+      street,
+      house,
+    }) satisfies Attribute;
+    return true;
+  }
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
@@ -18,30 +37,9 @@ export function isUser(root: unknown): root is User {
   if (!(typeof email === "undefined" || typeof email === "string")) {
     return false;
   }
-
-  type Address = Extract<User["address"], {}>;
-  function isAddress(root: unknown): root is Address {
-    if (!(typeof root === "object" && root !== null)) {
-      return false;
-    }
-    root satisfies {};
-    const { street, house }: SafeShallowShape<Address> = root;
-    if (!(typeof street === "string")) {
-      return false;
-    }
-    if (!(typeof house === "number")) {
-      return false;
-    }
-    ({
-      street,
-      house,
-    }) satisfies Address;
-    return true;
-  }
-  if (!(typeof address === "undefined" || isAddress(address))) {
+  if (!(typeof address === "undefined" || isAttribute(address))) {
     return false;
   }
-
   ({
     id,
     login,
