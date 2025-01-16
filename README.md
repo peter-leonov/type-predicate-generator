@@ -12,7 +12,7 @@ Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-
 - **Portable**: supports all the runtimes
 - **Reliable**: the generated code readable
 
-A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript code suitable to use in the browser, a Node.js / Deno / Bun app, Cloudflare workers and CloudFront edge functions.
+A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript code suitable to use in the browser, a Node.js / Deno / Bun app, Cloudflare workers and CloudFront edge functions. It supports deeply nested types, recursive structures, arrays, unions and more.
 
 ## How to use
 
@@ -257,7 +257,7 @@ These are by desing, fixing them would affect the [Pros](#pros):
 
 1. Compared to `tsc` plugins it requires a separate build step
 1. Compared to `tsc` plugins it reads a file and produces a file
-1. Compared to `tsc` plugins all the checked types must be explicitly exported
+1. Compared to `tsc` plugins all the checked types must be [explicitly exported](https://github.com/peter-leonov/type-predicate-generator/issues/16)
 
 See [Known Limitations](#known-limitations) for more on low level missing bits.
 
@@ -269,21 +269,9 @@ Most of the below is gonna be eventually fixed.
 
 1. No support for extended schema verification. This is mostly to stay simple and fast to evolve while in alpha/beta. It's trivial to add more value checkers with the current design.
 
-1. To also generate type predicates for imported types simply reexport them using type export:
+1. To also generate type predicates for imported types simply re-export them using `export { type ImportedType }`. See here for more: #16.
 
-```ts
-import { ExternalType } from "some-lib";
-
-// Like this. Please not that this is a type only export.
-// This is the only syntax supported atm.
-export { type ExternalType };
-
-export type MyType = {
-  field1: ExternalType;
-};
-```
-
-1. Does not produce error messages yet. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versitile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema checker on error.
+1. Does not produce error messages yet. As the errors happen really rarely in production the plan is to generate the error reporters separately and load them on demand. Error reporters are usually more versatile and don't minify that well as the code has to carry the context around and check produce a custom message for every property. The current workaround is to either simply stringify the falsy value or load a third party runtime schema checker on error.
 
 1. No support for generics atm, but the code is designed with them in mind, so also coming soon.
 
