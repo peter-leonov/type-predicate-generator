@@ -1,0 +1,10 @@
+Generation error
+The Generator stumbled upon something that does not fit.
+
+Error: The combination of types object type, object type is not supported in unions. Try extracting object types into their separate type aliases. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/1
+
+To see the the stacktrace use the --withStacktrace switch.
+
+If you feel this is a bug in the generator, pretty please report it here:
+https://github.com/peter-leonov/type-predicate-generator/issues/new
+
