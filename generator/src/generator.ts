@@ -43,7 +43,7 @@ export class TypeGuardGenerator {
       };
     } else if (type instanceof ArrayType) {
       const nestedTypeName = this.typeScope.newTypeName(
-        typePath.map(capitalise),
+        typePath.map(capitalize),
         "Element"
       );
       const guardName = scope.newLocalName([], `is${nestedTypeName}`);
@@ -256,12 +256,12 @@ function getObjectTypeName(typePath: string[]): [string[], string] {
   } else if (typePath.length === 1) {
     const rootTypeName = typePath[0];
     assert(rootTypeName, "must have the root type name");
-    return [typePath.map(capitalise), `ObjectIn${rootTypeName}`];
+    return [typePath.map(capitalize), `ObjectIn${rootTypeName}`];
   } else {
     const path = typePath.slice();
     const attributeName = path.pop();
     assert(attributeName, "must have the tail attribute name");
-    return [path.map(capitalise), capitalise(attributeName)];
+    return [path.map(capitalize), capitalize(attributeName)];
   }
 }
 
@@ -300,7 +300,7 @@ function safeToUseInAUnion(type: TypeModel) {
   );
 }
 
-function capitalise(str: string): string {
+function capitalize(str: string): string {
   const first = str.at(0);
   if (!first) {
     return str;
