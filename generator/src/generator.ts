@@ -351,7 +351,8 @@ export class TypeGuardGenerator {
       if (!this.guards.has(referencedTypeName)) {
         throw new MissingExportedType(
           referencedFrom,
-          referencedTypeName
+          referencedTypeName,
+          [...this.guards.keys()]
         );
       }
     }

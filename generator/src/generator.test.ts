@@ -298,3 +298,17 @@ test("dangling reference type", () => {
     ])
   ).toThrow("Missing is referenced in X");
 });
+
+test("multiple reference types", () => {
+  expect(
+    generateAll([
+      new ArrayType({ aliasName: "A" }, new AliasType({}, "B")),
+      new ArrayType({ aliasName: "B" }, new AliasType({}, "C")),
+      new ArrayType({ aliasName: "C" }, new AliasType({}, "D")),
+      new ArrayType(
+        { aliasName: "D" },
+        new PrimitiveType({}, "boolean")
+      ),
+    ])
+  ).toMatchSnapshot();
+});

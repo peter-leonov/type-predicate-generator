@@ -105,6 +105,72 @@ exports[`empty object 1`] = `
 "
 `;
 
+exports[`multiple reference types 1`] = `
+"import { type A, type B, type C, type D } from "./guards.ts";
+const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
+export function isA(root: unknown): root is A {
+    type Element = A[number];
+    function isElement(root: unknown): root is Element {
+        if (!(isB(root))) {
+            return false;
+        }
+        (root) satisfies Element;
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isElement))) {
+        return false;
+    }
+    (root) satisfies A;
+    return true;
+}
+export function isB(root: unknown): root is B {
+    type B_Element = B[number];
+    function isB_Element(root: unknown): root is B_Element {
+        if (!(isC(root))) {
+            return false;
+        }
+        (root) satisfies B_Element;
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isB_Element))) {
+        return false;
+    }
+    (root) satisfies B;
+    return true;
+}
+export function isC(root: unknown): root is C {
+    type C_Element = C[number];
+    function isC_Element(root: unknown): root is C_Element {
+        if (!(isD(root))) {
+            return false;
+        }
+        (root) satisfies C_Element;
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isC_Element))) {
+        return false;
+    }
+    (root) satisfies C;
+    return true;
+}
+export function isD(root: unknown): root is D {
+    type D_Element = D[number];
+    function isD_Element(root: unknown): root is D_Element {
+        if (!(typeof root === "boolean")) {
+            return false;
+        }
+        (root) satisfies D_Element;
+        return true;
+    }
+    if (!(safeIsArray(root) && root.every(isD_Element))) {
+        return false;
+    }
+    (root) satisfies D;
+    return true;
+}
+"
+`;
+
 exports[`nested arrays of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
     type Element = X[number];

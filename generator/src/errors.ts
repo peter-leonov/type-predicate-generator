@@ -8,9 +8,15 @@ export class TypeScriptError extends Error {}
 export class InputError extends Error {}
 
 export class MissingExportedType extends InputError {
-  constructor(source: string, missingTypeName: string) {
+  constructor(
+    source: string,
+    missingTypeName: string,
+    guarderTypes: string[]
+  ) {
     super(
-      `The type ${missingTypeName} is referenced in ${source} but there is no predicate generated for ${missingTypeName}. Likely it's because the referenced type is not exported. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/16`
+      `The type ${missingTypeName} is referenced in ${source} but there is no predicate generated for ${missingTypeName}. Here is the list of types having predicates: ${guarderTypes.join(
+        ", "
+      )} Likely it's because the referenced type is not exported. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/16`
     );
   }
 }
