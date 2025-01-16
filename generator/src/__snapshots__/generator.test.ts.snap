@@ -290,22 +290,22 @@ exports[`union of mixed safe types 1`] = `
 
 exports[`union of object and safe union types 1`] = `
 "export function isUnion(root: unknown): root is Union {
-    type Attribute = Extract<Union, object>;
-    function isAttribute(root: unknown): root is Attribute {
+    type ObjectInUnion = Extract<Union, object>;
+    function isObjectInUnion(root: unknown): root is ObjectInUnion {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
         (root) satisfies {};
-        const { a }: SafeShallowShape<Attribute> = root;
+        const { a }: SafeShallowShape<ObjectInUnion> = root;
         if (!(typeof a === "number")) {
             return false;
         }
         ({
             a
-        }) satisfies Attribute;
+        }) satisfies ObjectInUnion;
         return true;
     }
-    if (!((root === 1) || (typeof root === "string") || (isAttribute(root)))) {
+    if (!((root === 1) || (typeof root === "string") || (isObjectInUnion(root)))) {
         return false;
     }
     (root) satisfies Union;
