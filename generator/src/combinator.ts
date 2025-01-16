@@ -1,7 +1,7 @@
 /**
  * A module wide comment here :)
  *
- * Main invariant: do not reuse the values produced by the value funtions
+ * Main invariant: do not reuse the values produced by the value functions
  * (value, union, array, object), they are supposed to be used at the same
  * nesting as the same attribute, union member, etc. The API is ever changing
  * and relies on this invariant.
@@ -20,7 +20,7 @@ import {
 
 /**
  * A unique value used in tests to mark a wrong value that does not match
- * anything esle but itself and cannot be expressed in the subset of the
+ * anything else but itself and cannot be expressed in the subset of the
  * type system supported by the generator.
  *
  * This explicit value covers cases when in a union one member's invalid value
@@ -146,7 +146,7 @@ export function array(value: Combinator): Combinator {
  * Right now it generates all valid / invalid values per field without
  * permuting them. This does not cover the whole exponential space of
  * values, but still gives 100% test coverage for the predicates.
- * Effectively it linearizes object() into a sum type.
+ * Effectively it linearises object() into a sum type.
  */
 export function object(
   obj: Record<string, Combinator>,

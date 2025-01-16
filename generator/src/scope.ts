@@ -13,7 +13,7 @@ export class AttributeLocal {
 
 /**
  * A list of the object attribute names leading up to the value
- * excuding the target attribute.
+ * excluding the target attribute.
  */
 export type Path = string[];
 

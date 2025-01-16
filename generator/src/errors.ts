@@ -28,7 +28,7 @@ export class UnsupportedUnionMember extends UnsupportedError {
     const names = types.map((t) => t.nameForErrors);
     super(
       `The combination of types ${names.join(
-        ","
+        ", "
       )} is not supported in unions. Try extracting object types into their separate type aliases. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/1`
     );
   }

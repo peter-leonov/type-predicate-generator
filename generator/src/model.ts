@@ -11,7 +11,7 @@ export type TypeOptions = {
   aliasName?: string;
 };
 
-function normilizeOptions(options: TypeOptions): TypeOptions {
+function normalizeOptions(options: TypeOptions): TypeOptions {
   return {
     isOptional: Boolean(options.isOptional),
     aliasName: options.aliasName,
@@ -31,7 +31,7 @@ export class LiteralType implements BaseType {
     value: typeof this.value
   ) {
     this.nameForErrors = "literal type";
-    this.options = normilizeOptions(options);
+    this.options = normalizeOptions(options);
     this.value = value;
   }
 }
@@ -45,7 +45,7 @@ export class PrimitiveType implements BaseType {
     primitive: typeof this.primitive
   ) {
     this.nameForErrors = "primitive type";
-    this.options = normilizeOptions(options);
+    this.options = normalizeOptions(options);
     this.primitive = primitive;
   }
 }
@@ -61,7 +61,7 @@ export class ObjectType implements BaseType {
     optional: typeof this.optionalAttributes = new Set()
   ) {
     this.nameForErrors = "object type";
-    this.options = normilizeOptions(options);
+    this.options = normalizeOptions(options);
     this.attributes = attributes;
     this.optionalAttributes = optional;
   }
@@ -76,7 +76,7 @@ export class UnionType implements BaseType {
     types: typeof this.types
   ) {
     this.nameForErrors = "union type";
-    this.options = normilizeOptions(options);
+    this.options = normalizeOptions(options);
     this.types = types;
   }
 }
@@ -90,7 +90,7 @@ export class ArrayType implements BaseType {
     element: typeof this.element
   ) {
     this.nameForErrors = "array type";
-    this.options = normilizeOptions(options);
+    this.options = normalizeOptions(options);
     this.element = element;
   }
 }
@@ -106,7 +106,7 @@ export class AliasType implements BaseType {
     forNestedPredicate?: true
   ) {
     this.nameForErrors = "type alias";
-    this.options = normilizeOptions(options);
+    this.options = normalizeOptions(options);
     this.name = name;
     this.forNestedPredicate = forNestedPredicate;
   }
@@ -246,7 +246,7 @@ export function typeToModelInner(
     );
   } else if (tsTypeIsEnum(type)) {
     const exports = type.symbol.exports;
-    // Error on a simingly impossible empty enum.
+    // Error on a seemingly impossible empty enum.
     if (exports && exports.size == 0) {
       throw new UnsupportedEmptyEnum(checker.typeToString(type));
     }

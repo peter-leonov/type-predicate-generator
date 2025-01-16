@@ -146,11 +146,11 @@ function main(): number {
     try {
       const stats = fs.statSync(fileName);
       if (!stats.isFile()) {
-        console.error(`error openning file ${fileName}: not a file`);
+        console.error(`error opening file ${fileName}: not a file`);
         return 3;
       }
     } catch (err) {
-      console.error(`error openning file ${fileName}: ${err}`);
+      console.error(`error opening file ${fileName}: ${err}`);
       return 3;
     }
 
