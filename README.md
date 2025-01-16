@@ -1,38 +1,29 @@
 # TypeScript Type Predicate Generator
 
-Check JSON data from APIs 100% type safe, tested and at blazing speed.
+Check JSON data from APIs 100% type safe, tested and at blazing speed (~80M OPS).
 
 Give it a try in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/).
 
 ## About
 
-A TypeScript code generator that produces strictly type safe readable and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates).
+A TypeScript code generator that produces strictly type safe `*.ts` files with readable and and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) sutable to use in the browser, Node app, Cloudflare workers and CloudFront functions.
 
-Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and checked by TS as part of your project setup.
+Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe and get checked and compiled as part of your project setup as your own code does.
 
-To verify that the guards properly reject the invalid values while accepting the valid ones the generator also produces a set of unit tests (atm Vitest only) next to the guard file if run with `--unitTests` switch.
+As a bonus, to verify that the guards work properly the tool also produces a set of unit tests next to the guard file that you can run as part of your test suite in CI.
 
-## Status
-
-Release candidate. Most of the key distinctive features are implemented, unit and integration tested. Got the initial third-party feedback, ran some benchmarks with good results (~80M OPS).
-
-## Install
+## How to use
 
 ```bash
 npm i -D generate-type-guards
+npx type-predicate-generator src/types.ts
 ```
 
-## Use
-
-```bash
-npx type-predicate-generator ./types.ts
-```
-
-Generates `types_guards.ts` with the code like in the example [below](#example).
+Generates `src/types_guards.ts` with the predicate code for all the exported types in `src/types.ts` (see example outpyt in the example [below](#example)).
 
 ## Why
 
-It's a simple, easy to integrate tool that does only one thing and does it well: generates type safe and fast code ready to use right away. The implmentation is near trivial, it uses minimal TypeScript public API surface thus is easy to update to keep up with the constant changes in TS itself.
+It's a simple, easy to integrate tool that does only one thing and does it well: generates type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and fast code ready to use right away. The implmentation is near trivial, it uses minimal TypeScript public API surface thus is easy to update to keep up with the constant changes in TS itself.
 
 Experience shows that many teams can remain hesitant to introduce a runtime type checker because of various reasons. The main two have been speed (some checkers bring a whole runtime rule engine with them) and reliability (the produced code or a rule set is a black box that is hard to assess).
 
