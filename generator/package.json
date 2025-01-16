@@ -7,7 +7,7 @@
   },
   "bin": "dist/cli.js",
   "repository": {
-    "url": "https://github.com/peter-leonov/typescript-predicate-generator"
+    "url": "https://github.com/peter-leonov/type-predicate-generator"
   },
   "scripts": {
     "test": "vitest",

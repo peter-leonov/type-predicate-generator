@@ -2,7 +2,7 @@
 
 Check JSON data from APIs 100% type safe, unit tested and at blazing speed!
 
-Give it a try in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/).
+Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-generator/).
 
 ## About
 
@@ -95,7 +95,7 @@ export function isUser(root: unknown): root is User {
 }
 ```
 
-Play with it in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/?s=PTAEBUAsEsGdTqAhgO1AUwB5ILYAcAbdUAFwE890AaAKBFEKTNAHdoTIETkAnAewCuKACag+PBklgliZQRL4sUAOho0secd3KVQAVVjoJAXlABvGqATCAXKBQCcAIyMBuS6AJ8A5tBR3pHj9vdyt0HCRoAgB+AJIglBCPJGFhHnRYWDsLKytA9HQSOISk3NBIQUM7B2c3DwBfd0aaIA).
+Play with it in the [Playground](https://peter-leonov.github.io/type-predicate-generator/?s=PTAEBUAsEsGdTqAhgO1AUwB5ILYAcAbdUAFwE890AaAKBFEKTNAHdoTIETkAnAewCuKACag+PBklgliZQRL4sUAOho0secd3KVQAVVjoJAXlABvGqATCAXKBQCcAIyMBuS6AJ8A5tBR3pHj9vdyt0HCRoAgB+AJIglBCPJGFhHnRYWDsLKytA9HQSOISk3NBIQUM7B2c3DwBfd0aaIA).
 
 This is what `esbuild --minify` reduces it to (formatted for readability):
 
@@ -302,7 +302,7 @@ type X = {
 };
 ```
 
-See more here [#1](https://github.com/peter-leonov/typescript-predicate-generator/issues/1).
+See more here [#1](https://github.com/peter-leonov/type-predicate-generator/issues/1).
 
 1. Expects `strict: true`, otherwise every type is nullable which defends the purpose.
 
@@ -318,7 +318,7 @@ See more here [#1](https://github.com/peter-leonov/typescript-predicate-generato
 
 ## Contributing
 
-After reading below please feel free to pick any of the [issues](https://github.com/peter-leonov/typescript-predicate-generator/issues). We can always pair on it!
+After reading below please feel free to pick any of the [issues](https://github.com/peter-leonov/type-predicate-generator/issues). We can always pair on it!
 
 ### Architecture
 

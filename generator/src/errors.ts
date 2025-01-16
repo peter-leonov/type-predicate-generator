@@ -13,7 +13,7 @@ export class UnsupportedUnionMember extends UnsupportedError {
     super(
       `The combination of types ${names.join(
         ","
-      )} is not supported in unions. Try extracting object types into their separate type aliases. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/1`
+      )} is not supported in unions. Try extracting object types into their separate type aliases. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/1`
     );
   }
 }
@@ -21,7 +21,7 @@ export class UnsupportedUnionMember extends UnsupportedError {
 export class UnsupportedEmptyEnum extends UnsupportedError {
   constructor(aliasName: string) {
     super(
-      `The ${aliasName} type is defined as an empty enum (enum with no members). This type is not supported by the generator as it has no values to match against (much like never). See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/11`
+      `The ${aliasName} type is defined as an empty enum (enum with no members). This type is not supported by the generator as it has no values to match against (much like never). See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/11`
     );
   }
 }
@@ -29,7 +29,7 @@ export class UnsupportedEmptyEnum extends UnsupportedError {
 export class UnsupportedPseudoBigInt extends UnsupportedError {
   constructor() {
     super(
-      `The PseudoBigInt TS built-in type is currently not supported. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/14`
+      `The PseudoBigInt TS built-in type is currently not supported. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/14`
     );
   }
 }
@@ -37,7 +37,7 @@ export class UnsupportedPseudoBigInt extends UnsupportedError {
 export class UnsupportedPrimitiveType extends UnsupportedError {
   constructor(aliasName: string) {
     super(
-      `The primitive ${aliasName} type is nor currently supported by the generator. See here for more: https://github.com/peter-leonov/typescript-predicate-generator/issues/12`
+      `The primitive ${aliasName} type is nor currently supported by the generator. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/12`
     );
   }
 }
@@ -67,6 +67,6 @@ ${err}
 ${stacktrace}
 
 If you feel this is a bug in the generator, pretty please report it here:
-https://github.com/peter-leonov/typescript-predicate-generator/issues/new
+https://github.com/peter-leonov/type-predicate-generator/issues/new
 `;
 }
