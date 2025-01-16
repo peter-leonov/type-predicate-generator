@@ -38,7 +38,7 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(target.local_name, type)
         ),
       };
     } else if (type instanceof ArrayType) {
@@ -96,14 +96,14 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(target.local_name, type)
         ),
       };
     } else if (type instanceof LiteralType) {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(target.local_name, type)
         ),
       };
     } else if (type instanceof UnionType) {
@@ -143,10 +143,10 @@ export class TypeGuardGenerator {
             ],
             body: ifNotReturnFalse(
               // assertionConditionForArrayType(target.local_name, guardName)
-              assertionConditionForUnionTypes(target.local_name, [
-                ...safeUnionTypes,
-                referenceType,
-              ])
+              this.assertionConditionForUnionTypes(
+                target.local_name,
+                [...safeUnionTypes, referenceType]
+              )
             ),
           };
         } else {
@@ -157,7 +157,7 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          assertionConditionForUnionTypes(
+          this.assertionConditionForUnionTypes(
             target.local_name,
             type.types
           )
@@ -167,6 +167,69 @@ export class TypeGuardGenerator {
 
     [type] satisfies [never];
     unimplemented(`${(type as Object)?.constructor.name}`);
+  }
+
+  assertionConditionForType(
+    target: string,
+    type: TypeModel
+  ): ts.Expression {
+    if (type instanceof AliasType) {
+      return factory.createCallExpression(
+        factory.createIdentifier(`is${type.name}`),
+        undefined,
+        [factory.createIdentifier(target)]
+      );
+    }
+
+    if (type instanceof PrimitiveType) {
+      return factory.createBinaryExpression(
+        factory.createTypeOfExpression(
+          factory.createIdentifier(target)
+        ),
+        factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+        factory.createStringLiteral(type.primitive)
+      );
+    }
+
+    if (type instanceof LiteralType) {
+      if (type.value === undefined) {
+        return factory.createBinaryExpression(
+          factory.createTypeOfExpression(
+            factory.createIdentifier(target)
+          ),
+          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+          factory.createStringLiteral("undefined")
+        );
+      }
+      return factory.createBinaryExpression(
+        factory.createIdentifier(target),
+        factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+        valueToNode(type.value)
+      );
+    }
+
+    if (type instanceof UnionType) {
+      return this.assertionConditionForUnionTypes(target, type.types);
+    }
+
+    if (type instanceof ObjectType) {
+      throw new TypeError(`${type.constructor.name} is invalid here`);
+    }
+
+    unimplemented(`${(type as Object).constructor.name}`);
+  }
+
+  assertionConditionForUnionTypes(
+    target: string,
+    types: TypeModel[]
+  ): ts.Expression {
+    // A union is a set of at least two types.
+    assert(types.length >= 2);
+    // Nested unions look like an error and are not supported.
+    assert(!types.some((t) => t instanceof UnionType));
+    return wrapListInOr(
+      types.map((t) => this.assertionConditionForType(target, t))
+    );
   }
 
   /**
@@ -426,68 +489,6 @@ function assertionConditionForArrayType(
       undefined,
       [factory.createIdentifier(guardName)]
     )
-  );
-}
-function assertionConditionForType(
-  target: string,
-  type: TypeModel
-): ts.Expression {
-  if (type instanceof AliasType) {
-    return factory.createCallExpression(
-      factory.createIdentifier(`is${type.name}`),
-      undefined,
-      [factory.createIdentifier(target)]
-    );
-  }
-
-  if (type instanceof PrimitiveType) {
-    return factory.createBinaryExpression(
-      factory.createTypeOfExpression(
-        factory.createIdentifier(target)
-      ),
-      factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-      factory.createStringLiteral(type.primitive)
-    );
-  }
-
-  if (type instanceof LiteralType) {
-    if (type.value === undefined) {
-      return factory.createBinaryExpression(
-        factory.createTypeOfExpression(
-          factory.createIdentifier(target)
-        ),
-        factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-        factory.createStringLiteral("undefined")
-      );
-    }
-    return factory.createBinaryExpression(
-      factory.createIdentifier(target),
-      factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-      valueToNode(type.value)
-    );
-  }
-
-  if (type instanceof UnionType) {
-    return assertionConditionForUnionTypes(target, type.types);
-  }
-
-  if (type instanceof ObjectType) {
-    throw new TypeError(`${type.constructor.name} is invalid here`);
-  }
-
-  unimplemented(`${(type as Object).constructor.name}`);
-}
-
-function assertionConditionForUnionTypes(
-  target: string,
-  types: TypeModel[]
-): ts.Expression {
-  // A union is a set of at least two types.
-  assert(types.length >= 2);
-  // Nested unions look like an error and are not supported.
-  assert(!types.some((t) => t instanceof UnionType));
-  return wrapListInOr(
-    types.map((t) => assertionConditionForType(target, t))
   );
 }
 
