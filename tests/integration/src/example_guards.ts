@@ -2,15 +2,14 @@ import { type User } from "./example";
 type SafeShallowShape<Type extends {}> = {
   [_ in keyof Type]?: unknown;
 };
-const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isUser(root: unknown): root is User {
-  type Attribute = Extract<User["address"], object>;
-  function isAttribute(root: unknown): root is Attribute {
+  type Address = Extract<User["address"], object>;
+  function isAddress(root: unknown): root is Address {
     if (!(typeof root === "object" && root !== null)) {
       return false;
     }
     root satisfies {};
-    const { street, house }: SafeShallowShape<Attribute> = root;
+    const { street, house }: SafeShallowShape<Address> = root;
     if (!(typeof street === "string")) {
       return false;
     }
@@ -20,7 +19,7 @@ export function isUser(root: unknown): root is User {
     ({
       street,
       house,
-    }) satisfies Attribute;
+    }) satisfies Address;
     return true;
   }
   if (!(typeof root === "object" && root !== null)) {
@@ -37,7 +36,7 @@ export function isUser(root: unknown): root is User {
   if (!(typeof email === "undefined" || typeof email === "string")) {
     return false;
   }
-  if (!(typeof address === "undefined" || isAttribute(address))) {
+  if (!(typeof address === "undefined" || isAddress(address))) {
     return false;
   }
   ({
