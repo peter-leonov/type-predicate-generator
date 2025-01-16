@@ -156,7 +156,11 @@ const valid_User = [
     email: "string",
     address: { street: "", house: 0 },
   },
-  { id: 42, login: "string", address: { street: "", house: 0 } },
+  {
+    id: 42,
+    login: "string",
+    address: { street: "", house: 0 },
+  },
   {
     id: 42,
     login: "string",
@@ -179,37 +183,72 @@ const invalid_User = [
     email: undefined,
     address: { street: "", house: 0 },
   },
-  { login: "", email: undefined, address: { street: "", house: 0 } },
+  {
+    login: "",
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
   {
     id: 0,
     login: invalidValue,
     email: undefined,
     address: { street: "", house: 0 },
   },
-  { id: 0, email: undefined, address: { street: "", house: 0 } },
+  {
+    id: 0,
+    email: undefined,
+    address: { street: "", house: 0 },
+  },
   {
     id: 0,
     login: "",
     email: invalidValue,
     address: { street: "", house: 0 },
   },
-  { id: 0, login: "", email: undefined, address: invalidValue },
-  { id: 0, login: "", email: undefined, address: null },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: invalidValue,
+  },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: null,
+  },
   {
     id: 0,
     login: "",
     email: undefined,
     address: { street: invalidValue, house: 0 },
   },
-  { id: 0, login: "", email: undefined, address: { house: 0 } },
   {
     id: 0,
     login: "",
     email: undefined,
-    address: { street: "", house: invalidValue },
+    address: { house: 0 },
   },
-  { id: 0, login: "", email: undefined, address: { street: "" } },
-  { id: 0, login: "", email: undefined },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: {
+      street: "",
+      house: invalidValue,
+    },
+  },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+    address: { street: "" },
+  },
+  {
+    id: 0,
+    login: "",
+    email: undefined,
+  },
 ];
 describe("User", () => {
   it.for(valid_User)("valid", (value: unknown) => {
