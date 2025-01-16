@@ -6,11 +6,11 @@ Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-
 
 ## About
 
-- **Safe**: generates strictly typed code and unit tests for it
+- **Safe**: generates strictly typed code and unit tests
 - **Fast**: ~100 times faster than pure runtime solutions
 - **Lightweight**: no runtime dependencies
-- **Portable**: supports all the runtimes
-- **Reliable**: the generated code readable
+- **Portable**: supports all browsers, runtimes and bundlers
+- **Reliable**: the output code is trivial to audit
 
 A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript code suitable to use in the browser, a Node.js / Deno / Bun app, Cloudflare workers and CloudFront edge functions. It supports deeply nested types, recursive structures, arrays, unions and more.
 
