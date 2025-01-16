@@ -64,14 +64,14 @@ export function explainError(
 ): string {
   const title =
     err instanceof UnimplementedError
-      ? "Unimplemented error\nCongrats, you've found a missing feature!"
+      ? "Unimplemented error\n\nCongrats, you've found a missing feature!"
       : err instanceof InputError
-      ? "Input error\nThe Generator needs your help to change the input files."
+      ? "Input error\n\nThe Generator needs your help to change the input files."
       : err instanceof UnsupportedError
-      ? "Generation error\nThe Generator stumbled upon something that does not fit."
+      ? "Generation error\n\nThe Generator stumbled upon something that does not fit."
       : err instanceof TypeScriptError
       ? "TypeScript compilation error\nLikely it's a syntax error, if not then it's a bug."
-      : "Unknown error\nSomething went unexpectedly wrong.";
+      : "Unknown error\n\nSomething went unexpectedly wrong.";
 
   const stacktrace = inBrowser
     ? `For the full error message with the stacktrace

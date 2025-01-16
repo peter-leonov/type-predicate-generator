@@ -160,6 +160,7 @@ function main(): number {
       if (flags.withStacktrace) {
         console.error(err);
       }
+      console.error(`While processing file: ${fileName}`);
       console.error(explainError(err, false));
       return 1;
     }

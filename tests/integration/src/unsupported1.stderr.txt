@@ -1,4 +1,6 @@
+While processing file: ./src/unsupported1.ts
 Generation error
+
 The Generator stumbled upon something that does not fit.
 
 Error: The X type is defined as an empty enum (enum with no members). This type is not supported by the generator as it has no values to match against (much like never). See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/11
