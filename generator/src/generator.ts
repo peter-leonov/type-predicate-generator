@@ -87,11 +87,15 @@ export class TypeGuardGenerator {
         ),
       };
     } else if (type instanceof ObjectType) {
-      this.needsSafeShallowShape = true;
       const entries = Object.entries(type.attributes).map(
         ([attr, type]) =>
           [scope.createAttribute(targetPath, attr), type] as const
       );
+      // Only require SafeShallowShape for non-empty objects
+      if (entries.length) {
+        this.needsSafeShallowShape = true;
+      }
+
       const attrs = entries.map(([local, _]) => local);
       const hoists: ts.Statement[] = [];
       const bodies: ts.Statement[] = [

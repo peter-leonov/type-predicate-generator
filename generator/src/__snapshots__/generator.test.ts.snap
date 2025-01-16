@@ -70,9 +70,6 @@ exports[`array of an object type 1`] = `
 
 exports[`both object and array 1`] = `
 "import { type X } from "./guards.ts";
-type SafeShallowShape<Type extends {}> = {
-    [_ in keyof Type]?: unknown;
-};
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
     type Element = X[number];
@@ -303,9 +300,6 @@ export function isX(root: unknown): root is X {
 
 exports[`only object 1`] = `
 "import { type X } from "./guards.ts";
-type SafeShallowShape<Type extends {}> = {
-    [_ in keyof Type]?: unknown;
-};
 export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
@@ -413,6 +407,19 @@ export function isX(root: unknown): root is X {
     ({
         a
     }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`regression: empty object does not use SafeShallowShape 1`] = `
+"import { type X } from "./guards.ts";
+export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    ({}) satisfies X;
     return true;
 }
 "

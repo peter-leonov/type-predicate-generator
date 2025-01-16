@@ -340,3 +340,9 @@ test("refression: don't require top level predicates for nested predicate types 
     ])
   ).toMatchSnapshot();
 });
+
+test("regression: empty object does not use SafeShallowShape", () => {
+  expect(
+    generateAll([new ObjectType({ aliasName: "X" }, {})])
+  ).toMatchSnapshot();
+});
