@@ -3,10 +3,6 @@
 exports[`generateForPlayground 1`] = `
 {
   "predicatesCode": "import { type X } from "./types";
-type SafeShallowShape<Type extends {}> = {
-    [_ in keyof Type]?: unknown;
-};
-const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
     if (!(typeof root === "number")) {
         return false;
