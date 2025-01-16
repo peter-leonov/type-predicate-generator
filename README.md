@@ -118,7 +118,7 @@ function o(e) {
 
 As you can see, esbuild nicely merges all the `if`s for the same set of properties into just one combined check.
 
-The tests generated for the predicate look like this. They are not covering all possible combinations as it's growing exponential, instead the test generator yields each valid value for each field at least once while other values stay the same:
+The tests generated for the predicate look like this. They are not covering all possible combinations as the number of combinations grows exponentially, instead the test generator yields each valid value for each field at least once while other values reuse the same valid combination:
 
 ```ts
 // example_guards.test.js
@@ -225,7 +225,7 @@ describe("User", () => {
 
 Mainly safety.
 
-Experience shows that many teams can remain hesitant to introduce a runtime type checker because of various reasons. The main two have been speed (some checkers bring a whole runtime rule engine with them) and reliability (the produced code or a rule set is a black box that is hard to assess).
+Experience shows that many teams can remain hesitant to introduce a runtime type checker because of various reasons. The main two have been speed (some checkers bring a whole runtime rule engine with them) and reliability (the produced code or a rule set is a black box that is hard to assess). So we all stick to popular tools and wait with upgrading them.
 
 To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if it's manually written and minifies really well. This all is heavily inspired by code generators from other languages.
 
@@ -323,8 +323,8 @@ Goals:
 
 Non-goals:
 
-- Cover non-serializable types: at this stage of TS adoption most of the codebases that care about type safety have developed a safe "bubble" that only lets in checked values. This mainly means that the values get into the "bubble" throught a call to `JSON.parse()` that produces plain old data objects, this is where the 99% of type checking is required.
-- Cover a sophisticated schema verification protocol. While possible, the idea is to get an `unknown` type and turn it first into something type safe (safely assignable to a given type). The resulting value can get safely verified against a more sophisticated schema as a second step. Still, for simple checks the doors are open, but any non context free checks should be implemneted using a higher level schema verification generator that is not TypeScript specific.
+- Cover non-serializable types: at this stage of TS adoption most of the codebases that care about type safety have developed a safe "bubble" that only lets in checked values. This mainly means that the values get into the "bubble" through a call to `JSON.parse()` that produces plain old data objects, this is where the 99% of type checking is required.
+- Cover a sophisticated schema verification protocol. While possible, the idea is to get an `unknown` type and turn it first into something type safe (safely assignable to a given type). The resulting value can get safely verified against a more sophisticated schema as a second step. Still, for simple checks the doors are open, but any non context free checks should be implemented using a higher level schema verification generator that is not TypeScript specific.
 - Cover complex computed types or expensive JS values, except for generics (generics are neat and easy to cover in the current architecture).
 
 Guiding principles:
@@ -334,11 +334,11 @@ Guiding principles:
 - The generated code should be readable and easy to modify by hand if needed.
 - Common minifiers should be able to produce efficient and compact code
 - KISS the generator to address the bugs and TypeScript updates quicker
-- Use monomorphised functions to keep the JIT happy (a.k.a generate same helpers for each unique tipe)
+- Use monomorphised functions to keep the JIT happy (a.k.a generate same helpers for each unique type)
 
 Nice to haves:
 
-- Languare server plugin / VS Code extension that "just" generates the predicate next to the type.
+- Language server plugin / VS Code extension that "just" generates the predicate next to the type.
 
 ### Tools used
 
