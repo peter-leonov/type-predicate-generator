@@ -13,16 +13,33 @@ import {
 import { assert, unimplemented } from "./helpers";
 import { UnsupportedUnionMember as UnsupportedUnion } from "./errors";
 
+/**
+ * This class transforms and combines several `TypeModel`s
+ * into a coherent set of type predicates in form of AST Nodes.
+ *
+ * All the meat is in this class of a handful of methods.
+ * The rest of the module and the project is just supporting
+ * the code here.
+ */
 export class TypeGuardGenerator {
   guards: Map<string, ts.Statement>;
+  referencedTypes: Set<{
+    typePath: string[];
+    referencedTypeName: string;
+  }>;
+  needsSafeShallowShape: boolean;
+  needsSafeIsArray: boolean;
   /**
    * File global type scope.
    */
   typeScope: TypeScope;
 
   constructor() {
+    this.needsSafeShallowShape = false;
+    this.needsSafeIsArray = false;
     this.typeScope = new TypeScope();
     this.guards = new Map();
+    this.referencedTypes = new Set();
   }
 
   getAssertionsForLocalVar(
@@ -38,10 +55,15 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(
+            typePath,
+            target.local_name,
+            type
+          )
         ),
       };
     } else if (type instanceof ArrayType) {
+      this.needsSafeIsArray = true;
       const nestedTypeName = this.typeScope.newTypeName(
         typePath.map(capitalize),
         "Element"
@@ -61,6 +83,7 @@ export class TypeGuardGenerator {
         ),
       };
     } else if (type instanceof ObjectType) {
+      this.needsSafeShallowShape = true;
       const entries = Object.entries(type.attributes).map(
         ([attr, type]) =>
           [scope.createAttribute(targetPath, attr), type] as const
@@ -96,14 +119,22 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(
+            typePath,
+            target.local_name,
+            type
+          )
         ),
       };
     } else if (type instanceof LiteralType) {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(
+            typePath,
+            target.local_name,
+            type
+          )
         ),
       };
     } else if (type instanceof UnionType) {
@@ -144,6 +175,7 @@ export class TypeGuardGenerator {
             body: ifNotReturnFalse(
               // assertionConditionForArrayType(target.local_name, guardName)
               this.assertionConditionForUnionTypes(
+                path,
                 target.local_name,
                 [...safeUnionTypes, referenceType]
               )
@@ -158,6 +190,7 @@ export class TypeGuardGenerator {
         hoist: [],
         body: ifNotReturnFalse(
           this.assertionConditionForUnionTypes(
+            path,
             target.local_name,
             type.types
           )
@@ -170,10 +203,15 @@ export class TypeGuardGenerator {
   }
 
   assertionConditionForType(
+    typePath: string[],
     target: string,
     type: TypeModel
   ): ts.Expression {
     if (type instanceof AliasType) {
+      this.referencedTypes.add({
+        typePath,
+        referencedTypeName: type.name,
+      });
       return factory.createCallExpression(
         factory.createIdentifier(`is${type.name}`),
         undefined,
@@ -209,17 +247,29 @@ export class TypeGuardGenerator {
     }
 
     if (type instanceof UnionType) {
-      return this.assertionConditionForUnionTypes(target, type.types);
+      return this.assertionConditionForUnionTypes(
+        typePath,
+        target,
+        type.types
+      );
     }
 
-    if (type instanceof ObjectType) {
-      throw new TypeError(`${type.constructor.name} is invalid here`);
-    }
+    assert(
+      !(type instanceof ObjectType),
+      `${type.constructor.name} is invalid here`
+    );
 
-    unimplemented(`${(type as Object).constructor.name}`);
+    assert(
+      !(type instanceof ArrayType),
+      `${type.constructor.name} is invalid here`
+    );
+
+    [type] satisfies [never];
+    unimplemented(`${(type as Object)?.constructor.name}`);
   }
 
   assertionConditionForUnionTypes(
+    typePath: string[],
     target: string,
     types: TypeModel[]
   ): ts.Expression {
@@ -228,7 +278,9 @@ export class TypeGuardGenerator {
     // Nested unions look like an error and are not supported.
     assert(!types.some((t) => t instanceof UnionType));
     return wrapListInOr(
-      types.map((t) => this.assertionConditionForType(target, t))
+      types.map((t) =>
+        this.assertionConditionForType(typePath, target, t)
+      )
     );
   }
 
@@ -304,10 +356,20 @@ export class TypeGuardGenerator {
   }
 
   getFullFileBody(sourceFileName: string): ts.Statement[] {
+    // this.referencedTypes;
+
+    const typeSafeShallowShape = this.needsSafeShallowShape
+      ? getTypeSafeShallowShape()
+      : [];
+
+    const safeIsArray = this.needsSafeIsArray
+      ? [getSafeIsArray()]
+      : [];
+
     return [
       ...getTypeImports(sourceFileName, [...this.guards.keys()]),
-      ...typeSafeShallowShape(),
-      safeIsArray(),
+      ...typeSafeShallowShape,
+      ...safeIsArray,
       ...this.getGuards(),
     ];
   }
@@ -383,7 +445,7 @@ const SafeShallowShape = "SafeShallowShape";
  * const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
  * ```
  */
-function safeIsArray(): ts.Statement {
+function getSafeIsArray(): ts.Statement {
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -434,7 +496,7 @@ function safeIsArray(): ts.Statement {
  * };
  * ```
  */
-function typeSafeShallowShape(): ts.Statement[] {
+function getTypeSafeShallowShape(): ts.Statement[] {
   return [
     factory.createTypeAliasDeclaration(
       undefined,

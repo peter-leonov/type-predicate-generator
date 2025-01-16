@@ -18,6 +18,17 @@ export function generate(model: TypeModel): string {
   return nodesToString("guards.ts", tgg.getGuards());
 }
 
+export function generateAll(models: TypeModel[]): string {
+  const tgg = new TypeGuardGenerator();
+  for (const model of models) {
+    tgg.addRootTypeGuardFor(model);
+  }
+  return nodesToString(
+    "./guards.ts",
+    tgg.getFullFileBody("./guards.ts")
+  );
+}
+
 test("undefined", () => {
   expect(
     generate(new LiteralType({ aliasName: "X" }, undefined))
@@ -230,5 +241,34 @@ test("nested arrays of a primitive type", () => {
         )
       )
     )
+  ).toMatchSnapshot();
+});
+
+test("no models", () => {
+  expect(generateAll([])).toMatchSnapshot();
+});
+
+test("only object", () => {
+  expect(
+    generateAll([new ObjectType({ aliasName: "X" }, {})])
+  ).toMatchSnapshot();
+});
+
+test("only array", () => {
+  expect(
+    generateAll([
+      new ArrayType(
+        { aliasName: "X" },
+        new PrimitiveType({}, "string")
+      ),
+    ])
+  ).toMatchSnapshot();
+});
+
+test("both object and array", () => {
+  expect(
+    generateAll([
+      new ArrayType({ aliasName: "X" }, new ObjectType({}, {})),
+    ])
   ).toMatchSnapshot();
 });
