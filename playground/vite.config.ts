@@ -6,5 +6,5 @@ export default defineConfig({
     emptyOutDir: true,
     outDir: "../docs",
   },
-  base: "/typescript-predicate-generator/",
+  base: "/type-predicate-generator/",
 });
