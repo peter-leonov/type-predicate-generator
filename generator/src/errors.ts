@@ -5,6 +5,16 @@ export class UnreachableError extends Error {}
 
 export class TypeScriptError extends Error {}
 
+export class InputError extends Error {}
+
+export class MissingExportedType extends InputError {
+  constructor(source: string, missingTypeName: string) {
+    super(
+      `The type ${missingTypeName} is referenced in ${source} but there is no predicate generated for ${missingTypeName}. Likely it's because the referenced type is not exported. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/16`
+    );
+  }
+}
+
 export class UnsupportedError extends Error {}
 
 export class UnsupportedUnionMember extends UnsupportedError {
@@ -49,6 +59,8 @@ export function explainError(
   const title =
     err instanceof UnimplementedError
       ? "Unimplemented error\nCongrats, you've found a missing feature!"
+      : err instanceof InputError
+      ? "Input error\nThe Generator needs your help to change the input files."
       : err instanceof UnsupportedError
       ? "Generation error\nThe Generator stumbled upon something that does not fit."
       : err instanceof TypeScriptError

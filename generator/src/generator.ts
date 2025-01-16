@@ -11,7 +11,10 @@ import {
   type TypeModel,
 } from "./model.js";
 import { assert, unimplemented } from "./helpers";
-import { UnsupportedUnionMember as UnsupportedUnion } from "./errors";
+import {
+  MissingExportedType,
+  UnsupportedUnionMember as UnsupportedUnion,
+} from "./errors";
 
 /**
  * This class transforms and combines several `TypeModel`s
@@ -23,12 +26,16 @@ import { UnsupportedUnionMember as UnsupportedUnion } from "./errors";
  */
 export class TypeGuardGenerator {
   guards: Map<string, ts.Statement>;
-  referencedTypes: Set<{
-    typePath: string[];
+  referencedTypes: {
     referencedTypeName: string;
-  }>;
+    referencedFrom: string;
+  }[];
   needsSafeShallowShape: boolean;
   needsSafeIsArray: boolean;
+  /**
+   * Some context that is cumbersome to pass as arguments.
+   */
+  ctx: { rootTypeName?: string };
   /**
    * File global type scope.
    */
@@ -39,7 +46,8 @@ export class TypeGuardGenerator {
     this.needsSafeIsArray = false;
     this.typeScope = new TypeScope();
     this.guards = new Map();
-    this.referencedTypes = new Set();
+    this.referencedTypes = [];
+    this.ctx = {};
   }
 
   getAssertionsForLocalVar(
@@ -55,11 +63,7 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(
-            typePath,
-            target.local_name,
-            type
-          )
+          this.assertionConditionForType(target.local_name, type)
         ),
       };
     } else if (type instanceof ArrayType) {
@@ -119,22 +123,14 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(
-            typePath,
-            target.local_name,
-            type
-          )
+          this.assertionConditionForType(target.local_name, type)
         ),
       };
     } else if (type instanceof LiteralType) {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(
-            typePath,
-            target.local_name,
-            type
-          )
+          this.assertionConditionForType(target.local_name, type)
         ),
       };
     } else if (type instanceof UnionType) {
@@ -175,7 +171,6 @@ export class TypeGuardGenerator {
             body: ifNotReturnFalse(
               // assertionConditionForArrayType(target.local_name, guardName)
               this.assertionConditionForUnionTypes(
-                path,
                 target.local_name,
                 [...safeUnionTypes, referenceType]
               )
@@ -190,7 +185,6 @@ export class TypeGuardGenerator {
         hoist: [],
         body: ifNotReturnFalse(
           this.assertionConditionForUnionTypes(
-            path,
             target.local_name,
             type.types
           )
@@ -203,13 +197,12 @@ export class TypeGuardGenerator {
   }
 
   assertionConditionForType(
-    typePath: string[],
     target: string,
     type: TypeModel
   ): ts.Expression {
     if (type instanceof AliasType) {
-      this.referencedTypes.add({
-        typePath,
+      this.referencedTypes.push({
+        referencedFrom: this.ctx.rootTypeName || "unknown",
         referencedTypeName: type.name,
       });
       return factory.createCallExpression(
@@ -247,11 +240,7 @@ export class TypeGuardGenerator {
     }
 
     if (type instanceof UnionType) {
-      return this.assertionConditionForUnionTypes(
-        typePath,
-        target,
-        type.types
-      );
+      return this.assertionConditionForUnionTypes(target, type.types);
     }
 
     assert(
@@ -269,7 +258,6 @@ export class TypeGuardGenerator {
   }
 
   assertionConditionForUnionTypes(
-    typePath: string[],
     target: string,
     types: TypeModel[]
   ): ts.Expression {
@@ -278,9 +266,7 @@ export class TypeGuardGenerator {
     // Nested unions look like an error and are not supported.
     assert(!types.some((t) => t instanceof UnionType));
     return wrapListInOr(
-      types.map((t) =>
-        this.assertionConditionForType(typePath, target, t)
-      )
+      types.map((t) => this.assertionConditionForType(target, t))
     );
   }
 
@@ -288,7 +274,9 @@ export class TypeGuardGenerator {
    * It's a method because it's suppored to call itself for referenced types.
    */
   addRootTypeGuardFor(type: TypeModel): void {
+    this.ctx = {};
     const typeName = type.options.aliasName;
+    this.ctx.rootTypeName = typeName;
     assert(typeName, "the root type must have an alias name");
 
     const root = "root";
@@ -322,6 +310,8 @@ export class TypeGuardGenerator {
     );
 
     this.guards.set(typeName, guard);
+
+    this.ctx = {};
   }
 
   private createTypeGuardFor(
@@ -356,7 +346,15 @@ export class TypeGuardGenerator {
   }
 
   getFullFileBody(sourceFileName: string): ts.Statement[] {
-    // this.referencedTypes;
+    for (const { referencedTypeName, referencedFrom } of this
+      .referencedTypes) {
+      if (!this.guards.has(referencedTypeName)) {
+        throw new MissingExportedType(
+          referencedFrom,
+          referencedTypeName
+        );
+      }
+    }
 
     const typeSafeShallowShape = this.needsSafeShallowShape
       ? getTypeSafeShallowShape()

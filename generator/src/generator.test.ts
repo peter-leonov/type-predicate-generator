@@ -9,7 +9,10 @@ import {
   TypeModel,
   UnionType,
 } from "./model.js";
-import { UnsupportedUnionMember } from "./errors.js";
+import {
+  MissingExportedType,
+  UnsupportedUnionMember,
+} from "./errors.js";
 import { nodesToString } from "./compile.js";
 
 export function generate(model: TypeModel): string {
@@ -271,4 +274,27 @@ test("both object and array", () => {
       new ArrayType({ aliasName: "X" }, new ObjectType({}, {})),
     ])
   ).toMatchSnapshot();
+});
+
+test("dangling reference type", () => {
+  expect(() =>
+    generateAll([
+      new ArrayType({ aliasName: "X" }, new AliasType({}, "Missing")),
+    ])
+  ).toThrow(MissingExportedType);
+
+  expect(() =>
+    generateAll([
+      new ArrayType({ aliasName: "X" }, new AliasType({}, "Missing")),
+    ])
+  ).toThrow("Missing is referenced in X");
+
+  expect(() =>
+    generateAll([
+      new ObjectType(
+        { aliasName: "X" },
+        { a: new AliasType({}, "Missing") }
+      ),
+    ])
+  ).toThrow("Missing is referenced in X");
 });
