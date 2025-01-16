@@ -350,6 +350,74 @@ exports[`reference type in an object 1`] = `
 "
 `;
 
+exports[`refression: don't require top level predicates for nested predicate types  1`] = `
+"import { type X } from "./guards.ts";
+type SafeShallowShape<Type extends {}> = {
+    [_ in keyof Type]?: unknown;
+};
+const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
+export function isX(root: unknown): root is X {
+    type Element = X["a"][number];
+    function isElement(root: unknown): root is Element {
+        if (!(root === "foo")) {
+            return false;
+        }
+        (root) satisfies Element;
+        return true;
+    }
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { a }: SafeShallowShape<X> = root;
+    if (!(safeIsArray(a) && a.every(isElement))) {
+        return false;
+    }
+    ({
+        a
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`refression: don't require top level predicates for nested predicate types  2`] = `
+"import { type X } from "./guards.ts";
+type SafeShallowShape<Type extends {}> = {
+    [_ in keyof Type]?: unknown;
+};
+export function isX(root: unknown): root is X {
+    type A = Extract<X["a"], object>;
+    function isA(root: unknown): root is A {
+        if (!(typeof root === "object" && root !== null)) {
+            return false;
+        }
+        (root) satisfies {};
+        const { b }: SafeShallowShape<A> = root;
+        if (!(b === "B")) {
+            return false;
+        }
+        ({
+            b
+        }) satisfies A;
+        return true;
+    }
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { a }: SafeShallowShape<X> = root;
+    if (!((a === "undefined") || (isA(a)))) {
+        return false;
+    }
+    ({
+        a
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
 exports[`two arrays of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
     type Element = X["a"][number];

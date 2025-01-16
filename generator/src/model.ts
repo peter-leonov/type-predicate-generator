@@ -99,10 +99,16 @@ export class AliasType implements BaseType {
   nameForErrors: string;
   options: TypeOptions;
   name: string;
-  constructor(options: typeof this.options, name: typeof this.name) {
+  forNestedPredicate: true | undefined;
+  constructor(
+    options: typeof this.options,
+    name: typeof this.name,
+    forNestedPredicate?: true
+  ) {
     this.nameForErrors = "type alias";
     this.options = normilizeOptions(options);
     this.name = name;
+    this.forNestedPredicate = forNestedPredicate;
   }
 }
 

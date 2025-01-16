@@ -16,7 +16,7 @@ export class MissingExportedType extends InputError {
     super(
       `The type ${missingTypeName} is referenced in ${source} but there is no predicate generated for ${missingTypeName}. Here is the list of types having predicates: ${guarderTypes.join(
         ", "
-      )} Likely it's because the referenced type is not exported. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/16`
+      )}. Likely it's because the referenced type is not exported. See here for more: https://github.com/peter-leonov/type-predicate-generator/issues/16`
     );
   }
 }

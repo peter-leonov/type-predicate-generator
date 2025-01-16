@@ -312,3 +312,31 @@ test("multiple reference types", () => {
     ])
   ).toMatchSnapshot();
 });
+
+test("refression: don't require top level predicates for nested predicate types ", () => {
+  expect(
+    generateAll([
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          a: new ArrayType({}, new LiteralType({}, "foo")),
+        }
+      ),
+    ])
+  ).toMatchSnapshot();
+
+  expect(
+    generateAll([
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          a: new UnionType({}, [
+            new ObjectType({}, { b: new LiteralType({}, "B") }),
+            new LiteralType({}, "undefined"),
+          ]),
+        },
+        new Set(["a"])
+      ),
+    ])
+  ).toMatchSnapshot();
+});

@@ -154,7 +154,11 @@ export class TypeGuardGenerator {
           const safeUnionTypes = type.types.filter((t) =>
             safeToUseInAUnion(t)
           );
-          const referenceType = new AliasType({}, nestedTypeName);
+          const referenceType = new AliasType(
+            {},
+            nestedTypeName,
+            true
+          );
           const guardName = scope.newLocalName(
             [],
             `is${nestedTypeName}`
@@ -201,10 +205,16 @@ export class TypeGuardGenerator {
     type: TypeModel
   ): ts.Expression {
     if (type instanceof AliasType) {
-      this.referencedTypes.push({
-        referencedFrom: this.ctx.rootTypeName || "unknown",
-        referencedTypeName: type.name,
-      });
+      // Don't require a top level predicate generated for a nested
+      // predicate type.
+      if (!type.forNestedPredicate) {
+        const rootTypeName = this.ctx.rootTypeName;
+        assert(rootTypeName, "the root type name is always known");
+        this.referencedTypes.push({
+          referencedFrom: rootTypeName,
+          referencedTypeName: type.name,
+        });
+      }
       return factory.createCallExpression(
         factory.createIdentifier(`is${type.name}`),
         undefined,
