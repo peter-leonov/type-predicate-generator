@@ -387,19 +387,19 @@ type SafeShallowShape<Type extends {}> = {
     [_ in keyof Type]?: unknown;
 };
 export function isX(root: unknown): root is X {
-    type A = Extract<X["a"], object>;
-    function isA(root: unknown): root is A {
+    type ObjectInA = Extract<X["a"], object>;
+    function isObjectInA(root: unknown): root is ObjectInA {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
         (root) satisfies {};
-        const { b }: SafeShallowShape<A> = root;
+        const { b }: SafeShallowShape<ObjectInA> = root;
         if (!(b === "B")) {
             return false;
         }
         ({
             b
-        }) satisfies A;
+        }) satisfies ObjectInA;
         return true;
     }
     if (!(typeof root === "object" && root !== null)) {
@@ -407,7 +407,7 @@ export function isX(root: unknown): root is X {
     }
     (root) satisfies {};
     const { a }: SafeShallowShape<X> = root;
-    if (!((a === "undefined") || (isA(a)))) {
+    if (!((a === "undefined") || (isObjectInA(a)))) {
         return false;
     }
     ({

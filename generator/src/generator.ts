@@ -386,7 +386,7 @@ export class TypeGuardGenerator {
 
 function getObjectTypeName(typePath: string[]): [string[], string] {
   if (typePath.length === 0) {
-    return [[], "Root"];
+    return [[], "ObjectInRoot"];
   } else if (typePath.length === 1) {
     const rootTypeName = typePath[0];
     assert(rootTypeName, "must have the root type name");
@@ -395,7 +395,10 @@ function getObjectTypeName(typePath: string[]): [string[], string] {
     const path = typePath.slice();
     const attributeName = path.pop();
     assert(attributeName, "must have the tail attribute name");
-    return [path.map(capitalize), capitalize(attributeName)];
+    return [
+      path.map(capitalize),
+      `ObjectIn${capitalize(attributeName)}`,
+    ];
   }
 }
 
