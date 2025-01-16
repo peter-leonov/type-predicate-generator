@@ -1,12 +1,18 @@
 # TypeScript Type Predicate Generator
 
-Check JSON data from APIs 100% type safe, tested and at blazing speed (~80M OPS).
+Check JSON data from APIs 100% type safe, unit tested and at blazing speed!
 
 Give it a try in the [Playground](https://peter-leonov.github.io/typescript-predicate-generator/).
 
 ## About
 
-A TypeScript code generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) sutable to use in the browser, a Node app, Cloudflare workers and CloudFront functions.
+- **Safe**: generates strictly typed code and unit tests for it
+- **Fast**: ~100 times faster than pure runtime solutions
+- **Lightweight**: no runtime dependencies
+- **Portable**: supports all the runtimes
+- **Reliable**: the generated code readable
+
+A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript code suitable to use in the browser, a Node.js / Deno / Bun app, Cloudflare workers and CloudFront edge functions.
 
 ## How to use
 
@@ -19,7 +25,7 @@ Generates `src/types_guards.ts` and `src/types_guards.test.ts` with the predicat
 
 ## Example
 
-The file with the types:
+The source file with the types:
 
 ```ts
 // example.ts
