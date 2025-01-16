@@ -6,56 +6,16 @@ Give it a try in the [Playground](https://peter-leonov.github.io/typescript-pred
 
 ## About
 
-A TypeScript code generator that produces strictly type safe `*.ts` files with readable and and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) sutable to use in the browser, Node app, Cloudflare workers and CloudFront functions.
-
-Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe and get checked and compiled as part of your project setup as your own code does.
-
-As a bonus, to verify that the guards work properly the tool also produces a set of unit tests next to the guard file that you can run as part of your test suite in CI.
+A TypeScript code generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) sutable to use in the browser, a Node app, Cloudflare workers and CloudFront functions.
 
 ## How to use
 
 ```bash
 npm i -D generate-type-guards
-npx type-predicate-generator src/types.ts
+npx type-predicate-generator --unitTests src/types.ts
 ```
 
-Generates `src/types_guards.ts` with the predicate code for all the exported types in `src/types.ts` (see example outpyt in the example [below](#example)).
-
-## Why
-
-It's a simple, easy to integrate tool that does only one thing and does it well: generates type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and fast code ready to use right away. The implmentation is near trivial, it uses minimal TypeScript public API surface thus is easy to update to keep up with the constant changes in TS itself.
-
-Experience shows that many teams can remain hesitant to introduce a runtime type checker because of various reasons. The main two have been speed (some checkers bring a whole runtime rule engine with them) and reliability (the produced code or a rule set is a black box that is hard to assess).
-
-To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if it's manually written and minifies really well. This all is heavily inspired by code generators from other languages.
-
-## Pros
-
-1. The produced code is type safe and gets checked by your TS setup
-1. The produced code is as fast as it gets: no extra reads, calls, comparisons
-1. The produced code is readable, linear and easy to modify if needed
-1. Does not require any runtime or compile time dependencies
-1. It's bundler agnostic as its output is plain TS (no `tsc` plugins required)
-1. The bundle size cost is 100% visible and predictable
-1. Supports environments without `eval()` (such as CloudFront and Cloudflare JS runtimes)
-1. Safe to upgrade: if the produced code changes you'll see it in the PR
-1. Zero performance cost in development: run once and forget
-1. Full IDE support: jump to definition just works
-1. Cannot unexpectedly break as the produced code is static and checked into your repository
-1. Reliable: the tool rejects the types it cannot cover 100%
-1. Easy to debug and fix: the stacktrace points exactly at where the bug is
-1. No vendor lock-in: any tool that works with TS can be used instead
-1. Unix-way: relies on other tools for minification, dead code elimination, etc
-
-## Cons
-
-These are by desing, fixing them would affect the [Pros](#pros):
-
-1. Compared to `tsc` plugins it requires a separate build step
-1. Compared to `tsc` plugins it reads a file and produces a file
-1. Compared to `tsc` plugins all the checked types must be explicitly exported
-
-See [Known Limitations](#known-limitations) for more on low level missing bits.
+Generates `src/types_guards.ts` and `src/types_guards.test.ts` with the predicate code for all the exported types in `src/types.ts` (see example output [below](#example)).
 
 ## Example
 
@@ -254,6 +214,46 @@ describe("User", () => {
   });
 });
 ```
+
+## Motivation
+
+Mainly safety.
+
+Experience shows that many teams can remain hesitant to introduce a runtime type checker because of various reasons. The main two have been speed (some checkers bring a whole runtime rule engine with them) and reliability (the produced code or a rule set is a black box that is hard to assess).
+
+To account for the above this generator emits explicitly readable code that is easy to audit and support. The produced code is as fast as if it's manually written and minifies really well. This all is heavily inspired by code generators from other languages.
+
+Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe and get checked and compiled as part of your project setup next to your application code.
+
+As a bonus, to verify that the guards work properly the tool also produces a set of unit tests next to the guard file that you can run as part of your test suite in CI.
+
+## Pros
+
+1. The produced code is type safe (using the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator)) and gets checked by your TS setup
+1. The produced code is as fast as it gets: no extra reads, calls, comparisons
+1. The produced code is readable, linear and easy to modify if needed
+1. Does not require any runtime or compile time dependencies
+1. It's bundler agnostic as its output is plain TS (no `tsc` plugins required)
+1. The bundle size cost is 100% visible and predictable
+1. Supports environments without `eval()` (such as CloudFront and Cloudflare JS runtimes)
+1. Safe to upgrade: if the produced code changes you'll see it in the PR
+1. Zero performance cost in development: run once and forget
+1. Full IDE support: jump to definition just works
+1. Cannot unexpectedly break as the produced code is static and checked into your repository
+1. Reliable: the tool rejects the types it cannot cover 100%
+1. Easy to debug and fix: the stacktrace points exactly at where the bug is
+1. No vendor lock-in: any tool that works with TS can be used instead
+1. Unix-way: relies on other tools for minification, dead code elimination, etc
+
+## Cons
+
+These are by desing, fixing them would affect the [Pros](#pros):
+
+1. Compared to `tsc` plugins it requires a separate build step
+1. Compared to `tsc` plugins it reads a file and produces a file
+1. Compared to `tsc` plugins all the checked types must be explicitly exported
+
+See [Known Limitations](#known-limitations) for more on low level missing bits.
 
 ## Known Limitations
 
