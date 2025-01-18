@@ -7,8 +7,8 @@ Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-
 ## About
 
 - **Safe**: generates strictly typed code and unit tests
-- **Fast**: ~100 times faster than pure runtime solutions
-- **Lightweight**: no runtime dependencies
+- **Fast**: ~200 times faster than zod
+- **Lightweight**: no runtime dependencies, minifies into bytes
 - **Portable**: supports all browsers, runtimes and bundlers
 - **Reliable**: the output code is trivial to audit
 
@@ -21,7 +21,7 @@ npm i -D generate-type-guards
 npx type-predicate-generator --unitTests src/types.ts
 ```
 
-Generates `src/types_guards.ts` and `src/types_guards.test.ts` with the predicate code for all the exported types in `src/types.ts` (see example output [below](#example)).
+Generates `src/types_guards.ts` and `src/types_guards.test.ts` with the predicate code for all the exported types in `src/types.ts`.
 
 ## Example
 
@@ -352,6 +352,8 @@ After reading below please feel free to pick any of the [issues](https://github.
 This tool is simple if not trivial. The code generator uses the TypeScript public API to emit valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
 
 What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type in [generator/src/model.ts](generator/src/model.ts)). The type parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed to the generator to actually produce the resulting TS code and to the tests generator to produce unit tests. This way both subsystems can be developed and tested relatively independently. This resembles the viewmodel from [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) and in general promotes clean domain boundaries inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
+
+Also, a unique know-how of this tool is yielding a set of unit tests in addition to the predicates. Here is a little write up on how it's done: [Combining Generators](https://github.com/peter-leonov/type-predicate-generator/issues/18).
 
 ### Design
 
