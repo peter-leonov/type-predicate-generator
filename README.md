@@ -7,7 +7,7 @@ Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-
 ## About
 
 - **Safe**: generates strictly typed code and unit tests
-- **Fast**: ~200 times faster than zod
+- **Fast**: ~200 times faster than zod, instant cold start
 - **Lightweight**: no runtime dependencies, minifies into bytes
 - **Portable**: supports all browsers, runtimes and bundlers
 - **Reliable**: the output code is trivial to audit
