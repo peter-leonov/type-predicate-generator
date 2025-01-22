@@ -344,7 +344,7 @@ exports[`reference type in an object 1`] = `
 "
 `;
 
-exports[`refression: don't require top level predicates for nested predicate types  1`] = `
+exports[`regression: don't require top level predicates for nested predicate types  1`] = `
 "import { type X } from "./guards.ts";
 type SafeShallowShape<Type extends {}> = {
     [_ in keyof Type]?: unknown;
@@ -375,7 +375,7 @@ export function isX(root: unknown): root is X {
 "
 `;
 
-exports[`refression: don't require top level predicates for nested predicate types  2`] = `
+exports[`regression: don't require top level predicates for nested predicate types  2`] = `
 "import { type X } from "./guards.ts";
 type SafeShallowShape<Type extends {}> = {
     [_ in keyof Type]?: unknown;

@@ -313,7 +313,7 @@ test("multiple reference types", () => {
   ).toMatchSnapshot();
 });
 
-test("refression: don't require top level predicates for nested predicate types ", () => {
+test("regression: don't require top level predicates for nested predicate types ", () => {
   expect(
     generateAll([
       new ObjectType(
