@@ -177,6 +177,83 @@ test("nested object", () => {
   ).toMatchSnapshot();
 });
 
+test("object with non-identificator-like names", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          "with two spaces": new LiteralType({}, 1),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          "1starts_with_a_number": new LiteralType({}, 1),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          "∞_starts_with_a_unicode": new LiteralType({}, 1),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});
+
+test("object attributes should not collide on root", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          "€": new LiteralType({}, 1),
+          "£": new LiteralType({}, 2),
+          "∂": new LiteralType({}, 3),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});
+
+test("object nested attributes should not collide on root", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          "€": new LiteralType({}, 1),
+          a: new ObjectType(
+            {},
+            {
+              "€": new LiteralType({}, 2),
+              b: new ObjectType(
+                {},
+                {
+                  "€": new LiteralType({}, 3),
+                  "£": new LiteralType({}, 4),
+                  "∂": new LiteralType({}, 5),
+                }
+              ),
+            }
+          ),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});
+
 test("array of a primitive type", () => {
   expect(
     generate(

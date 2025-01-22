@@ -251,6 +251,134 @@ exports[`null 1`] = `
 "
 `;
 
+exports[`object attributes should not collide on root 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { "€": _, "£": root__, "∂": __2 }: SafeShallowShape<X> = root;
+    if (!(_ === 1)) {
+        return false;
+    }
+    if (!(root__ === 2)) {
+        return false;
+    }
+    if (!(__2 === 3)) {
+        return false;
+    }
+    ({
+        "€": _,
+        "£": root__,
+        "∂": __2
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`object nested attributes should not collide on root 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { "€": _, a }: SafeShallowShape<X> = root;
+    if (!(_ === 1)) {
+        return false;
+    }
+    if (!(typeof a === "object" && a !== null)) {
+        return false;
+    }
+    (a) satisfies {};
+    const { "€": a__, b }: SafeShallowShape<X["a"]> = a;
+    if (!(a__ === 2)) {
+        return false;
+    }
+    if (!(typeof b === "object" && b !== null)) {
+        return false;
+    }
+    (b) satisfies {};
+    const { "€": b__, "£": a_b__, "∂": root_a_b__ }: SafeShallowShape<X["a"]["b"]> = b;
+    if (!(b__ === 3)) {
+        return false;
+    }
+    if (!(a_b__ === 4)) {
+        return false;
+    }
+    if (!(root_a_b__ === 5)) {
+        return false;
+    }
+    ({
+        "€": _,
+        a: {
+            "€": a__,
+            b: {
+                "€": b__,
+                "£": a_b__,
+                "∂": root_a_b__
+            }
+        }
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`object with non-identificator-like names 1`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { "with two spaces": with_two_spaces }: SafeShallowShape<X> = root;
+    if (!(with_two_spaces === 1)) {
+        return false;
+    }
+    ({
+        "with two spaces": with_two_spaces
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`object with non-identificator-like names 2`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { "1starts_with_a_number": _1starts_with_a_number }: SafeShallowShape<X> = root;
+    if (!(_1starts_with_a_number === 1)) {
+        return false;
+    }
+    ({
+        "1starts_with_a_number": _1starts_with_a_number
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`object with non-identificator-like names 3`] = `
+"export function isX(root: unknown): root is X {
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    const { "∞_starts_with_a_unicode": __starts_with_a_unicode }: SafeShallowShape<X> = root;
+    if (!(__starts_with_a_unicode === 1)) {
+        return false;
+    }
+    ({
+        "∞_starts_with_a_unicode": __starts_with_a_unicode
+    }) satisfies X;
+    return true;
+}
+"
+`;
+
 exports[`object with primitive types 1`] = `
 "export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
