@@ -12,7 +12,7 @@ Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-
 - **Portable**: supports all browsers, runtimes and bundlers
 - **Reliable**: the output code is trivial to audit
 
-A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript code suitable to use in the browser, a Node.js / Deno / Bun app, Cloudflare workers and CloudFront edge functions. It supports deeply nested types, recursive structures, arrays, unions and more.
+A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) generator that produces strictly type safe `*.ts` files with readable and extremely fast TypeScript code suitable to use in the browser, a Node.js / Deno / Bun app, CloudFront Functions, Cloudflare Workers and Akamai EdgeWorkers. It supports deeply nested types, recursive structures, arrays, unions and more.
 
 ## How to use
 
