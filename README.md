@@ -1,8 +1,10 @@
 # TypeScript Type Predicate Generator
 
-Check JSON data from APIs 100% type safe, unit tested and at blazing speed!
+Check JSON APIs responses 100% type safe, unit tested and at blazing speed!
 
 Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-generator/).
+
+[![NPM Package](https://img.shields.io/npm/v/type-predicate-generator)](https://www.npmjs.com/package/type-predicate-generator)
 
 ## About
 
@@ -22,6 +24,21 @@ npx type-predicate-generator --unitTests src/types.ts
 ```
 
 Generates `src/types_guards.ts` and `src/types_guards.test.ts` with the predicate code for all the exported types in `src/types.ts`.
+
+```ts
+import { isUser } from "./types_guards.ts";
+
+const response = await fetch("/user/1");
+const user: unknown = await response.json();
+if (isUser(user)) {
+  // user is safely User here
+}
+```
+
+```bash
+npx vitest src/types_guards.test.ts
+
+```
 
 ## Example
 
