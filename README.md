@@ -287,7 +287,7 @@ To account for the above this generator emits explicitly readable code that is e
 
 Yep, the resulting type predicates (a.k.a type guards) are themselves strictly type safe and get checked and compiled as part of your project setup next to your application code.
 
-As a bonus, to verify that the guards work properly the tool also produces a set of unit tests next to the guard file that you can run as part of your test suite in CI.
+As a bonus, to verify that the guards work properly Generator also produces a set of unit tests next to the guard file that you can run as part of your test suite in CI.
 
 ## Pros
 
@@ -302,7 +302,7 @@ As a bonus, to verify that the guards work properly the tool also produces a set
 1. Zero performance cost in development: run once and forget
 1. Full IDE support: jump to definition just works
 1. Cannot unexpectedly break as the produced code is static and checked into your repository
-1. Reliable: the tool rejects the types it cannot cover 100%
+1. Reliable: Generator rejects the types it cannot cover 100%
 1. Easy to debug and fix: the stacktrace points exactly at where the bug is
 1. No vendor lock-in: any tool that works with TS can be used instead
 1. Unix-way: relies on other tools for minification, dead code elimination, etc
@@ -366,18 +366,18 @@ After reading below please feel free to pick any of the [issues](https://github.
 
 ### Architecture
 
-This tool is simple if not trivial. The code generator uses the TypeScript public API to emit valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
+Generator is simple if not trivial. The code generator uses the TypeScript public API to emit valid TS code. The type parser uses the TypeScript public API too to walk the type graph.
 
-What this tool does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type in [generator/src/model.ts](generator/src/model.ts)). The type parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed to the generator to actually produce the resulting TS code and to the tests generator to produce unit tests. This way both subsystems can be developed and tested relatively independently. This resembles the viewmodel from [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) and in general promotes clean domain boundaries inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
+What Generator does in its own way is using an intermediate type representation that interfaces the generator with the type parser (see `TypeModel` type in [generator/src/model.ts](generator/src/model.ts)). The type parser produces a model object that has no trace of the `ts.*` structures in it. This model object then is fed to the generator to actually produce the resulting TS code and to the tests generator to produce unit tests. This way both subsystems can be developed and tested relatively independently. This resembles the viewmodel from [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) and in general promotes clean domain boundaries inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 
-Also, a unique know-how of this tool is yielding a set of unit tests in addition to the predicates. Here is a little write up on how it's done: [Combining Generators](https://github.com/peter-leonov/type-predicate-generator/issues/18).
+Also, a unique know-how of Generator is yielding a set of unit tests in addition to the predicates. Here is a little write up on how it's done: [Combining Generators](https://github.com/peter-leonov/type-predicate-generator/issues/18).
 
 ### Design
 
 Goals:
 
 - Check JSON data from APIs 100% type safe and fast
-- Make the tool easy to use and maintain both for the tool users and the tool developers
+- Make Generator easy to use and maintain both for Generator users and developers
 
 Non-goals:
 
