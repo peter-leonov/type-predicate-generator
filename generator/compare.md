@@ -1,44 +1,66 @@
 # How is Generator different
 
-Table of contents
+This doc compares Generator to three kinds of type checkers:
+
+- pure runtime type checkers
+- `tsc` plugin based transpilers
+- code generators
+
+Generator belong to the latter kind.
 
 ## Preamble
 
 First and foremost, my sincere respect to all the tool makers, and especially to those involved in designing, implementing, testing and documenting all and every of the tools I'm comparing Generator to in this post. Keep up the great work, folks!
 
+## Table of contents
+
+Some of the points are duplicated to ease the scoped reading experience.
+
+TODO
+
 ## Pure runtime checkers
 
 The most popular library in this category is the infamous zod.
 
-Some of the points below can be applied to all the build time code generators, but there are some that are unique to Generator.
+Type checkers in this category use only the code that the JavaScript engine runs within an application. No type information is used inside of this class of libraries. Some of them use `eval` to turn a schema into JS code in runtime, some like `zod` use pure function composition.
 
 ### Generator produces code that is over 200 times faster
 
-The main reason is that Generator produces specialized code that is easy for all the modern JS engines to optimize. Each type predicate function consists of trivial instructions (like `typeof` and `a === b`) that in most cases don't even call other functions. JIT engines like when code types are local and when for each distinct type there is a separate small function to specialize in runtime. See this amazing article (https://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html#:~:text=stands%20in%20the%20way%20of%20inlining) for more details on how V8 deals with polymorphic functions.
+TODO: give a screenshot
 
-Pure runtime checkers like zod instead use function composition. In this case basic building block function (like `hasProperty(object, propertyName)`) get reused with values of different types and thus hidden classes. This leads to frequent de-optimizations (falling back to the non-optimized code). In the most sewear cases the JIT compiler might oscillate between optimizing and then de-optimizing a code path for one type and then another spending a lot of cycles in just compiling the code instead of actually running it.
+The main reason is that Generator produces specialized code that is easy for all the modern JS engines to optimize. Each type predicate function consists of trivial instructions (like `typeof x === "string"` and `x === "constant"`) that in most cases don't even call any other functions and never any external or shared functions. JIT JavaScript engines like when code types are local and when for each distinct type there is a separate small function. This helps JS engines to specialize these small functions in runtime. See [this amazing article](https://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html#:~:text=stands%20in%20the%20way%20of%20inlining) for more details on how V8 deals with polymorphic functions.
+
+Pure runtime checkers like `zod` instead use function composition. In this case basic building block functions (like `hasProperty(object, propertyName)`) get reused with values of different types and thus different [hidden classes](https://v8.dev/docs/hidden-classes). This leads to frequent [deoptimizations](https://github.com/P0lip/v8-deoptimize-reasons) (falling back to the slower non-optimized byte code instead of the faster native code). In the most sewear cases the JIT compiler might [oscillate between optimizing and then deoptimizing](https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/#:~:text=If%20you%20have%20code%20that%20keeps%20getting%20optimized%20and%20then%20deoptimized%2C%20it%20ends%20up%20being%20slower%20than%20just%20executing%20the%20baseline%20compiled%20version.) a code path for one type and then another spending a lot of cycles in just compiling the code instead of actually running it.
 
 ### Generator does not have any runtime dependencies
 
-The code that get's into the bundle is the exact code you see in the git diff in your project after generating the type predicate. The only other code the predicate uses is the JS built-ins like `Array.isArray()`. This means that the bundle real estate Generator requires for the predicates stays minimal and grows linearly with the size and number of the predicates. The net amount of code used to define a zod type is comparable to the size of an average predicate after minification.
+The code that get's into the bundle is the exact code you see in the `git diff` output in your project after generating the type predicates. The only other code the predicate uses is the built-ins like `Array.isArray()` ([safely wrapped](https://github.com/peter-leonov/type-predicate-generator/blob/42d725c113cc778b9b742e5f2736cba4c52ca866/generator/src/generator.ts#L461)!). This means that the bundle real estate Generator uses for the predicates stays minimal. It grows linearly with the size of types. The net amount of code used to define a zod type is comparable to the size of an average predicate after minification.
 
 ### Generator produces TypeScript code that is strictly type safe
 
-This is one of the key distinctive features of Generator. The code that gets into your app bundle first gets checked by TypeScript to verify it's safe. Generator plays well here by producing strictly type safe code that also gets checked by your app's build pipeline.
+This is one of the key distinctive features of Generator. The code produced by Generator that gets into your app bundle first gets checked by your app's TypeScript setup to verify it's safe internally and matches the types being checked. Generator plays well here by producing strictly type safe code that is gonna compile even in a strictest configurations. What is also handy is that when you make a change to the type that has a generated predicate the `tsc` reminds you to update the predicate too (by just re-generating it).
 
-The purely runtime checkers cannot directly use the power of TypeScript to verify that the composed function has all the required checks. Even a proper TypeScript type predicate that does not use at least the `satisfies` type operator can easily fool itself by just returning `true` for any input value without making sufficient enough checks. Of course, the production ready libraries like zod use TypeScript internally to check the library code correctness and provide utility functions to infer types from the runtime building blocks. This helps with improving the code reliability by far compared to purely JS libraries, but still does not let the TS type engine verify the final code correctness on its own, there is alway some more helping code that cannot be verified.
+The purely runtime checkers cannot directly use the power of TypeScript to verify that the composed function has all the required checks in the right order. Even a proper TypeScript type predicate that does not use at least the `satisfies` type operator can easily fool itself by just returning `true` for any input value without making sufficient enough checks.
+
+```ts
+function isUser(value: unknown): value is User {
+  return true; // TypeScript blindly trust us here
+}
+```
+
+Of course, the production ready libraries like `zod` use TypeScript internally to check the library code correctness and provide utility functions to infer types from the runtime building blocks. This helps with improving the code reliability by far compared to some purely JavaScript libraries. But even this still does not let the `tsc` of your project verify the final code correctness on its own. There is alway some wrapping/linking/helping code that cannot be verified.
 
 ### Generator produces code that is modifiable
 
-For the cases when there is a feature that the library does not support or there is a bug that needs fixing and the checking library is involved the code that is produced by Generator is readable and immediately editable. As the type predicate code does not change often there would be no pressing urge to send patches upstream to the Generator source code (even though highly appreciated!). A fix of this sort would be trivial to review and local to the predicate in question allowing to unblock the app faster.
+For the cases when there is a blocking feature that the generated predicate does not support or there is a bug in it that requires urgent fixing the code produced by Generator is readable and can be immediately edited. As the type predicate code does not change often there would be no pressure to send patches upstream to the Generator source code (even though highly appreciated!). Such a quick fix would be trivial to review in a tiny PR and remain local to the predicate in question allowing to unblock the team without any sync dependencies on the Generator's development process.
 
-In case of a runtime library a fix would require a patch to the library itself to be able to mitigate the issue. Such a patch would touch all the code that is checked by the library and require more thorough testing.
+In case of a runtime library a fix would require a patch to the library itself to be able to mitigate the issue. Such a patch would touch all the code that is checked by the library and require more thorough testing. A short lived fork might be an option here, but would require to find out how to run the build and publish pileline of a given tool.
 
 ### Generator does not require to define types using a custom DSL
 
-Generator takes in any type defined in any part of the application using just native TypeScript. Even a type from a third-party library or a different team's public type that doesn't use the same runtime type checker. It's just types, everything is compatible and composable.
+Generator takes in any type defined in any part of the application using just native TypeScript. Even a type from a third-party library or a different team's public type that doesn't use any runtime type checker. It's just types, everything is compatible and composable.
 
-Contrary to this, by design, all of the runtime checkers provide a set of classes or functions that form the final type checker. Most of them require to infer the resulting type from the resulting compound function. This effectively turns the runtime generators into DSL-first libraries (used to be very popular in the past in the Ruby community) instead of TypeScript first. This way the focus shifts to more schema-centric approach to consuming APIs where TypeScript is more of a powerful secondary tool that the primary target.
+Contrary to this, by design, all of the runtime checkers provide a set of classes or functions that form the final type checker instance that is used to check the values. Most of them require to infer the resulting type from the resulting compound function. This effectively turns the runtime generators into DSL-first libraries (popular in [Ruby world](https://github.com/davidgf/design-patterns-in-ruby/blob/master/dsl.md)) instead of being truly TypeScript first. This way the focus shifts to more schema-centric approach of consuming APIs where TypeScript is more of a powerful secondary tool than a primary target.
 
 ### Generator produces code that is way faster to cold start
 
