@@ -18,9 +18,9 @@ Some of the points are duplicated to ease the scoped reading experience.
 
 TODO
 
-## Pure runtime checkers
+## Comparing to th pure runtime checkers
 
-The most popular library in this category is the infamous zod.
+The most popular library in this category is the infamous [zod](https://zod.dev).
 
 Type checkers in this category use only the code that the JavaScript engine runs within an application. No type information is used inside of this class of libraries. Some of them use `eval` to turn a schema into JS code in runtime, some like `zod` use pure function composition.
 
@@ -82,19 +82,21 @@ I should mention here that using `eval()` is a potential [security issue](https:
 
 Every library from time to time introduces or reveals a bug. With Generator the source code that might raise an exception is explicitly bundled with your app and covered with source maps. Using a step debugger on the generated code is the same experience as stepping through your own app code. The stack trace in the error reporting tool is going to be crystal clear too. Such a bug can rarely happen within a code like that Generator produces, but it's still possible e.g. when a [`Proxy`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object throws on property access or a [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) returns an unexpected `null`, or a library misuses [patching global `prototype`s](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain#:~:text=misfeature%20is%20called-,monkey%20patching,-.%20Doing%20monkey%20patching).
 
-A runtime library in most cases would produce a stack trace with minified symbols. This is especially visible if used with the new native support for TypeScript in NodeJS where there are no source maps in use at all.
+A runtime library in most cases would produce a stack trace with minified symbols. This is especially visible if used with the new [native support for TypeScript](https://nodejs.org/en/learn/typescript/run-natively) in Node.js where there are no source maps in use at all.
 
 ### Native IDE experience
 
 Generator's code is trivial to navigate to through every IDE's "goto definition" feature. The hover types are also just the exact types used in your application, no added wrappers or renaming. Plus, the actual code of the type predicate is available a click away in case you'd need to modify it.
 
+In case of `zod` you'd see the inferred types that cannot have other neat features like type level JSDoc (property level JSDoc [works though](https://github.com/colinhacks/zod/issues/200#issuecomment-1198922371)) or type level generics (runtime workaround [exists](https://spin.atomicobject.com/typed-generic-validator/) but requires some effort).
+
 ### Generator produces code that is easy to review
 
-Another benefit of having explicitly generated code is that it's trivial to audit. This makes very easy to upgrade the Generator's version as all the changes the new version introduces into the generated code are immediately visible in the project git diff.
+Another benefit of having explicitly generated code version controlled in your repository is that it's trivial to audit. Starting with all the changes immediately visible during PR review through GitHub-based code scanners. This also makes upgrading Generator package trivial as all the changes the new version introduces into the generated code are immediately visible in the project `git diff` and are covered by the [generated unit tests](https://github.com/peter-leonov/type-predicate-generator/issues/18).
 
-For the sake of completeness on the topic of safety and touching a bit the supply chain security (https://www.youtube.com/watch?v=kCj4YBZ0Og8), the users of a runtime library are still running a compiled to JS source code of the runtime checker that can theoretically be anything as `*.d.ts` files don't provide any verification for the `*.js` code that comes in the library bundle. So for the more safety and security strict applications the ability of having the actual code verified by the project's set of security tools can be important.
+For the sake of completeness on the topic of safety and touching a bit the [supply chain security](https://www.youtube.com/watch?v=kCj4YBZ0Og8), the users of a runtime library are still running a compiled to JS source code of the runtime checker that can theoretically be anything as the `*.d.ts` files don't provide post build verification for the `*.js` code that comes in the library bundle. So, for the more safety and security strict applications the ability of having the actual code verified by the project's set of security tools can be important.
 
-## Than `tsc` plugins like `typia`
+## Than `tsc` plugins
 
 ### Generator produces type safe TypeScript
 
