@@ -54,7 +54,7 @@ function isUser(value: unknown): value is User {
 
 Of course, the production ready libraries like `zod` use TypeScript internally to check the library code correctness and provide utility functions to infer types from the runtime building blocks. This helps with improving the code reliability by far compared to some purely JavaScript libraries. But even this still does not let the `tsc` of your project verify the final code correctness on its own. There is alway some wrapping/linking/helping code that cannot be verified.
 
-### Generator produces code that is modifiable
+### Generator produces code that is readable and modifiable
 
 For the cases when there is a blocking feature that the generated predicate does not support or there is a bug in it that requires urgent fixing the code produced by Generator is readable and can be immediately edited. As the type predicate code does not change often there would be no pressure to send patches upstream to the Generator source code (even though highly appreciated!). Such a quick fix would be trivial to review in a tiny PR and remain local to the predicate in question allowing to unblock the team without any sync dependencies on the Generator's development process.
 
@@ -114,47 +114,65 @@ As TypeScript does not officially support plugins for `tsc` the checkers that re
 
 Another issue with having `tsc` plugins is that major TypeScript updates tend to introduce breaking change to the internal APIs. This in an optimistic case just breaks the plugins and errors out. In a more tricky case the plugin is going to continue working but might produce invalid code. This in its strictest requires the app developer wait till all the plugins have upgraded their TypeScript support, upgraded their tests suits and published the updated package. In projects with strict SLAs this might also require waiting some time till the comunity adopts the freshly published package.
 
-I have to admin that `tsc` plugins provide elegant API that I personally like the most as a programming language enthusiast, but strictly speaking TS plugins extend the language as a whole and is not in line with the course [TypeScript](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals) and the rest of community (see reasoning and comments [here](https://github.com/microsoft/TypeScript/issues/59601)) is taking since long time. A bit sad, but otherwise we would have gotten another JS fork (like [CoffeeScript](https://coffeescript.org/#introduction) or Facebook's [Flow](https://medium.com/flow-type/announcing-component-syntax-b6c5285660d0)).
+I have to admin that `tsc` plugins provide elegant APIs that I personally like the most as a programming language enthusiast. But strictly speaking TS plugins extend the language as a whole and are not in line with the course [TypeScript](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals) and the rest of community (see reasoning and comments [here](https://github.com/microsoft/TypeScript/issues/59601)) is taking since long time. A bit sad, but otherwise we would have gotten another JS fork (like [CoffeeScript](https://coffeescript.org/#introduction) or Facebook's [Flow](https://medium.com/flow-type/announcing-component-syntax-b6c5285660d0)) by now.
 
 ### Generator produces type safe TypeScript
 
-As mentioned above [Generator produces TypeScript code that is strictly type safe](#generator_produces_typescript_code_that_is_strictly_type_safe) and is checked by your `tsc` setup according to the safety rules of your project.
+As mentioned above [Generator produces TypeScript code that is strictly type safe](#generator-produces-typescript-code-that-is-strictly-type-safe) and is checked by your `tsc` setup according to the safety rules of your project.
 
 The TS plugins instead produce JavaScript code that is not type checked by the TypeScript compiler meaning that this part of the code that your project runs is still purely JavaScript even though coming from the TypeScript compiler. Of course, the tool creators test the output code really well, but you still have to outsource the type safety to the external tool build pipeline.
 
-### Genarator code is explicitly readable
+### Genarator code is explicitly readable and modifiable
 
-To check what a tsc-based checker actually produces you'd need to extract the generated code from the compilation pipeline. That code is purely JS which would require you to manually check correctness.
+As mentioned above [Generator produces code that is readable and modifiable](#generator-produces-code-that-is-readable-and-modifiable)
 
-### Generator code is trivial to share
+To check what a `tsc` plugin-based checker actually produces you'd need to extract the generated code from the compilation pipeline. That code is purely JavaScript which would require you to manually check the produced code correctness.
 
-It's just a tiny TS file that any JS ecosystem tool can consume as is along the rest of your app code.
+The fact that the produced code is in most setups not checked into the repository making the package upgrades a multi-step process. To make sure that the new version of the plugin based checker produces comarable code you'd need to save somewhere the current emitted code, upgrade the package and run a diff. With Generator this comes out of the box.
 
-If you want to share your typescript source code with other teams you'd need to first compile it down to JS and publish along the `\*.d.ts` files or make other teams use the same tsc plugin in their setup too. This might be an issue if they are not building their project with tsc or even use the new native TS syntax support in node that does not require a separate build step.
+The only downside of that Generator produces files is the explicit build step. With a `tsc` plugin the is no code to worry about, the plugin keeps the predicates always up to date. Still, not all the build and development tools support hot reloading with full `tsc` plugin support (example [issue](https://github.com/samchon/typia/issues/812) that took almost a year to fix).
 
-### debugging copy
+### Generator code shareable across project boundaries
 
-During debugging and reading stack traces the source maps are gonna point only to the single symbol in the source TS code. In case of an issue or a bug with the source code or the library it's required to inspect the raw JS bundle instead.
+It's just a tiny TS file that any JS ecosystem tool can consume as is, along the rest of your application code.
+
+If you needed to share your TypeScript source code that uses `tsc` plugins with other teams you'd have to first publish it. This requires compiling the code down to a JavaScript bundle and publishing along with the `\*.d.ts` files. Another way is to make other teams use the same set and versions of `tsc` plugins including the checker plugin in their setup too. This requires some coordination and might slow down migrations to the newer TypeScript versions. Another blocker might come from the teams that are not building their project with `tsc` and instead use the new tools that natively understand TypeScript syntax and do not require a separate build step ([Node.js native TS support](https://nodejs.org/en/learn/typescript/run-natively), [esbuild](https://esbuild.github.io/content-types/#typescript), [Cloudflare wrangler](https://developers.cloudflare.com/workers/languages/typescript/)).
+
+### Generator emitted code is easy to debug
+
+As mentioned above in [Easier debugging and better stack traces](#easier-debugging-and-better-stack-traces) Generator emits code that is friendly to debuggers and error reporting tools. The stack traces are native to your application giving instant feedback on where the error originates from (both the validation errors and potential runtime errors).
+
+In the `tsc` plugin case during debugging and reading stack traces the source maps are gonna point only to the single symbol in the source TS code (in most cases the `is<MyType>` token). In case of an issue or a bug with the source code or the checker itself it's required to inspect the raw JavaScript bundle instead.
+
+There is a workaround though. It should be possible to publish both source maps for your app's bundle and for the dependencies and set the error reporting tool up to look for the source maps there. Quick googling did not show definitive results on how to deal with transitive source maps though.
 
 ### Generator supports all the JS/TS tools
 
-The predicate code is easy to use with the new nodejs TS strip feature. No need to use ts-node or precompile the code with tsc. want to use vite with super fast type-to-spaces TS transformer? Generator supports this as does the rest of your app code.
+The predicate code is easy to use with the new Node.js TypeScript strip feature. No need to use `ts-node` or precompile the code with `tsc`. The same applies to the various test runners and edge runtime bundlers.
 
-The ts plugin based checkers have to rely on the tsc cli to generate the final JS code. This effectively turns this category of checkers into a language extention. See the new --only-removable-types https://github.com/microsoft/TypeScript/pull/61011
+With a `tsc` plugin you're locked withing the `tsc` centric infrastructure. It's not something particularry challenging, but might require additional setup and degrate performance. For example, Vite transpiles `*.ts` files [20-30x times faster](https://vite.dev/guide/features#:~:text=JavaScript%20which%20is-,about%2020~30x,-faster%20than%20vanilla) with the default `esbuild` compiler than with `tsc`. The new super fast [ts-blank-space](https://github.com/bloomberg/ts-blank-space) package does not even run TypeScript type analysis that is required for `tsc` plugins to work and through this is also blazing fast.
 
-## Than other type-to-code generators like ts-…-guard
+So, once again, extending the type system that affects resulting syntax effectively turns this category of checkers into a [language extention](#generator-does-not-require-tsc-plugins).
+
+## Comparing to the other code generators
+
+The most complete (and dear to my heart as I've used it in the past) tool in this class is [ts-auto-guard](https://github.com/rhys-vdw/ts-auto-guard).
+
+This class of checkers produce the final predicate code as distinct files that should be explicitly imported into the application code and build with the rest of the code. Generator falls into this category of runtime type checkers.
+
+Most of the arguments above in favour using Generator more or less apply to all of the tools in this category.
 
 ### Generator produces type safe TS
 
-Copy type safe
+As mentioned above [Generator produces TypeScript code that is strictly type safe](#generator-produces-typescript-code-that-is-strictly-type-safe)
 
-Other code generators produce TS code that is not type safe. For example use unsafe type casting `as` or `any`. As the produced code is actually TS it gives better safety promises that using just JS.
+Other code generators that also produce TypeScript emit code that is not type safe. The not safe emitted code uses unsafe constructions like type casting (with `as`) or can rely on the unsafe types (mostly `any`). This effectively turns the produces TypeScript code into loosely typed JavaScript. If your application's setup uses strict TypeScript linters the produces code would require adding exceptions and lower the overall type safety score.
 
 ### Generator produces readable code
 
-To help with debugging and potentially manually changing the generated code Generator linearizes all the checks, make small steps that are easy to navigate and (coming soon) add comprehensive comments. The code still minifies into a tiny combined if expression where possible.
+As mentioned above [Generator produces code that is readable and modifiable](#generator-produces-code-that-is-readable-and-modifiable). In addition to this, compared to other code emitting tools Generator helps you with reading, debugging and potentially manually changing the generated code by linearizing all the checks. It makes small steps that are easy to navigate and add comprehensive comments (coming soon!). This means that the produced code is not minified, but is still organized in the way that common bundler minifies can easily turn it into a tiny combined `if` expression anyway. Generator also tries to use meaningful local variable and temporary type names where possible to improve reading experience.
 
-The code produced by most of the tools in this category is pre-optimized and thus not really readable. Generator does two distinct things to make the output code readable and editable. One is it turns
+The code produced by most of the other tools in this category is pre-optimized and thus not really readable. This gives better control to the tool maker to achieve the best performance as not all the bundlers can infer how to deal with rather complex predicate functions for the more complex types.
 
 ### Generator always produces correct code
 
