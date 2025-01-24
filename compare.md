@@ -1,5 +1,7 @@
 # How is Generator different?
 
+tl;dr; it's as type safe at it gets, generates static files with code for maximum compatibility, fast in many ways because it's AOT and tiny, and comes with a handy unit test generator to be ~100% sure the produced predicates work as expected.
+
 This document goes into a rather deep comparison of Generator to other runtime type checkers, giving also a rather broad overview of related topics.
 
 ## Preamble
@@ -45,6 +47,10 @@ First and foremost, my sincere respect to all the tool makers, and especially to
 The most popular library in this category is the infamous [zod](https://zod.dev).
 
 Type checkers in this category use only the code that the JavaScript engine runs within an application. No type information is used inside of this class of libraries. Some of them use `eval` to turn a schema into JS code at runtime, some like `zod` use pure function composition.
+
+The main benefits of this approach is ease of use and flexibility of expressible rules (it's built with turing complete JS after all). It is also relatively easier to evolve as it's just JS/TS without the heavylifting of interfacing with the TypeScript API.
+
+Now to the bread and butter of what Generator has to offer compared to the pure runtime checkers.
 
 ### Generator produces code that is over 100 times faster
 
@@ -128,6 +134,8 @@ The most popular and feature-rich tool in this category is [Typia](https://typia
 
 The type checkers in this category generate the type predicates code during the build step. They hook into the `tsc` compiler as plugins and provide type-level helper types that get transpiled into the actual JavaScript code during the code generation stage of the `tsc` compilation pipeline.
 
+The main strong sides of tools in this category is that it's super handy to use (just add a keyword-type like `is<MyType>` and it magically works) and supports virtually any type TypeScript has to offer. This power comes from that a compiler plugin is in the end a Compiler Plugin: it can do anything and everything `tsc` can.
+
 ### Generator does not require `tsc` plugins
 
 Generator is a standalone tool that has its own TypeScript version bundled inside that does not interfere with your app's TypeScript setup. Even if Generator breaks during an upgrade, the predicates code it has generated is already checked into your repository and is not going away. The code is rather static and does not strictly require Generator to even be part of the build pipeline; you can simply code the code from the [Playground](https://peter-leonov.github.io/type-predicate-generator/).
@@ -180,9 +188,9 @@ So, once again, extending the type system that affects resulting syntax effectiv
 
 The most complete (and dear to my heart as I've used it in the past) tool in this class is [ts-auto-guard](https://github.com/rhys-vdw/ts-auto-guard).
 
-This class of checkers produces the final predicate code as distinct files that should be explicitly imported into the application code and built with the rest of the code. Generators fall into this category of runtime type checkers.
+This class of checkers produces the final predicate code as distinct static files that should be explicitly imported into the application code and built with the rest of the code. Generators fall into this category of runtime type checkers.
 
-Most of the arguments above in favour of using Generator more or less apply to all of the tools in this category.
+Most of the arguments above in favour of using Generator more or less apply to all of the tools in this category. The main benefits of this class of tools is compatibility and predictability. This very much resonates with the approached to tooling taken in more pragmatic ecosystems like Golang, compiler development and such.
 
 ### Generator produces type-safe TS
 
@@ -268,7 +276,7 @@ And as it becomes more visible, Generator is way faster than any AI tool. Ah, I 
 
 ## Summary
 
-In some cases, the code produced by other tools might have seemed incorrect for some corner cases. While it's of course possible to just go and fix the existing tools, I thought that it's better to challenge the status quo and go full type safe.
+As you can see there are several use cases where it's better to challenge the status quo and go full type safe and static.
 
 Generator is also a tool that is dead simple inside by relying on other tools to do the rest of the heavy lifting: to produce the code, Generator uses TypeScript API, for minification, expects the `esbuild` with default settings, for type checking, obviously, makes the produced code strictly typed, and uses the `satisfies` operator. In addition to this, Generator augments it all with emitting a set of unit tests to test the other generated code. Also, the feature set is minimal.
 
