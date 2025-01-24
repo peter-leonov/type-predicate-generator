@@ -176,13 +176,57 @@ The code produced by most of the other tools in this category is pre-optimized a
 
 ### Generator always produces correct code
 
+As the code Generator emits is strictly checked by TypeScript compiler and also is emitted using TS AST builder API (see the awesome [ts-ast-viewer.com](https://ts-ast-viewer.com/) to play with the API). This makes it impossible for Generator to produce invalid TypeScript.
+
+During my research I've found that for some nontrivial cases other checkers that use string concatenation can produce invalid or incomplete code. Luckily, the invalid code is immediately rejected by the TypeScript compiler (this is the superpower of the code generating tools in general), but the incompleteness is not covered as the produced code is not type safe. This also applies to checkers that [rely on `eval()`](#generator-does-not-use-eval) at runtime.
+
 ### Generator code is fast
 
-Small disclaimer here. Most of the type-to-code generators show significantly (100x) better performance than purely runtime solutions and sensibly better startup times compared to those that use `eval` (TODO: run benchs).
+Small disclaimer here. Most of the type-to-code generators show significantly (100x) better performance than purely runtime solutions and sensibly better startup times compared to those that use `eval`. But Generator still has some tricks up its sleeves.
 
-Generator accesses object properties only once broadly reusing local variables that makes the code extremely fast (example). This does not require too much of the JS engine to optimize on cold start.
+What Generator adds to the table is accessesing object properties only once broadly reusing local variables that makes the code extremely fast even in non-optimizing JS engines (this traces back to the techniques used to make old JS engines faster). Also this trick potentially simplifies analysis for the modern JS engines.
 
-Most other checkers form full or partial nested property access expressions that take some time for the JS engine to identify and optimize.
+Most other checkers form full or partial nested property access expressions that take some time for the JS engine to identify and optimize as it's just more bytecode to analyze:
+
+```ts
+function isUserProperties(v) {
+  // …
+  return typeof v.a.b === "object" && v.a.b !== null;
+}
+
+// node --print-bytecode --print-bytecode-filter=isUserProperties bytecode.js
+// GetNamedProperty a0, [0], [0]
+// Star0
+// GetNamedProperty r0, [1], [2]
+// TestTypeOf #7
+// JumpIfFalse [13] (0x22bd65001e68 @ 24)
+// GetNamedProperty a0, [0], [0]
+// Star0
+// GetNamedProperty r0, [1], [4]
+// TestNull
+// LogicalNot
+// Return
+
+function isUserLocals(v) {
+  // …
+  const b = v.a.b;
+  return typeof b === "object" && b !== null;
+}
+
+// node --print-bytecode --print-bytecode-filter=isUserLocals bytecode.js
+// GetNamedProperty a0, [0], [0]
+// Star1
+// GetNamedProperty r1, [1], [2]
+// Star0
+// TestTypeOf #7
+// JumpIfFalse [6] (0x5e08e641f02 @ 18)
+// Ldar r0
+// TestNull
+// LogicalNot
+// Return
+```
+
+There is not second `GetNamedProperty` in the local variable code. It uses one more register though.
 
 ### Generator also tests the generated code
 
