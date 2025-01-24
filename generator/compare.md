@@ -18,7 +18,7 @@ Some of the points are duplicated to ease the scoped reading experience.
 
 TODO
 
-## Comparing to th pure runtime checkers
+## Comparing to the pure runtime checkers
 
 The most popular library in this category is the infamous [zod](https://zod.dev).
 
@@ -35,6 +35,10 @@ Pure runtime checkers like `zod` instead use function composition. In this case 
 ### Generator does not have any runtime dependencies
 
 The code that get's into the bundle is the exact code you see in the `git diff` output in your project after generating the type predicates. The only other code the predicate uses is the built-ins like `Array.isArray()` ([safely wrapped](https://github.com/peter-leonov/type-predicate-generator/blob/42d725c113cc778b9b742e5f2736cba4c52ca866/generator/src/generator.ts#L461)!). This means that the bundle real estate Generator uses for the predicates stays minimal. It grows linearly with the size of types. The net amount of code used to define a zod type is comparable to the size of an average predicate after minification.
+
+Purely runtime type checkers by design are a runtime dependency. They require the runtime library of matchers to be included in the resulting bundle. Most of the libraries use handy constructors that are flexible enough to allow most of the checks a general API would need. This is great, but also affects the bundle size ([60+ KB](https://bundlephobia.com/package/zod@3.24.1) for `zod`) because the more generalized matchers cannot be tree shaked statically (here is [an interesting attempt](https://dev.to/mizchi/lizod-spiritual-successor-of-zod-less-than-1kb-4i67) on dealing with the bundle size).
+
+Another emerging issue with the runtime-only complex libraries that are used in performance and avalability critical parts of the application is compile time compatibility with the [WinterCG](https://wintercg.org) runtimes. Heavy runtime libraries tend to target feature rich runtimes like Node and throw in runtime for corner cases like error message generation requiring more testing. This is not an issue if you're on a widely supported platform like Node or the latest browsers, but if you're investing in, say, [Wasmer Edge](https://www.secondstate.io/articles/run-javascript-in-webassembly-with-wasmedge/), adding a seemingly trivial dependency might turn into a turmoil.
 
 ### Generator produces TypeScript code that is strictly type safe
 
@@ -96,13 +100,27 @@ Another benefit of having explicitly generated code version controlled in your r
 
 For the sake of completeness on the topic of safety and touching a bit the [supply chain security](https://www.youtube.com/watch?v=kCj4YBZ0Og8), the users of a runtime library are still running a compiled to JS source code of the runtime checker that can theoretically be anything as the `*.d.ts` files don't provide post build verification for the `*.js` code that comes in the library bundle. So, for the more safety and security strict applications the ability of having the actual code verified by the project's set of security tools can be important.
 
-## Than `tsc` plugins
+## Comparing to TypeScript compiler plugins
+
+The most popular and feature rich tool in this category is [Typia](https://typia.io).
+
+The type checkers in this category generate the type predicates code during the build step. They hook into the `tsc` compiler as plugins and provide type level helper types that get transpiled into the actual JavaScript code during code generation stage of the `tsc` compilation pipeline.
+
+### Generator does not require `tsc` plugins
+
+Generator is a standalone tool that has it's own TypeScript version bundled inside that does not interfer with your app's TypeScript setup. Even if Generator breaks during an upgrade the predicates code it has generated is already checked into your repository and is not going away. The code is rather static and does not strictly require Generator to even be part of the build pipeline you can simply code the code from the [Playground](https://peter-leonov.github.io/type-predicate-generator/).
+
+As TypeScript does not officially support plugins for `tsc` the checkers that rely on hooking into `tsc` require patches to the `tsc` itself. This is a blocker for most teams that want to run vanila TypeScript compiler for different reasons. Mostly it's reliability as TS is the safety net that proves the code will work in production.
+
+Another issue with having `tsc` plugins is that major TypeScript updates tend to introduce breaking change to the internal APIs. This in an optimistic case just breaks the plugins and errors out. In a more tricky case the plugin is going to continue working but might produce invalid code. This in its strictest requires the app developer wait till all the plugins have upgraded their TypeScript support, upgraded their tests suits and published the updated package. In projects with strict SLAs this might also require waiting some time till the comunity adopts the freshly published package.
+
+I have to admin that `tsc` plugins provide elegant API that I personally like the most as a programming language enthusiast, but strictly speaking TS plugins extend the language as a whole and is not in line with the course [TypeScript](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals) and the rest of community (see reasoning and comments [here](https://github.com/microsoft/TypeScript/issues/59601)) is taking since long time. A bit sad, but otherwise we would have gotten another JS fork (like [CoffeeScript](https://coffeescript.org/#introduction) or Facebook's [Flow](https://medium.com/flow-type/announcing-component-syntax-b6c5285660d0)).
 
 ### Generator produces type safe TypeScript
 
-Copy type safety
+As mentioned above [Generator produces TypeScript code that is strictly type safe](#generator_produces_typescript_code_that_is_strictly_type_safe) and is checked by your `tsc` setup according to the safety rules of your project.
 
-They produce JS code that is not type checked by the TS compiler meaning that this part of the code that your project runs is still purely JS. Of course, the tool creators test the output code well, but you have to outsource safety here.
+The TS plugins instead produce JavaScript code that is not type checked by the TypeScript compiler meaning that this part of the code that your project runs is still purely JavaScript even though coming from the TypeScript compiler. Of course, the tool creators test the output code really well, but you still have to outsource the type safety to the external tool build pipeline.
 
 ### Genarator code is explicitly readable
 
