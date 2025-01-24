@@ -8,15 +8,17 @@ First and foremost, my sincere respect to all the tool makers, and especially to
 
 ## Table of contents
 
+TODO
+
 ## Comparing to the pure runtime checkers
 
 The most popular library in this category is the infamous [zod](https://zod.dev).
 
 Type checkers in this category use only the code that the JavaScript engine runs within an application. No type information is used inside of this class of libraries. Some of them use `eval` to turn a schema into JS code at runtime, some like `zod` use pure function composition.
 
-### Generator produces code that is over 200 times faster
+### Generator produces code that is over 100 times faster
 
-TODO: give a screenshot
+Check out the [benchmark results](https://github.com/peter-leonov/type-predicate-generator/issues/13).
 
 The main reason is that Generator produces specialized code that is easy for all the modern JS engines to optimize. Each type predicate function consists of trivial instructions (like `typeof x === "string"` and `x === "constant"`) that in most cases don't even call any other functions and never any external or shared functions. JIT JavaScript engines like when code types are local and when for each distinct type there is a separate small function. This helps JS engines to specialize these small functions in runtime. See [this amazing article](https://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html#:~:text=stands%20in%20the%20way%20of%20inlining) for more details on how V8 deals with polymorphic functions.
 
@@ -239,3 +241,7 @@ And as it becomes more visible, Generator is way faster than any AI tool. Ah, I 
 In some cases, the code produced by other tools might have seemed incorrect for some corner cases. While it's of course possible to just go and fix the existing tools, I thought that it's better to challenge the status quo and go full type safe.
 
 Generator is also a tool that is dead simple inside by relying on other tools to do the rest of the heavy lifting: to produce the code, Generator uses TypeScript API, for minification, expects the `esbuild` with default settings, for type checking, obviously, makes the produced code strictly typed, and uses the `satisfies` operator. In addition to this, Generator augments it all with emitting a set of unit tests to test the other generated code. Also, the feature set is minimal.
+
+## Feedback welcome
+
+Please leave a comment in the [dedicated issue](https://github.com/peter-leonov/type-predicate-generator/issues/20).
