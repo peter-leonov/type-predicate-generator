@@ -2,11 +2,11 @@
 
 tl;dr; it's as type safe at it gets, generates static files with code for maximum compatibility, fast in many ways because it's AOT and tiny, and comes with a handy unit test generator to be ~100% sure the produced predicates work as expected.
 
-This document goes into a rather deep comparison of Generator to other runtime type checkers, giving also a rather broad overview of related topics.
+This document goes into a rather deep comparison of Generator to other runtime type checkers, giving also a broader overview of the related topics. It's turning into a more analytical than "hey, my X is cooler than Y" article with each interation.
 
 ## Preamble
 
-First and foremost, my sincere respect to all the tool makers, and especially to those involved in designing, implementing, testing, and documenting each and every tool I'm comparing Generator to in this post. Keep up the great work, folks!
+First and foremost, my sincere respect to all the tool makers, and especially to those involved in designing, implementing, testing, and documenting each and every tool I'm comparing Generator to in this post ([zod](https://zod.dev), [typia](https://github.com/samchon/typia), [ts-auto-guard](https://github.com/rhys-vdw/ts-auto-guard), [ts-runtime-checks](https://github.com/GoogleFeud/ts-runtime-checks)). Keep up the great work, folks!
 
 ## Table of contents
 
