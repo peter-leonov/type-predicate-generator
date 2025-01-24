@@ -250,7 +250,7 @@ function isUserLocals(v) {
 
 There is no second `GetNamedProperty` in the local variable code. It uses one more register, though.
 
-### Generator also tests the generated code.
+### Generator also tests the generated code
 
 As a bonus, during the predicates generation, Generator can also optionally emit a load of unit tests for the generated predicates. You can run these tests as part of your application's test suite.
 
