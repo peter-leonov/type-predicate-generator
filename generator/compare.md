@@ -1,22 +1,12 @@
 # How is Generator different
 
-This doc compares Generator to three kinds of type checkers:
-
-- pure runtime type checkers
-- `tsc` plugin based transpilers
-- code generators
-
-Generator belong to the latter kind.
+This document goes into a rather deep comparison of Generator to other runtime type checkers giving also a rather broad overview of related topics.
 
 ## Preamble
 
 First and foremost, my sincere respect to all the tool makers, and especially to those involved in designing, implementing, testing and documenting all and every of the tools I'm comparing Generator to in this post. Keep up the great work, folks!
 
 ## Table of contents
-
-Some of the points are duplicated to ease the scoped reading experience.
-
-TODO
 
 ## Comparing to the pure runtime checkers
 
@@ -226,24 +216,26 @@ function isUserLocals(v) {
 // Return
 ```
 
-There is not second `GetNamedProperty` in the local variable code. It uses one more register though.
+There is no second `GetNamedProperty` in the local variable code. It uses one more register though.
 
 ### Generator also tests the generated code
 
-As part of the predicates generating Generator also optionally dumps a load of unit tests that you can run next to your app test suite.
+As a bonus during the predicates generation Generator can also optionally emit a load of unit tests for the generated predicates. You can run these tests as part of your application's test suite.
 
-AT the moment this is a rather unique feature that I hope is gonna be picked up by other tool makers. Read about the approach here: ggggg
+At the moment this is a rather unique feature that I hope is gonna be picked up by other tool makers. Read more about the approach [here](https://github.com/peter-leonov/type-predicate-generator/issues/18).
 
-## ChatGPT
+## Is it better than ChatGPT?
 
-Yep, seriously.
+Yep, it yet is.
 
-You can trust the produced code as Generator is too trivial to hallucinate. Generator responds with an error to the types it cannot convert instead of producing incorrect code.
+As is going more important these days with AI producing more and more content, with Generator you can trust the produced code as it's a trivial tool that is too simple to hallucinate. Generator responds with an error to the types it cannot convert instead of producing incorrect code and convincing you it's correct.
 
-I tried Copilot and ChatGPT. Both AI tools produced unsafe TS that could not even compile without errors no matter what prompt I used. ChatGPT simply broke in the middle of the code generation with completely out of context symbols.
+I tried Copilot and ChatGPT. Both AI tools produced unsafe TS that could not even compile without errors at first no matter what prompt I used. On one of runs ChatGPT simply broke in the middle of the code generation with a set completely out of context symbols.
 
-## Footnotes
+And as becomes more visible, Generator is way faster than any AI tool. Ah, forgot to mention, Generator is also free.
 
-In some cases the code produced by other tools might have seemed incorrect to me for some tricky corner cases. While it's of course possible to go and fix the tool, I decided to challenge the approach as a whole. This is why Generator is a tool that is dead simple inside by relying on other tools to produce the code (TS API) minify the code (esbuild), makes the produced code strictly type safe (using `satisfies` operator) and augments it all with a unit test generator (using JS generators). It's not only that Generator's code base is simple, but also the feature set is minimal.
+## Summary
 
-Under the hood Generator uses the ViewModel-like architecture to separate the module layers to foster independent development and testing. This means that when TypeScript breaks their public API next time it's gonna be trivial to identify where and provide a fix for just one layer. In theory, the layered architecture allows to plug any type system that describes JS into Generator and still produce the same predicate code. I sincerely hope that we as JS community are gonna settle on TypeScript though.
+In some cases the code produced by other tools might have seemed incorrect for some corner cases. While it's of course possible to just go and fix the existing tools, I though that it's better to challenge the status quo and go full type safe.
+
+Generator is also a tool that is dead simple inside by relying on other tools to do the rest of heavy lifting: to produce the code Generator uses TypeScript API, for minification expects the `esbuild` with default setting, for type checking, obviously, makes the produced code strictly typed and uses the `satisfies` operator. In addition to this Generator augments it all with emitting a set of unit test to test the other generated code. Also, the feature set is minimal.
