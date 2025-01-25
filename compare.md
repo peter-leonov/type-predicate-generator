@@ -80,6 +80,21 @@ function isUser(value: unknown): value is User {
 }
 ```
 
+There is a way for several [trivial cases](https://github.com/microsoft/TypeScript/issues/38390) to trick TS into checking that the function body is a type predicate (by using function return [type covariance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) property):
+
+```ts
+const isNumberError: (x: unknown) => x is number = (x) => {
+//    ~~~~~~~~~~~~~ Signature '(x: unknown): true' must be a type predicate.
+    return true
+}
+
+const isNumberOK: (x: unknown) => x is number = (x) => {
+    return typeof x === "number"
+}
+```
+
+Test it for yourself in [TS Playground](https://www.typescriptlang.org/play/?ts=5.7.3#code/MYewdgzgLgBAlhAcgVwLYCMCmAnAot7EbALhgAoAPU5MAazBAHcwBKGAXgD4YL4IYwaLNg7kKbLjADeAKBjyY2TFGTYwMKNmSYZAXxkzQkWAhQYcAeQDSpStToNmE7rwQChOUZWfS5CpSpqGgCeAA6YIABmPBzs7DAARILm2Al6MkA). This is a step in the right direction, but don't expect TS to soon turn into a [theory proving engine](https://en.wikipedia.org/wiki/Automated_theorem_proving) to just cover the type predicate strictnes. It's way easier to prove that a predicate is valid for a smaller subset of operators, this is sort of what Generator is internally, so maybe one day.
+
 Of course, the production-ready libraries like `zod` use TypeScript internally to check the library's code correctness and provide utility functions to infer types from the runtime building blocks. This helps with improving the code reliability by far compared to some purely JavaScript libraries. But even this still does not let the `tsc` of your project verify the final code correctness on its own. There is always some wrapping/linking/helping code that cannot be verified.
 
 ### Generator produces code that is readable and modifiable
