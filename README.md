@@ -23,7 +23,7 @@ npm i -D generate-type-guards
 npx type-predicate-generator --unitTests src/types.ts
 ```
 
-Generates `src/types_guards.ts` and `src/types_guards.test.ts` with the predicate code for all the exported types in `src/types.ts`.
+It generates `src/types_guards.ts` with the predicate functions for all the exported types in `src/types.ts` and init tests in `src/types_guards.test.ts` for each generated predicate. Double safe!
 
 ```ts
 import { isUser } from "./types_guards.ts";
@@ -40,7 +40,7 @@ npx vitest src/types_guards.test.ts
 
 ```
 
-## Example
+## Extended example
 
 The source file with the types:
 
