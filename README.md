@@ -1,15 +1,13 @@
-# TypeScript Type Predicate Generator
+# TypeScript Type Predicate Generator    [![NPM Package](https://img.shields.io/npm/v/type-predicate-generator)](https://www.npmjs.com/package/type-predicate-generator)
 
-Check JSON APIs responses 100% type safe, unit tested and at blazing speed!
+Check JSON APIs responses 100% type safe 🔒, unit tested ✅ and at blazing speed 🚀! Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-generator/).
 
-Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-generator/).
-
-[![NPM Package](https://img.shields.io/npm/v/type-predicate-generator)](https://www.npmjs.com/package/type-predicate-generator)
+[![Playground](playground.png)](https://peter-leonov.github.io/type-predicate-generator/?s=PTAEBUAsEsGdTqAhgO1AUwB5ILYAcAbdUWdAF1AHsAzUMgTz3VgBoAoEUQpe0Ad2hlIdSOhxUATlySwyxepQCuUynxQA6Nmyx5KEigyagAqqSkBeUAG82oBABMAXKBSKcAI3QSA3LdAFKAHNoFGdZCRDA3wBfXyA)
 
 ## About
 
 - **Safe**: [generates strictly typed code](compare.md#generator-produces-typescript-code-that-is-strictly-type-safe) and [unit tests](compare.md#generator-also-tests-the-generated-code)
-- **Fast**: [~100 times faster than Zod](compare.md#generator-produces-code-that-is-over-100-times-faster), [instant cold start](compare.md#generator-produces-code-that-is-way-faster-to-cold-start)
+- **Fast**: [~120 times faster than Zod](compare.md#generator-produces-code-that-is-over-100-times-faster), [instant cold start](compare.md#generator-produces-code-that-is-way-faster-to-cold-start)
 - **Lightweight**: [no runtime dependencies](compare.md#generator-does-not-have-any-runtime-dependencies), [minifies into bytes](compare.md#generator-produces-readable-code)
 - **Portable**: [supports all browsers, runtimes and bundlers](compare.md#generator-supports-all-the-jsts-tools)
 - **Reliable**: the output code is [trivial to audit](compare.md#generator-produces-code-that-is-easy-to-review)
