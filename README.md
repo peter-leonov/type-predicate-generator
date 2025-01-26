@@ -309,7 +309,7 @@ As a bonus, to verify that the guards work properly Generator also produces a se
 
 ## Cons
 
-These are by desing, fixing them would affect the [Pros](#pros):
+These are by design, fixing them would affect the [Pros](#pros):
 
 1. Compared to `tsc` plugins it requires a separate build step
 1. Compared to `tsc` plugins it reads a file and produces a file
