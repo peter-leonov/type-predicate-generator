@@ -9,7 +9,7 @@ Give it a try in the [Playground](https://peter-leonov.github.io/type-predicate-
 ## About
 
 - **Safe**: [generates strictly typed code](compare.md#generator-produces-typescript-code-that-is-strictly-type-safe) and [unit tests](compare.md#generator-also-tests-the-generated-code)
-- **Fast**: [~120 times faster than Zod](compare.md#generator-produces-code-that-is-over-100-times-faster), [instant cold start](compare.md#generator-produces-code-that-is-way-faster-to-cold-start)
+- **Fast**: [~120 times faster than Zod](compare.md#generator-produces-code-that-is-over-120-times-faster), [instant cold starts](compare.md#generator-produces-code-that-is-way-faster-to-cold-start)
 - **Lightweight**: [no runtime dependencies](compare.md#generator-does-not-have-any-runtime-dependencies), [minifies into bytes](compare.md#generator-produces-readable-code)
 - **Portable**: [supports all browsers, runtimes and bundlers](compare.md#generator-supports-all-the-jsts-tools)
 - **Reliable**: the output code is [trivial to audit](compare.md#generator-produces-code-that-is-easy-to-review)
