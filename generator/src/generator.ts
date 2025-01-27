@@ -887,7 +887,50 @@ function assertIsNotNever(target: string): ts.Statement {
 }
 
 function assertAreNotNever(targets: string[]): ts.Statement[] {
-  return targets.map(assertIsNotNever);
+  const stmts = targets.map(assertIsNotNever);
+  const first = stmts[0];
+  if (first) {
+    prependComment(
+      first,
+      `
+  In TypeScript the \`never\` type is assignable to any other type,
+  effectively turning it into an unsafe \`any\` type at assignment.
+  The following ${
+    targets.length ? "checks ensure" : "check ensures"
+  } that none of the checked values got
+  narrowed down to \`never\`.
+`
+    );
+  }
+
+  return stmts;
+}
+
+/**
+ * A missing TS API method that prepends a new comment to a statement.
+ */
+function prependComment(stmt: ts.Statement, comment: string) {
+  const comments = ts.getSyntheticLeadingComments(stmt) || [];
+  comments.unshift(newMultiLineComment(comment));
+  ts.setSyntheticLeadingComments(stmt, comments);
+}
+
+function newSynthesizedComment(text: string): ts.SynthesizedComment {
+  return {
+    kind: ts.SyntaxKind.SingleLineCommentTrivia,
+    text,
+    pos: -1,
+    end: -1,
+  };
+}
+
+function newMultiLineComment(text: string): ts.SynthesizedComment {
+  return {
+    kind: ts.SyntaxKind.MultiLineCommentTrivia,
+    text,
+    pos: -1,
+    end: -1,
+  };
 }
 
 function predicateFunction(

@@ -7,6 +7,12 @@ exports[`array of a primitive type 1`] = `
         if (!(typeof root === "number")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies Element;
@@ -15,6 +21,12 @@ exports[`array of a primitive type 1`] = `
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -34,6 +46,12 @@ exports[`array of a primitive type union 1`] = `
         if (!((typeof root === "number") || (typeof root === "string"))) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies Element;
@@ -42,6 +60,12 @@ exports[`array of a primitive type union 1`] = `
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -69,6 +93,12 @@ exports[`array of an object type 1`] = `
         if (!(typeof b === "string")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
@@ -84,6 +114,12 @@ exports[`array of an object type 1`] = `
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -106,6 +142,12 @@ export function isX(root: unknown): root is X {
             return false;
         }
         (root) satisfies {};
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         ({}) satisfies Element;
@@ -114,6 +156,12 @@ export function isX(root: unknown): root is X {
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -132,6 +180,12 @@ exports[`empty object 1`] = `
         return false;
     }
     (root) satisfies {};
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -151,6 +205,12 @@ export function isA(root: unknown): root is A {
         if (!(isB(root))) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies Element;
@@ -159,6 +219,12 @@ export function isA(root: unknown): root is A {
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -174,6 +240,12 @@ export function isB(root: unknown): root is B {
         if (!(isC(root))) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies B_Element;
@@ -182,6 +254,12 @@ export function isB(root: unknown): root is B {
     if (!(safeIsArray(root) && root.every(isB_Element))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -197,6 +275,12 @@ export function isC(root: unknown): root is C {
         if (!(isD(root))) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies C_Element;
@@ -205,6 +289,12 @@ export function isC(root: unknown): root is C {
     if (!(safeIsArray(root) && root.every(isC_Element))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -220,6 +310,12 @@ export function isD(root: unknown): root is D {
         if (!(typeof root === "boolean")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies D_Element;
@@ -228,6 +324,12 @@ export function isD(root: unknown): root is D {
     if (!(safeIsArray(root) && root.every(isD_Element))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -251,6 +353,12 @@ exports[`nested arrays of a primitive type 1`] = `
                 if (!(typeof root === "number")) {
                     return false;
                 }
+                /*
+                  In TypeScript the \`never\` type is assignable to any other type,
+                  effectively turning it into an unsafe \`any\` type at assignment.
+                  The following checks ensure that none of the checked values got
+                  narrowed down to \`never\`.
+                */ 
                 // @ts-expect-error: should not be \`never\`
                 (root) satisfies never;
                 (root) satisfies Element_Element_Element;
@@ -259,6 +367,12 @@ exports[`nested arrays of a primitive type 1`] = `
             if (!(safeIsArray(root) && root.every(isElement_Element_Element))) {
                 return false;
             }
+            /*
+              In TypeScript the \`never\` type is assignable to any other type,
+              effectively turning it into an unsafe \`any\` type at assignment.
+              The following checks ensure that none of the checked values got
+              narrowed down to \`never\`.
+            */ 
             // @ts-expect-error: should not be \`never\`
             (root) satisfies never;
             // @ts-expect-error: should not be \`never\`
@@ -269,6 +383,12 @@ exports[`nested arrays of a primitive type 1`] = `
         if (!(safeIsArray(root) && root.every(isElement_Element))) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
@@ -279,6 +399,12 @@ exports[`nested arrays of a primitive type 1`] = `
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -311,6 +437,12 @@ exports[`nested object 1`] = `
     if (!(typeof c === "string")) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -343,6 +475,12 @@ exports[`null 1`] = `
     if (!(root === null)) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -369,6 +507,12 @@ exports[`object attributes should not collide on root 1`] = `
     if (!(__2 === 3)) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -421,6 +565,12 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(root_a_b__ === 5)) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -465,6 +615,12 @@ exports[`object with non-identificator-like names 1`] = `
     if (!(with_two_spaces === 1)) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -489,6 +645,12 @@ exports[`object with non-identificator-like names 2`] = `
     if (!(_1starts_with_a_number === 1)) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -513,6 +675,12 @@ exports[`object with non-identificator-like names 3`] = `
     if (!(__starts_with_a_unicode === 1)) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -543,6 +711,12 @@ exports[`object with primitive types 1`] = `
     if (!(typeof c === "boolean")) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -572,6 +746,12 @@ export function isX(root: unknown): root is X {
         if (!(typeof root === "string")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies Element;
@@ -580,6 +760,12 @@ export function isX(root: unknown): root is X {
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -599,6 +785,12 @@ export function isX(root: unknown): root is X {
         return false;
     }
     (root) satisfies {};
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -614,6 +806,12 @@ exports[`reference type in a union 1`] = `
     if (!((typeof root === "number") || (isA(root)))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -637,6 +835,12 @@ exports[`reference type in an object 1`] = `
     if (!(isB(b))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -666,6 +870,12 @@ export function isX(root: unknown): root is X {
         if (!(root === "foo")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies Element;
@@ -679,6 +889,12 @@ export function isX(root: unknown): root is X {
     if (!(safeIsArray(a) && a.every(isElement))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -711,6 +927,12 @@ export function isX(root: unknown): root is X {
         if (!(b === "B")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
@@ -728,6 +950,12 @@ export function isX(root: unknown): root is X {
     if (!((a === "undefined") || (isObjectInA(a)))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -751,6 +979,12 @@ export function isX(root: unknown): root is X {
         return false;
     }
     (root) satisfies {};
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -768,6 +1002,12 @@ exports[`two arrays of a primitive type 1`] = `
         if (!(typeof root === "number")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies Element;
@@ -778,6 +1018,12 @@ exports[`two arrays of a primitive type 1`] = `
         if (!(typeof root === "string")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         (root) satisfies B_Element;
@@ -794,6 +1040,12 @@ exports[`two arrays of a primitive type 1`] = `
     if (!(safeIsArray(b) && b.every(isB_Element))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -820,6 +1072,12 @@ exports[`undefined 1`] = `
     if (!(typeof root === "undefined")) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -835,6 +1093,12 @@ exports[`union of literal types 1`] = `
     if (!((root === "a") || (root === "b") || (root === 1) || (root === 2) || (root === true) || (root === false) || (root === null) || (typeof root === "undefined"))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -850,6 +1114,12 @@ exports[`union of mixed safe types 1`] = `
     if (!((typeof root === "number") || (root === "a") || (root === true))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -872,6 +1142,12 @@ exports[`union of object and safe union types 1`] = `
         if (!(typeof a === "number")) {
             return false;
         }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
@@ -884,6 +1160,12 @@ exports[`union of object and safe union types 1`] = `
     if (!((root === 1) || (typeof root === "string") || (isObjectInUnion(root)))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -901,6 +1183,12 @@ exports[`union of primitive and literal types 1`] = `
     if (!((typeof root === "string") || (typeof root === "number") || (root === null))) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
     // @ts-expect-error: should not be \`never\`
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
