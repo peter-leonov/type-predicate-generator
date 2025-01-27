@@ -15,9 +15,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.

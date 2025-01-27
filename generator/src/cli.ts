@@ -72,9 +72,7 @@ function processFile(typesPath: string, flags: Flags) {
     const models = sourceFileToModels(checker, sourceFile);
 
     {
-      for (const model of models) {
-        generator.addRootTypePredicateFor(model);
-      }
+      generator.addRootTypePredicatesFor(models);
 
       const predicateFileBody =
         generator.getFullFileBody(typesImportFrom);

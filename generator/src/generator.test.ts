@@ -17,15 +17,13 @@ import { nodesToString } from "./compile.js";
 
 export function generate(model: TypeModel): string {
   const tgg = new TypeGuardGenerator();
-  tgg.addRootTypePredicateFor(model);
+  tgg.addRootTypePredicatesFor([model]);
   return nodesToString("guards.ts", tgg.getGuards());
 }
 
 export function generateAll(models: TypeModel[]): string {
   const tgg = new TypeGuardGenerator();
-  for (const model of models) {
-    tgg.addRootTypePredicateFor(model);
-  }
+  tgg.addRootTypePredicatesFor(models);
   return nodesToString(
     "./guards.ts",
     tgg.getFullFileBody("./guards.ts")
@@ -441,6 +439,23 @@ test("regression: don't require top level predicates for nested predicate types 
         },
         new Set(["a"])
       ),
+    ])
+  ).toMatchSnapshot();
+});
+
+test("regression: don't mask other imported types with nested type names ", () => {
+  expect(
+    generateAll([
+      new ObjectType(
+        { aliasName: "X" },
+        {
+          Y: new UnionType({}, [
+            new ObjectType({}, { b: new LiteralType({}, "B") }),
+            new LiteralType({}, "undefined"),
+          ]),
+        }
+      ),
+      new PrimitiveType({ aliasName: "ObjectInY" }, "string"),
     ])
   ).toMatchSnapshot();
 });

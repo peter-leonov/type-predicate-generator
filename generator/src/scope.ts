@@ -101,7 +101,6 @@ export class Scope {
   }
 }
 
-let typeScopeID = 0;
 /**
  * Type namespace is not lexical, thus we need a separate scope class.
  */
@@ -126,6 +125,10 @@ export class TypeScope {
       "adding the same type name twice is a logic error"
     );
     this.#type_names.add(typeName);
+  }
+
+  hasTypeName(typeName: string) {
+    return this.#type_names.has(typeName);
   }
 
   newTypeName(path: string[], proposal: string): string {

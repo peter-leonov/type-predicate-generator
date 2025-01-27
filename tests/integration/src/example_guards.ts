@@ -74,9 +74,9 @@ export function isUser(root: unknown): root is User {
       narrowed down to `never`.
     */
   // @ts-expect-error: should not be `never`
-  root satisfies never;
-  // @ts-expect-error: should not be `never`
   isUser satisfies never;
+  // @ts-expect-error: should not be `never`
+  root satisfies never;
   // @ts-expect-error: should not be `never`
   id satisfies never;
   // @ts-expect-error: should not be `never`

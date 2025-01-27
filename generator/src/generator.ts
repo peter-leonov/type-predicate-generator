@@ -111,9 +111,11 @@ export class TypeGuardGenerator {
         hoist: [
           typeAliasForArrayElement(nestedTypeName, typePath),
           this.createTypePredicateFor(
+            new Scope(),
             guardName,
             nestedTypeName,
-            type.element
+            type.element,
+            false
           ),
         ],
         body: ifNotReturnFalse(
@@ -220,9 +222,11 @@ export class TypeGuardGenerator {
             hoist: [
               typeAliasForObjectAttribute(nestedTypeName, typePath),
               this.createTypePredicateFor(
+                new Scope(),
                 guardName,
                 nestedTypeName,
-                unsafeType
+                unsafeType,
+                false
               ),
             ],
             body: ifNotReturnFalse(
@@ -336,24 +340,68 @@ export class TypeGuardGenerator {
     );
   }
 
+  addRootTypePredicatesFor(models: TypeModel[]): void {
+    for (const model of models) {
+      this.addRootType(model);
+    }
+    for (const model of models) {
+      this.addRootTypePredicateFor(model);
+    }
+  }
+
   /**
    * It's a method because it's suppored to call itself for referenced types.
    */
-  addRootTypePredicateFor(type: TypeModel): void {
+  private addRootType(type: TypeModel): void {
+    const typeName = type.options.aliasName;
+    this.ctx.rootTypeName = typeName;
+    assert(typeName, "the root type must have an alias name");
+
+    this.typeScope.addTypeName(typeName);
+  }
+
+  /**
+   * It's a method because it's suppored to call itself for referenced types.
+   */
+  private addRootTypePredicateFor(type: TypeModel): void {
     this.ctx = {};
     const typeName = type.options.aliasName;
     this.ctx.rootTypeName = typeName;
     assert(typeName, "the root type must have an alias name");
-    this.typeScope.addTypeName(typeName);
+    assert(
+      this.typeScope.hasTypeName(typeName),
+      "all the root types should have been added first using addRootType()"
+    );
 
-    const root = "root";
     const scope = new Scope();
-    const rootLocal = scope.createAttribute([], root);
 
     // The root predicate has to be in its own scope to allow
     // for a recursive type to reference itself and not some
     // other same named nested type.
     const predicateName = scope.newLocalName([], `is${typeName}`);
+
+    const guard = this.createTypePredicateFor(
+      scope,
+      predicateName,
+      typeName,
+      type,
+      true
+    );
+
+    this.guards.set(typeName, guard);
+
+    this.ctx = {};
+  }
+
+  private createTypePredicateFor(
+    scope: Scope,
+    predicateName: string,
+    typeName: string,
+    type: TypeModel,
+    exported: boolean
+  ): ts.Statement {
+    const root = "root";
+    const rootLocal = scope.createAttribute([], root);
 
     const { hoist, body } = this.getAssertionsForLocalVar(
       scope,
@@ -363,7 +411,7 @@ export class TypeGuardGenerator {
       type
     );
 
-    const guard = predicateFunction(
+    return predicateFunction(
       root,
       predicateName,
       typeName,
@@ -376,39 +424,8 @@ export class TypeGuardGenerator {
         ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
         returnTrue(),
       ],
-      { exported: true }
+      { exported }
     );
-
-    this.guards.set(typeName, guard);
-
-    this.ctx = {};
-  }
-
-  private createTypePredicateFor(
-    predicateName: string,
-    typeName: string,
-    type: TypeModel
-  ): ts.Statement {
-    const root = "root";
-    const scope = new Scope();
-    const rootLocal = scope.createAttribute([], root);
-    const { hoist, body } = this.getAssertionsForLocalVar(
-      scope,
-      [],
-      rootLocal,
-      [typeName],
-      type
-    );
-
-    return predicateFunction(root, predicateName, typeName, [
-      // hoist to the top what's returned as hoist
-      ...hoist,
-      // then follow with the body statements
-      ...body,
-      ...assertAreNotNever(scope.list()),
-      ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
-      returnTrue(),
-    ]);
   }
 
   getGuards(): ts.Statement[] {
@@ -1048,7 +1065,7 @@ function predicateFunction(
   name: string,
   returnType: string,
   body: ts.Statement[],
-  opts: { exported?: boolean } = {}
+  opts: { exported: boolean }
 ): ts.Statement {
   return factory.createFunctionDeclaration(
     opts.exported

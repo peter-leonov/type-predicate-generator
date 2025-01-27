@@ -37,9 +37,7 @@ export function generateForPlayground(
   let predicatesCode: string, testsCode: string;
 
   {
-    for (const model of models) {
-      generator.addRootTypePredicateFor(model);
-    }
+    generator.addRootTypePredicatesFor(models);
 
     const predicateFileBody =
       generator.getFullFileBody(sourceFilePath);

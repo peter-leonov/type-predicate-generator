@@ -32,9 +32,9 @@ export function isExternalType(root: unknown): root is ExternalType {
       narrowed down to `never`.
     */
   // @ts-expect-error: should not be `never`
-  root satisfies never;
-  // @ts-expect-error: should not be `never`
   isExternalType satisfies never;
+  // @ts-expect-error: should not be `never`
+  root satisfies never;
   // @ts-expect-error: should not be `never`
   id satisfies never;
   // @ts-expect-error: should not be `never`
@@ -92,9 +92,9 @@ export function isUser(root: unknown): root is User {
       narrowed down to `never`.
     */
   // @ts-expect-error: should not be `never`
-  root satisfies never;
-  // @ts-expect-error: should not be `never`
   isUser satisfies never;
+  // @ts-expect-error: should not be `never`
+  root satisfies never;
   // @ts-expect-error: should not be `never`
   id satisfies never;
   // @ts-expect-error: should not be `never`
@@ -185,9 +185,9 @@ export function isPost(root: unknown): root is Post {
       narrowed down to `never`.
     */
   // @ts-expect-error: should not be `never`
-  root satisfies never;
-  // @ts-expect-error: should not be `never`
   isPost satisfies never;
+  // @ts-expect-error: should not be `never`
+  root satisfies never;
   // @ts-expect-error: should not be `never`
   title satisfies never;
   // @ts-expect-error: should not be `never`
@@ -320,9 +320,9 @@ export function isHugeOnCombinations(
       narrowed down to `never`.
     */
   // @ts-expect-error: should not be `never`
-  root satisfies never;
-  // @ts-expect-error: should not be `never`
   isHugeOnCombinations satisfies never;
+  // @ts-expect-error: should not be `never`
+  root satisfies never;
   // @ts-expect-error: should not be `never`
   a satisfies never;
   // @ts-expect-error: should not be `never`

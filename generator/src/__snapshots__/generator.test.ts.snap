@@ -35,9 +35,9 @@ exports[`array of a primitive type 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
     /*
@@ -86,9 +86,9 @@ exports[`array of a primitive type union 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
     /*
@@ -115,9 +115,9 @@ exports[`array of an alias type 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -182,9 +182,9 @@ exports[`array of an object type 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
     /*
@@ -236,9 +236,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
     /*
@@ -266,9 +266,9 @@ exports[`empty object 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -295,9 +295,9 @@ export function isA(root: unknown): root is A {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isA) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -318,9 +318,9 @@ export function isB(root: unknown): root is B {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isB) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -341,9 +341,9 @@ export function isC(root: unknown): root is C {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isC) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -386,9 +386,9 @@ export function isD(root: unknown): root is D {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isD) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isDElement) satisfies never;
     /*
@@ -485,9 +485,9 @@ exports[`nested arrays of a primitive type 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
     /*
@@ -535,9 +535,9 @@ exports[`nested object 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -579,9 +579,9 @@ exports[`null 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -621,9 +621,9 @@ exports[`object attributes should not collide on root 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (_) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -695,9 +695,9 @@ exports[`object nested attributes should not collide on root 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (_) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -753,9 +753,9 @@ exports[`object with non-identificator-like names 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (with_two_spaces) satisfies never;
     /*
@@ -791,9 +791,9 @@ exports[`object with non-identificator-like names 2`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (_1starts_with_a_number) satisfies never;
     /*
@@ -829,9 +829,9 @@ exports[`object with non-identificator-like names 3`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (__starts_with_a_unicode) satisfies never;
     /*
@@ -875,9 +875,9 @@ exports[`object with primitive types 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -936,9 +936,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
     /*
@@ -967,9 +967,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -994,9 +994,9 @@ exports[`reference type in a union 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -1032,9 +1032,9 @@ exports[`reference type in an object 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -1048,6 +1048,107 @@ exports[`reference type in an object 1`] = `
         a,
         b
     }) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`regression: don't mask other imported types with nested type names  1`] = `
+"import { type X, type ObjectInY } from "./guards.ts";
+// used to safely get all the object attributes as \`unknown\`s
+type SafeShallowShape<Type extends {}> = {
+    [_ in keyof Type]?: unknown;
+};
+export function isX(root: unknown): root is X {
+    type X_ObjectInY = Extract<X["Y"], object>;
+    function isX_ObjectInY(root: unknown): root is X_ObjectInY {
+        // check that \`root\` is an object
+        if (!(typeof root === "object" && root !== null)) {
+            return false;
+        }
+        (root) satisfies {};
+        // safely get all the attributes from \`root\` as \`unknown\`s
+        const { b }: SafeShallowShape<X_ObjectInY> = root;
+        // check that \`root.b\` is of literal type "B"
+        if (!(b === "B")) {
+            return false;
+        }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (b) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
+        ({
+            b
+        }) satisfies X_ObjectInY;
+        return true;
+    }
+    // check that \`root\` is an object
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    // safely get all the attributes from \`root\` as \`unknown\`s
+    const { Y }: SafeShallowShape<X> = root;
+    // check that \`root.Y\` is of nested type X_ObjectInY
+    if (!((Y === "undefined") || (isX_ObjectInY(Y)))) {
+        return false;
+    }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (Y) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX_ObjectInY) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
+    ({
+        Y
+    }) satisfies X;
+    return true;
+}
+export function isObjectInY(root: unknown): root is ObjectInY {
+    // check that \`root\` is of primitive type \`string\`
+    if (!(typeof root === "string")) {
+        return false;
+    }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (isObjectInY) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
+    (root) satisfies ObjectInY;
     return true;
 }
 "
@@ -1101,9 +1202,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -1179,9 +1280,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -1214,9 +1315,9 @@ export function isX(root: unknown): root is X {
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -1281,9 +1382,9 @@ exports[`regression: object with a nested type of the same name 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isObjectInX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (X) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -1369,9 +1470,9 @@ exports[`two arrays of a primitive type 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
@@ -1407,9 +1508,9 @@ exports[`undefined 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -1434,9 +1535,9 @@ exports[`union of literal types 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -1461,9 +1562,9 @@ exports[`union of mixed safe types 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -1521,9 +1622,9 @@ exports[`union of object and safe union types 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isUnion) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isObjectInUnion) satisfies never;
     /*
@@ -1550,9 +1651,9 @@ exports[`union of primitive and literal types 1`] = `
       narrowed down to \`never\`.
     */ 
     // @ts-expect-error: should not be \`never\`
-    (root) satisfies never;
-    // @ts-expect-error: should not be \`never\`
     (isUnion) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
