@@ -78,7 +78,7 @@ export class TypeGuardGenerator {
       this.needsSafeIsArray = true;
       const nestedTypeName = this.typeScope.newTypeName(
         typePath.map(capitalize),
-        "Element"
+        `${capitalize(typePath.at(-1) || "")}Element`
       );
       const guardName = scope.newLocalName([], `is${nestedTypeName}`);
       return {

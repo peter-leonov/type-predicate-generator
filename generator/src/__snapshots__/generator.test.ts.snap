@@ -2,8 +2,8 @@
 
 exports[`array of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
-    type Element = X[number];
-    function isElement(root: unknown): root is Element {
+    type XElement = X[number];
+    function isXElement(root: unknown): root is XElement {
         // check that \`root\` is of primitive type \`number\`
         if (!(typeof root === "number")) {
             return false;
@@ -16,11 +16,11 @@ exports[`array of a primitive type 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies Element;
+        (root) satisfies XElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`XElement\` (\`X\`)
+    if (!(safeIsArray(root) && root.every(isXElement))) {
         return false;
     }
     /*
@@ -34,7 +34,7 @@ exports[`array of a primitive type 1`] = `
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isXElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -43,8 +43,8 @@ exports[`array of a primitive type 1`] = `
 
 exports[`array of a primitive type union 1`] = `
 "export function isX(root: unknown): root is X {
-    type Element = X[number];
-    function isElement(root: unknown): root is Element {
+    type XElement = X[number];
+    function isXElement(root: unknown): root is XElement {
         // check that \`root\` is in the union of 2 trivial types
         if (!((typeof root === "number") || (typeof root === "string"))) {
             return false;
@@ -57,11 +57,11 @@ exports[`array of a primitive type union 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies Element;
+        (root) satisfies XElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`XElement\` (\`X\`)
+    if (!(safeIsArray(root) && root.every(isXElement))) {
         return false;
     }
     /*
@@ -75,7 +75,7 @@ exports[`array of a primitive type union 1`] = `
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isXElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -84,13 +84,13 @@ exports[`array of a primitive type union 1`] = `
 
 exports[`array of an object type 1`] = `
 "export function isX(root: unknown): root is X {
-    type Element = X[number];
-    function isElement(root: unknown): root is Element {
+    type XElement = X[number];
+    function isXElement(root: unknown): root is XElement {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
         (root) satisfies {};
-        const { a, b }: SafeShallowShape<Element> = root;
+        const { a, b }: SafeShallowShape<XElement> = root;
         // check that \`root.a\` is of primitive type \`number\`
         if (!(typeof a === "number")) {
             return false;
@@ -114,11 +114,11 @@ exports[`array of an object type 1`] = `
         ({
             a,
             b
-        }) satisfies Element;
+        }) satisfies XElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`XElement\` (\`X\`)
+    if (!(safeIsArray(root) && root.every(isXElement))) {
         return false;
     }
     /*
@@ -132,7 +132,7 @@ exports[`array of an object type 1`] = `
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isXElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -143,8 +143,8 @@ exports[`both object and array 1`] = `
 "import { type X } from "./guards.ts";
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
-    type Element = X[number];
-    function isElement(root: unknown): root is Element {
+    type XElement = X[number];
+    function isXElement(root: unknown): root is XElement {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
@@ -157,11 +157,11 @@ export function isX(root: unknown): root is X {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        ({}) satisfies Element;
+        ({}) satisfies XElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`XElement\` (\`X\`)
+    if (!(safeIsArray(root) && root.every(isXElement))) {
         return false;
     }
     /*
@@ -175,7 +175,7 @@ export function isX(root: unknown): root is X {
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isXElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -208,8 +208,8 @@ exports[`multiple reference types 1`] = `
 "import { type A, type B, type C, type D } from "./guards.ts";
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isA(root: unknown): root is A {
-    type Element = A[number];
-    function isElement(root: unknown): root is Element {
+    type AElement = A[number];
+    function isAElement(root: unknown): root is AElement {
         // check that \`root\` is of type B
         if (!(isB(root))) {
             return false;
@@ -222,11 +222,11 @@ export function isA(root: unknown): root is A {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies Element;
+        (root) satisfies AElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`A\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`AElement\` (\`A\`)
+    if (!(safeIsArray(root) && root.every(isAElement))) {
         return false;
     }
     /*
@@ -240,13 +240,13 @@ export function isA(root: unknown): root is A {
     // @ts-expect-error: should not be \`never\`
     (isA) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isAElement) satisfies never;
     (root) satisfies A;
     return true;
 }
 export function isB(root: unknown): root is B {
-    type B_Element = B[number];
-    function isB_Element(root: unknown): root is B_Element {
+    type BElement = B[number];
+    function isBElement(root: unknown): root is BElement {
         // check that \`root\` is of type C
         if (!(isC(root))) {
             return false;
@@ -259,11 +259,11 @@ export function isB(root: unknown): root is B {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies B_Element;
+        (root) satisfies BElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`B_Element\` (\`B\`)
-    if (!(safeIsArray(root) && root.every(isB_Element))) {
+    // check that \`root\` is an array of nested type \`BElement\` (\`B\`)
+    if (!(safeIsArray(root) && root.every(isBElement))) {
         return false;
     }
     /*
@@ -277,13 +277,13 @@ export function isB(root: unknown): root is B {
     // @ts-expect-error: should not be \`never\`
     (isB) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isB_Element) satisfies never;
+    (isBElement) satisfies never;
     (root) satisfies B;
     return true;
 }
 export function isC(root: unknown): root is C {
-    type C_Element = C[number];
-    function isC_Element(root: unknown): root is C_Element {
+    type CElement = C[number];
+    function isCElement(root: unknown): root is CElement {
         // check that \`root\` is of type D
         if (!(isD(root))) {
             return false;
@@ -296,11 +296,11 @@ export function isC(root: unknown): root is C {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies C_Element;
+        (root) satisfies CElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`C_Element\` (\`C\`)
-    if (!(safeIsArray(root) && root.every(isC_Element))) {
+    // check that \`root\` is an array of nested type \`CElement\` (\`C\`)
+    if (!(safeIsArray(root) && root.every(isCElement))) {
         return false;
     }
     /*
@@ -314,13 +314,13 @@ export function isC(root: unknown): root is C {
     // @ts-expect-error: should not be \`never\`
     (isC) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isC_Element) satisfies never;
+    (isCElement) satisfies never;
     (root) satisfies C;
     return true;
 }
 export function isD(root: unknown): root is D {
-    type D_Element = D[number];
-    function isD_Element(root: unknown): root is D_Element {
+    type DElement = D[number];
+    function isDElement(root: unknown): root is DElement {
         // check that \`root\` is of primitive type \`boolean\`
         if (!(typeof root === "boolean")) {
             return false;
@@ -333,11 +333,11 @@ export function isD(root: unknown): root is D {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies D_Element;
+        (root) satisfies DElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`D_Element\` (\`D\`)
-    if (!(safeIsArray(root) && root.every(isD_Element))) {
+    // check that \`root\` is an array of nested type \`DElement\` (\`D\`)
+    if (!(safeIsArray(root) && root.every(isDElement))) {
         return false;
     }
     /*
@@ -351,7 +351,7 @@ export function isD(root: unknown): root is D {
     // @ts-expect-error: should not be \`never\`
     (isD) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isD_Element) satisfies never;
+    (isDElement) satisfies never;
     (root) satisfies D;
     return true;
 }
@@ -360,12 +360,12 @@ export function isD(root: unknown): root is D {
 
 exports[`nested arrays of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
-    type Element = X[number];
-    function isElement(root: unknown): root is Element {
-        type Element_Element = Element[number];
-        function isElement_Element(root: unknown): root is Element_Element {
-            type Element_Element_Element = Element_Element[number];
-            function isElement_Element_Element(root: unknown): root is Element_Element_Element {
+    type XElement = X[number];
+    function isXElement(root: unknown): root is XElement {
+        type XElementElement = XElement[number];
+        function isXElementElement(root: unknown): root is XElementElement {
+            type XElementElementElement = XElementElement[number];
+            function isXElementElementElement(root: unknown): root is XElementElementElement {
                 // check that \`root\` is of primitive type \`number\`
                 if (!(typeof root === "number")) {
                     return false;
@@ -378,11 +378,11 @@ exports[`nested arrays of a primitive type 1`] = `
                 */ 
                 // @ts-expect-error: should not be \`never\`
                 (root) satisfies never;
-                (root) satisfies Element_Element_Element;
+                (root) satisfies XElementElementElement;
                 return true;
             }
-            // check that \`root\` is an array of nested type \`Element_Element_Element\` (\`Element_Element\`)
-            if (!(safeIsArray(root) && root.every(isElement_Element_Element))) {
+            // check that \`root\` is an array of nested type \`XElementElementElement\` (\`XElementElement\`)
+            if (!(safeIsArray(root) && root.every(isXElementElementElement))) {
                 return false;
             }
             /*
@@ -394,12 +394,12 @@ exports[`nested arrays of a primitive type 1`] = `
             // @ts-expect-error: should not be \`never\`
             (root) satisfies never;
             // @ts-expect-error: should not be \`never\`
-            (isElement_Element_Element) satisfies never;
-            (root) satisfies Element_Element;
+            (isXElementElementElement) satisfies never;
+            (root) satisfies XElementElement;
             return true;
         }
-        // check that \`root\` is an array of nested type \`Element_Element\` (\`Element\`)
-        if (!(safeIsArray(root) && root.every(isElement_Element))) {
+        // check that \`root\` is an array of nested type \`XElementElement\` (\`XElement\`)
+        if (!(safeIsArray(root) && root.every(isXElementElement))) {
             return false;
         }
         /*
@@ -411,12 +411,12 @@ exports[`nested arrays of a primitive type 1`] = `
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
-        (isElement_Element) satisfies never;
-        (root) satisfies Element;
+        (isXElementElement) satisfies never;
+        (root) satisfies XElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`XElement\` (\`X\`)
+    if (!(safeIsArray(root) && root.every(isXElement))) {
         return false;
     }
     /*
@@ -430,7 +430,7 @@ exports[`nested arrays of a primitive type 1`] = `
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isXElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -777,8 +777,8 @@ exports[`only array 1`] = `
 "import { type X } from "./guards.ts";
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
-    type Element = X[number];
-    function isElement(root: unknown): root is Element {
+    type XElement = X[number];
+    function isXElement(root: unknown): root is XElement {
         // check that \`root\` is of primitive type \`string\`
         if (!(typeof root === "string")) {
             return false;
@@ -791,11 +791,11 @@ export function isX(root: unknown): root is X {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies Element;
+        (root) satisfies XElement;
         return true;
     }
-    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
-    if (!(safeIsArray(root) && root.every(isElement))) {
+    // check that \`root\` is an array of nested type \`XElement\` (\`X\`)
+    if (!(safeIsArray(root) && root.every(isXElement))) {
         return false;
     }
     /*
@@ -809,7 +809,7 @@ export function isX(root: unknown): root is X {
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isXElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -906,8 +906,8 @@ type SafeShallowShape<Type extends {}> = {
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
-    type Element = X["a"][number];
-    function isElement(root: unknown): root is Element {
+    type AElement = X["a"][number];
+    function isAElement(root: unknown): root is AElement {
         // check that \`root\` is of literal type "foo"
         if (!(root === "foo")) {
             return false;
@@ -920,7 +920,7 @@ export function isX(root: unknown): root is X {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies Element;
+        (root) satisfies AElement;
         return true;
     }
     if (!(typeof root === "object" && root !== null)) {
@@ -928,8 +928,8 @@ export function isX(root: unknown): root is X {
     }
     (root) satisfies {};
     const { a }: SafeShallowShape<X> = root;
-    // check that \`root.a\` is an array of nested type \`Element\` (\`X["a"]\`)
-    if (!(safeIsArray(a) && a.every(isElement))) {
+    // check that \`root.a\` is an array of nested type \`AElement\` (\`X["a"]\`)
+    if (!(safeIsArray(a) && a.every(isAElement))) {
         return false;
     }
     /*
@@ -945,7 +945,7 @@ export function isX(root: unknown): root is X {
     // @ts-expect-error: should not be \`never\`
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isAElement) satisfies never;
     ({
         a
     }) satisfies X;
@@ -1042,8 +1042,8 @@ export function isX(root: unknown): root is X {
 
 exports[`two arrays of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
-    type Element = X["a"][number];
-    function isElement(root: unknown): root is Element {
+    type AElement = X["a"][number];
+    function isAElement(root: unknown): root is AElement {
         // check that \`root\` is of primitive type \`number\`
         if (!(typeof root === "number")) {
             return false;
@@ -1056,11 +1056,11 @@ exports[`two arrays of a primitive type 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies Element;
+        (root) satisfies AElement;
         return true;
     }
-    type B_Element = X["b"][number];
-    function isB_Element(root: unknown): root is B_Element {
+    type BElement = X["b"][number];
+    function isBElement(root: unknown): root is BElement {
         // check that \`root\` is of primitive type \`string\`
         if (!(typeof root === "string")) {
             return false;
@@ -1073,7 +1073,7 @@ exports[`two arrays of a primitive type 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
-        (root) satisfies B_Element;
+        (root) satisfies BElement;
         return true;
     }
     if (!(typeof root === "object" && root !== null)) {
@@ -1081,12 +1081,12 @@ exports[`two arrays of a primitive type 1`] = `
     }
     (root) satisfies {};
     const { a, b }: SafeShallowShape<X> = root;
-    // check that \`root.a\` is an array of nested type \`Element\` (\`X["a"]\`)
-    if (!(safeIsArray(a) && a.every(isElement))) {
+    // check that \`root.a\` is an array of nested type \`AElement\` (\`X["a"]\`)
+    if (!(safeIsArray(a) && a.every(isAElement))) {
         return false;
     }
-    // check that \`root.b\` is an array of nested type \`B_Element\` (\`X["b"]\`)
-    if (!(safeIsArray(b) && b.every(isB_Element))) {
+    // check that \`root.b\` is an array of nested type \`BElement\` (\`X["b"]\`)
+    if (!(safeIsArray(b) && b.every(isBElement))) {
         return false;
     }
     /*
@@ -1104,9 +1104,9 @@ exports[`two arrays of a primitive type 1`] = `
     // @ts-expect-error: should not be \`never\`
     (b) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isElement) satisfies never;
+    (isAElement) satisfies never;
     // @ts-expect-error: should not be \`never\`
-    (isB_Element) satisfies never;
+    (isBElement) satisfies never;
     ({
         a,
         b
