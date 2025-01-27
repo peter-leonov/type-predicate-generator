@@ -1,6 +1,12 @@
 import ts from "typescript";
 import { factory } from "typescript";
-import { AttributeLocal, type Path, Scope, TypeScope } from "./scope";
+import {
+  AttributeLocal,
+  isSafeIdentifier,
+  type Path,
+  Scope,
+  TypeScope,
+} from "./scope";
 import {
   ArrayType,
   LiteralType,
@@ -58,13 +64,14 @@ export class TypeGuardGenerator {
     type: TypeModel
   ): { hoist: ts.Statement[]; body: ts.Statement[] } {
     const targetPath = [...path, target.attribute_name];
+    const targetPathStr = pathToString(targetPath);
 
     if (type instanceof AliasType) {
       return {
         hoist: [],
         body: ifNotReturnFalse(
           this.assertionConditionForType(target.local_name, type),
-          ` check that \`${target.local_name}\` is of type ${type}`
+          ` check that \`${targetPathStr}\` is of type ${type.name}`
         ),
       };
     } else if (type instanceof ArrayType) {
@@ -88,7 +95,9 @@ export class TypeGuardGenerator {
             target.local_name,
             guardName
           ),
-          ` check that \`${target.local_name}\` is an array of nested type ${nestedTypeName}`
+          ` check that \`${targetPathStr}\` is an array of nested type \`${nestedTypeName}\` (\`${typePathToString(
+            typePath
+          )}\`)`
         ),
       };
     } else if (type instanceof ObjectType) {
@@ -133,7 +142,7 @@ export class TypeGuardGenerator {
         hoist: [],
         body: ifNotReturnFalse(
           this.assertionConditionForType(target.local_name, type),
-          ` check that \`${target.local_name}\` is of primitive type \`${type}\``
+          ` check that \`${targetPathStr}\` is of primitive type \`${type.primitive}\``
         ),
       };
     } else if (type instanceof LiteralType) {
@@ -141,9 +150,9 @@ export class TypeGuardGenerator {
         hoist: [],
         body: ifNotReturnFalse(
           this.assertionConditionForType(target.local_name, type),
-          ` check that \`${
-            target.local_name
-          }\` is of literal type ${JSON.stringify(type.value)}`
+          ` check that \`${targetPathStr}\` is of literal type ${JSON.stringify(
+            type.value
+          )}`
         ),
       };
     } else if (type instanceof UnionType) {
@@ -190,7 +199,7 @@ export class TypeGuardGenerator {
                 target.local_name,
                 [...safeUnionTypes, referenceType]
               ),
-              ` check that \`${target.local_name}\` is of nested type ${nestedTypeName}`
+              ` check that \`${targetPathStr}\` is of nested type ${nestedTypeName}`
             ),
           };
         } else {
@@ -205,7 +214,7 @@ export class TypeGuardGenerator {
             target.local_name,
             type.types
           ),
-          ` check that \`${target.local_name}\` is in the union of ${
+          ` check that \`${targetPathStr}\` is in the union of ${
             type.types.length
           } trivial type${type.types.length ? "s" : ""}`
         ),
@@ -788,6 +797,41 @@ function typePathToTypeSelector(path: string[]): ts.TypeNode {
       undefined
     )
   );
+}
+
+/**
+ * Expects the path to start with a type name and the rest to be
+ * attribute names. `path` should have at least 1 element.
+ */
+function typePathToString(path: string[]): string {
+  assert(path.length >= 1);
+  const [root, ...rest] = path;
+  assert(root, "expecting the path to start with a root type name");
+
+  return [
+    root,
+    ...rest.map((attr) => `[${JSON.stringify(attr)}]`),
+  ].join("");
+}
+
+/**
+ * Expects the path to start with the root variable name
+ * and the rest to be attribute names.
+ * `path` should have at least 1 element.
+ */
+function pathToString(path: string[]): string {
+  assert(path.length >= 1);
+  const [root, ...rest] = path;
+  assert(root, "expecting the path to start with a root type name");
+
+  return [
+    root,
+    ...rest.map((attr) =>
+      isSafeIdentifier(attr)
+        ? `.${attr}`
+        : `[${JSON.stringify(attr)}]`
+    ),
+  ].join("");
 }
 
 function typeAliasForArrayElement(

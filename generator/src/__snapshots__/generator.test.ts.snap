@@ -4,7 +4,7 @@ exports[`array of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
     type Element = X[number];
     function isElement(root: unknown): root is Element {
-        // check that \`root\` is of primitive type \`[object Object]\`
+        // check that \`root\` is of primitive type \`number\`
         if (!(typeof root === "number")) {
             return false;
         }
@@ -19,7 +19,7 @@ exports[`array of a primitive type 1`] = `
         (root) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -60,7 +60,7 @@ exports[`array of a primitive type union 1`] = `
         (root) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -91,11 +91,11 @@ exports[`array of an object type 1`] = `
         }
         (root) satisfies {};
         const { a, b }: SafeShallowShape<Element> = root;
-        // check that \`a\` is of primitive type \`[object Object]\`
+        // check that \`root.a\` is of primitive type \`number\`
         if (!(typeof a === "number")) {
             return false;
         }
-        // check that \`b\` is of primitive type \`[object Object]\`
+        // check that \`root.b\` is of primitive type \`string\`
         if (!(typeof b === "string")) {
             return false;
         }
@@ -117,7 +117,7 @@ exports[`array of an object type 1`] = `
         }) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -160,7 +160,7 @@ export function isX(root: unknown): root is X {
         ({}) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -210,7 +210,7 @@ const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isA(root: unknown): root is A {
     type Element = A[number];
     function isElement(root: unknown): root is Element {
-        // check that \`root\` is of type [object Object]
+        // check that \`root\` is of type B
         if (!(isB(root))) {
             return false;
         }
@@ -225,7 +225,7 @@ export function isA(root: unknown): root is A {
         (root) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`A\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -247,7 +247,7 @@ export function isA(root: unknown): root is A {
 export function isB(root: unknown): root is B {
     type B_Element = B[number];
     function isB_Element(root: unknown): root is B_Element {
-        // check that \`root\` is of type [object Object]
+        // check that \`root\` is of type C
         if (!(isC(root))) {
             return false;
         }
@@ -262,7 +262,7 @@ export function isB(root: unknown): root is B {
         (root) satisfies B_Element;
         return true;
     }
-    // check that \`root\` is an array of nested type B_Element
+    // check that \`root\` is an array of nested type \`B_Element\` (\`B\`)
     if (!(safeIsArray(root) && root.every(isB_Element))) {
         return false;
     }
@@ -284,7 +284,7 @@ export function isB(root: unknown): root is B {
 export function isC(root: unknown): root is C {
     type C_Element = C[number];
     function isC_Element(root: unknown): root is C_Element {
-        // check that \`root\` is of type [object Object]
+        // check that \`root\` is of type D
         if (!(isD(root))) {
             return false;
         }
@@ -299,7 +299,7 @@ export function isC(root: unknown): root is C {
         (root) satisfies C_Element;
         return true;
     }
-    // check that \`root\` is an array of nested type C_Element
+    // check that \`root\` is an array of nested type \`C_Element\` (\`C\`)
     if (!(safeIsArray(root) && root.every(isC_Element))) {
         return false;
     }
@@ -321,7 +321,7 @@ export function isC(root: unknown): root is C {
 export function isD(root: unknown): root is D {
     type D_Element = D[number];
     function isD_Element(root: unknown): root is D_Element {
-        // check that \`root\` is of primitive type \`[object Object]\`
+        // check that \`root\` is of primitive type \`boolean\`
         if (!(typeof root === "boolean")) {
             return false;
         }
@@ -336,7 +336,7 @@ export function isD(root: unknown): root is D {
         (root) satisfies D_Element;
         return true;
     }
-    // check that \`root\` is an array of nested type D_Element
+    // check that \`root\` is an array of nested type \`D_Element\` (\`D\`)
     if (!(safeIsArray(root) && root.every(isD_Element))) {
         return false;
     }
@@ -366,7 +366,7 @@ exports[`nested arrays of a primitive type 1`] = `
         function isElement_Element(root: unknown): root is Element_Element {
             type Element_Element_Element = Element_Element[number];
             function isElement_Element_Element(root: unknown): root is Element_Element_Element {
-                // check that \`root\` is of primitive type \`[object Object]\`
+                // check that \`root\` is of primitive type \`number\`
                 if (!(typeof root === "number")) {
                     return false;
                 }
@@ -381,7 +381,7 @@ exports[`nested arrays of a primitive type 1`] = `
                 (root) satisfies Element_Element_Element;
                 return true;
             }
-            // check that \`root\` is an array of nested type Element_Element_Element
+            // check that \`root\` is an array of nested type \`Element_Element_Element\` (\`Element_Element\`)
             if (!(safeIsArray(root) && root.every(isElement_Element_Element))) {
                 return false;
             }
@@ -398,7 +398,7 @@ exports[`nested arrays of a primitive type 1`] = `
             (root) satisfies Element_Element;
             return true;
         }
-        // check that \`root\` is an array of nested type Element_Element
+        // check that \`root\` is an array of nested type \`Element_Element\` (\`Element\`)
         if (!(safeIsArray(root) && root.every(isElement_Element))) {
             return false;
         }
@@ -415,7 +415,7 @@ exports[`nested arrays of a primitive type 1`] = `
         (root) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -454,7 +454,7 @@ exports[`nested object 1`] = `
     }
     (b) satisfies {};
     const { c }: SafeShallowShape<X["a"]["b"]> = b;
-    // check that \`c\` is of primitive type \`[object Object]\`
+    // check that \`root.a.b.c\` is of primitive type \`string\`
     if (!(typeof c === "string")) {
         return false;
     }
@@ -520,15 +520,15 @@ exports[`object attributes should not collide on root 1`] = `
     }
     (root) satisfies {};
     const { "€": _, "£": root__, "∂": __2 }: SafeShallowShape<X> = root;
-    // check that \`_\` is of literal type 1
+    // check that \`root["€"]\` is of literal type 1
     if (!(_ === 1)) {
         return false;
     }
-    // check that \`root__\` is of literal type 2
+    // check that \`root["£"]\` is of literal type 2
     if (!(root__ === 2)) {
         return false;
     }
-    // check that \`__2\` is of literal type 3
+    // check that \`root["∂"]\` is of literal type 3
     if (!(__2 === 3)) {
         return false;
     }
@@ -565,7 +565,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     }
     (root) satisfies {};
     const { "€": _, a }: SafeShallowShape<X> = root;
-    // check that \`_\` is of literal type 1
+    // check that \`root["€"]\` is of literal type 1
     if (!(_ === 1)) {
         return false;
     }
@@ -574,7 +574,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     }
     (a) satisfies {};
     const { "€": a__, b }: SafeShallowShape<X["a"]> = a;
-    // check that \`a__\` is of literal type 2
+    // check that \`root.a["€"]\` is of literal type 2
     if (!(a__ === 2)) {
         return false;
     }
@@ -583,15 +583,15 @@ exports[`object nested attributes should not collide on root 1`] = `
     }
     (b) satisfies {};
     const { "€": b__, "£": a_b__, "∂": root_a_b__ }: SafeShallowShape<X["a"]["b"]> = b;
-    // check that \`b__\` is of literal type 3
+    // check that \`root.a.b["€"]\` is of literal type 3
     if (!(b__ === 3)) {
         return false;
     }
-    // check that \`a_b__\` is of literal type 4
+    // check that \`root.a.b["£"]\` is of literal type 4
     if (!(a_b__ === 4)) {
         return false;
     }
-    // check that \`root_a_b__\` is of literal type 5
+    // check that \`root.a.b["∂"]\` is of literal type 5
     if (!(root_a_b__ === 5)) {
         return false;
     }
@@ -642,7 +642,7 @@ exports[`object with non-identificator-like names 1`] = `
     }
     (root) satisfies {};
     const { "with two spaces": with_two_spaces }: SafeShallowShape<X> = root;
-    // check that \`with_two_spaces\` is of literal type 1
+    // check that \`root["with two spaces"]\` is of literal type 1
     if (!(with_two_spaces === 1)) {
         return false;
     }
@@ -673,7 +673,7 @@ exports[`object with non-identificator-like names 2`] = `
     }
     (root) satisfies {};
     const { "1starts_with_a_number": _1starts_with_a_number }: SafeShallowShape<X> = root;
-    // check that \`_1starts_with_a_number\` is of literal type 1
+    // check that \`root["1starts_with_a_number"]\` is of literal type 1
     if (!(_1starts_with_a_number === 1)) {
         return false;
     }
@@ -704,7 +704,7 @@ exports[`object with non-identificator-like names 3`] = `
     }
     (root) satisfies {};
     const { "∞_starts_with_a_unicode": __starts_with_a_unicode }: SafeShallowShape<X> = root;
-    // check that \`__starts_with_a_unicode\` is of literal type 1
+    // check that \`root["∞_starts_with_a_unicode"]\` is of literal type 1
     if (!(__starts_with_a_unicode === 1)) {
         return false;
     }
@@ -735,15 +735,15 @@ exports[`object with primitive types 1`] = `
     }
     (root) satisfies {};
     const { a, b, c }: SafeShallowShape<X> = root;
-    // check that \`a\` is of primitive type \`[object Object]\`
+    // check that \`root.a\` is of primitive type \`number\`
     if (!(typeof a === "number")) {
         return false;
     }
-    // check that \`b\` is of primitive type \`[object Object]\`
+    // check that \`root.b\` is of primitive type \`string\`
     if (!(typeof b === "string")) {
         return false;
     }
-    // check that \`c\` is of primitive type \`[object Object]\`
+    // check that \`root.c\` is of primitive type \`boolean\`
     if (!(typeof c === "boolean")) {
         return false;
     }
@@ -779,7 +779,7 @@ const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
     type Element = X[number];
     function isElement(root: unknown): root is Element {
-        // check that \`root\` is of primitive type \`[object Object]\`
+        // check that \`root\` is of primitive type \`string\`
         if (!(typeof root === "string")) {
             return false;
         }
@@ -794,7 +794,7 @@ export function isX(root: unknown): root is X {
         (root) satisfies Element;
         return true;
     }
-    // check that \`root\` is an array of nested type Element
+    // check that \`root\` is an array of nested type \`Element\` (\`X\`)
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
@@ -868,11 +868,11 @@ exports[`reference type in an object 1`] = `
     }
     (root) satisfies {};
     const { a, b }: SafeShallowShape<X> = root;
-    // check that \`a\` is of type [object Object]
+    // check that \`root.a\` is of type A
     if (!(isA(a))) {
         return false;
     }
-    // check that \`b\` is of type [object Object]
+    // check that \`root.b\` is of type B
     if (!(isB(b))) {
         return false;
     }
@@ -928,7 +928,7 @@ export function isX(root: unknown): root is X {
     }
     (root) satisfies {};
     const { a }: SafeShallowShape<X> = root;
-    // check that \`a\` is an array of nested type Element
+    // check that \`root.a\` is an array of nested type \`Element\` (\`X["a"]\`)
     if (!(safeIsArray(a) && a.every(isElement))) {
         return false;
     }
@@ -967,7 +967,7 @@ export function isX(root: unknown): root is X {
         }
         (root) satisfies {};
         const { b }: SafeShallowShape<ObjectInA> = root;
-        // check that \`b\` is of literal type "B"
+        // check that \`root.b\` is of literal type "B"
         if (!(b === "B")) {
             return false;
         }
@@ -991,7 +991,7 @@ export function isX(root: unknown): root is X {
     }
     (root) satisfies {};
     const { a }: SafeShallowShape<X> = root;
-    // check that \`a\` is of nested type ObjectInA
+    // check that \`root.a\` is of nested type ObjectInA
     if (!((a === "undefined") || (isObjectInA(a)))) {
         return false;
     }
@@ -1044,7 +1044,7 @@ exports[`two arrays of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
     type Element = X["a"][number];
     function isElement(root: unknown): root is Element {
-        // check that \`root\` is of primitive type \`[object Object]\`
+        // check that \`root\` is of primitive type \`number\`
         if (!(typeof root === "number")) {
             return false;
         }
@@ -1061,7 +1061,7 @@ exports[`two arrays of a primitive type 1`] = `
     }
     type B_Element = X["b"][number];
     function isB_Element(root: unknown): root is B_Element {
-        // check that \`root\` is of primitive type \`[object Object]\`
+        // check that \`root\` is of primitive type \`string\`
         if (!(typeof root === "string")) {
             return false;
         }
@@ -1081,11 +1081,11 @@ exports[`two arrays of a primitive type 1`] = `
     }
     (root) satisfies {};
     const { a, b }: SafeShallowShape<X> = root;
-    // check that \`a\` is an array of nested type Element
+    // check that \`root.a\` is an array of nested type \`Element\` (\`X["a"]\`)
     if (!(safeIsArray(a) && a.every(isElement))) {
         return false;
     }
-    // check that \`b\` is an array of nested type B_Element
+    // check that \`root.b\` is an array of nested type \`B_Element\` (\`X["b"]\`)
     if (!(safeIsArray(b) && b.every(isB_Element))) {
         return false;
     }
@@ -1191,7 +1191,7 @@ exports[`union of object and safe union types 1`] = `
         }
         (root) satisfies {};
         const { a }: SafeShallowShape<ObjectInUnion> = root;
-        // check that \`a\` is of primitive type \`[object Object]\`
+        // check that \`root.a\` is of primitive type \`number\`
         if (!(typeof a === "number")) {
             return false;
         }

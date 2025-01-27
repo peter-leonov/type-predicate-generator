@@ -4,9 +4,20 @@ exports[`generateForPlayground 1`] = `
 {
   "predicatesCode": "import { type X } from "./types";
 export function isX(root: unknown): root is X {
+    // check that \`root\` is of primitive type \`number\`
     if (!(typeof root === "number")) {
         return false;
     }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     (root) satisfies X;
     return true;
 }

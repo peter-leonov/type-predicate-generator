@@ -153,3 +153,14 @@ function toIdentifier(name: string): string {
     .replace(/[^_a-zA-Z0-9]/g, "_")
     .replace(/^([^_a-zA-Z])/, "_$1");
 }
+
+/**
+ * Checks if the name is safe to use as an identifier,
+ * for example in a dotted property access expression:
+ * ```ts
+ * a.safeID.b
+ * ```
+ */
+export function isSafeIdentifier(name: string): boolean {
+  return name == toIdentifier(name);
+}
