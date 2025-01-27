@@ -7,12 +7,20 @@ exports[`array of a primitive type 1`] = `
         if (!(typeof root === "number")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -26,12 +34,20 @@ exports[`array of a primitive type union 1`] = `
         if (!((typeof root === "number") || (typeof root === "string"))) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -53,6 +69,12 @@ exports[`array of an object type 1`] = `
         if (!(typeof b === "string")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (a) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (b) satisfies never;
         ({
             a,
             b
@@ -62,6 +84,12 @@ exports[`array of an object type 1`] = `
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -78,12 +106,20 @@ export function isX(root: unknown): root is X {
             return false;
         }
         (root) satisfies {};
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         ({}) satisfies Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -96,6 +132,10 @@ exports[`empty object 1`] = `
         return false;
     }
     (root) satisfies {};
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     ({}) satisfies X;
     return true;
 }
@@ -111,12 +151,20 @@ export function isA(root: unknown): root is A {
         if (!(isB(root))) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isA) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies A;
     return true;
 }
@@ -126,12 +174,20 @@ export function isB(root: unknown): root is B {
         if (!(isC(root))) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies B_Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isB_Element))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isB) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isB_Element) satisfies never;
     (root) satisfies B;
     return true;
 }
@@ -141,12 +197,20 @@ export function isC(root: unknown): root is C {
         if (!(isD(root))) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies C_Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isC_Element))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isC) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isC_Element) satisfies never;
     (root) satisfies C;
     return true;
 }
@@ -156,12 +220,20 @@ export function isD(root: unknown): root is D {
         if (!(typeof root === "boolean")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies D_Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isD_Element))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isD) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isD_Element) satisfies never;
     (root) satisfies D;
     return true;
 }
@@ -179,24 +251,40 @@ exports[`nested arrays of a primitive type 1`] = `
                 if (!(typeof root === "number")) {
                     return false;
                 }
+                // @ts-expect-error: should not be \`never\`
+                (root) satisfies never;
                 (root) satisfies Element_Element_Element;
                 return true;
             }
             if (!(safeIsArray(root) && root.every(isElement_Element_Element))) {
                 return false;
             }
+            // @ts-expect-error: should not be \`never\`
+            (root) satisfies never;
+            // @ts-expect-error: should not be \`never\`
+            (isElement_Element_Element) satisfies never;
             (root) satisfies Element_Element;
             return true;
         }
         if (!(safeIsArray(root) && root.every(isElement_Element))) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (isElement_Element) satisfies never;
         (root) satisfies Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -223,6 +311,16 @@ exports[`nested object 1`] = `
     if (!(typeof c === "string")) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (b) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (c) satisfies never;
     ({
         a: {
             b: {
@@ -245,6 +343,10 @@ exports[`null 1`] = `
     if (!(root === null)) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -267,6 +369,16 @@ exports[`object attributes should not collide on root 1`] = `
     if (!(__2 === 3)) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (_) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root__) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (__2) satisfies never;
     ({
         "€": _,
         "£": root__,
@@ -309,6 +421,24 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(root_a_b__ === 5)) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (_) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a__) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (b) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (b__) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a_b__) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root_a_b__) satisfies never;
     ({
         "€": _,
         a: {
@@ -335,6 +465,12 @@ exports[`object with non-identificator-like names 1`] = `
     if (!(with_two_spaces === 1)) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (with_two_spaces) satisfies never;
     ({
         "with two spaces": with_two_spaces
     }) satisfies X;
@@ -353,6 +489,12 @@ exports[`object with non-identificator-like names 2`] = `
     if (!(_1starts_with_a_number === 1)) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (_1starts_with_a_number) satisfies never;
     ({
         "1starts_with_a_number": _1starts_with_a_number
     }) satisfies X;
@@ -371,6 +513,12 @@ exports[`object with non-identificator-like names 3`] = `
     if (!(__starts_with_a_unicode === 1)) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (__starts_with_a_unicode) satisfies never;
     ({
         "∞_starts_with_a_unicode": __starts_with_a_unicode
     }) satisfies X;
@@ -395,6 +543,16 @@ exports[`object with primitive types 1`] = `
     if (!(typeof c === "boolean")) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (b) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (c) satisfies never;
     ({
         a,
         b,
@@ -414,12 +572,20 @@ export function isX(root: unknown): root is X {
         if (!(typeof root === "string")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies Element;
         return true;
     }
     if (!(safeIsArray(root) && root.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -433,6 +599,10 @@ export function isX(root: unknown): root is X {
         return false;
     }
     (root) satisfies {};
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     ({}) satisfies X;
     return true;
 }
@@ -444,6 +614,10 @@ exports[`reference type in a union 1`] = `
     if (!((typeof root === "number") || (isA(root)))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -463,6 +637,14 @@ exports[`reference type in an object 1`] = `
     if (!(isB(b))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (b) satisfies never;
     ({
         a,
         b
@@ -484,6 +666,8 @@ export function isX(root: unknown): root is X {
         if (!(root === "foo")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies Element;
         return true;
     }
@@ -495,6 +679,14 @@ export function isX(root: unknown): root is X {
     if (!(safeIsArray(a) && a.every(isElement))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
     ({
         a
     }) satisfies X;
@@ -519,6 +711,10 @@ export function isX(root: unknown): root is X {
         if (!(b === "B")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (b) satisfies never;
         ({
             b
         }) satisfies ObjectInA;
@@ -532,6 +728,14 @@ export function isX(root: unknown): root is X {
     if (!((a === "undefined") || (isObjectInA(a)))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isObjectInA) satisfies never;
     ({
         a
     }) satisfies X;
@@ -547,6 +751,10 @@ export function isX(root: unknown): root is X {
         return false;
     }
     (root) satisfies {};
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     ({}) satisfies X;
     return true;
 }
@@ -560,6 +768,8 @@ exports[`two arrays of a primitive type 1`] = `
         if (!(typeof root === "number")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies Element;
         return true;
     }
@@ -568,6 +778,8 @@ exports[`two arrays of a primitive type 1`] = `
         if (!(typeof root === "string")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
         (root) satisfies B_Element;
         return true;
     }
@@ -582,6 +794,18 @@ exports[`two arrays of a primitive type 1`] = `
     if (!(safeIsArray(b) && b.every(isB_Element))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (a) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (b) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isElement) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isB_Element) satisfies never;
     ({
         a,
         b
@@ -596,6 +820,10 @@ exports[`undefined 1`] = `
     if (!(typeof root === "undefined")) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -607,6 +835,10 @@ exports[`union of literal types 1`] = `
     if (!((root === "a") || (root === "b") || (root === 1) || (root === 2) || (root === true) || (root === false) || (root === null) || (typeof root === "undefined"))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -618,6 +850,10 @@ exports[`union of mixed safe types 1`] = `
     if (!((typeof root === "number") || (root === "a") || (root === true))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
     (root) satisfies X;
     return true;
 }
@@ -636,6 +872,10 @@ exports[`union of object and safe union types 1`] = `
         if (!(typeof a === "number")) {
             return false;
         }
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (a) satisfies never;
         ({
             a
         }) satisfies ObjectInUnion;
@@ -644,6 +884,12 @@ exports[`union of object and safe union types 1`] = `
     if (!((root === 1) || (typeof root === "string") || (isObjectInUnion(root)))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isUnion) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isObjectInUnion) satisfies never;
     (root) satisfies Union;
     return true;
 }
@@ -655,6 +901,10 @@ exports[`union of primitive and literal types 1`] = `
     if (!((typeof root === "string") || (typeof root === "number") || (root === null))) {
         return false;
     }
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isUnion) satisfies never;
     (root) satisfies Union;
     return true;
 }

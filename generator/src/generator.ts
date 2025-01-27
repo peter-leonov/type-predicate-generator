@@ -316,7 +316,7 @@ export class TypeGuardGenerator {
         ...hoist,
         // then follow with the body statements
         ...body,
-        // ...assertAreNotNever(scope.list()),
+        ...assertAreNotNever(scope.list()),
         ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
         returnTrue(),
       ],
@@ -349,7 +349,7 @@ export class TypeGuardGenerator {
       ...hoist,
       // then follow with the body statements
       ...body,
-      // ...assertAreNotNever(scope.list()),
+      ...assertAreNotNever(scope.list()),
       ...typeSafeCheckAssembly(scope, root, [root], typeName, type),
       returnTrue(),
     ]);
@@ -866,23 +866,24 @@ function typeSafeCheckAssembly(
   ];
 }
 
-const is_never = "is_never";
-
 function assertIsNotNever(target: string): ts.Statement {
-  const targetID = factory.createIdentifier(target);
+  const stmt = factory.createExpressionStatement(
+    factory.createSatisfiesExpression(
+      factory.createParenthesizedExpression(
+        factory.createIdentifier(target)
+      ),
+      factory.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword)
+    )
+  );
+
   ts.addSyntheticLeadingComment(
-    targetID,
+    stmt,
     ts.SyntaxKind.SingleLineCommentTrivia,
     " @ts-expect-error: should not be `never`",
     true
   );
-  return factory.createExpressionStatement(
-    factory.createCallExpression(
-      factory.createIdentifier(is_never),
-      undefined,
-      [targetID]
-    )
-  );
+
+  return stmt;
 }
 
 function assertAreNotNever(targets: string[]): ts.Statement[] {
