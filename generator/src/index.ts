@@ -38,7 +38,7 @@ export function generateForPlayground(
 
   {
     for (const model of models) {
-      generator.addRootTypeGuardFor(model);
+      generator.addRootTypePredicateFor(model);
     }
 
     const predicateFileBody =

@@ -17,14 +17,14 @@ import { nodesToString } from "./compile.js";
 
 export function generate(model: TypeModel): string {
   const tgg = new TypeGuardGenerator();
-  tgg.addRootTypeGuardFor(model);
+  tgg.addRootTypePredicateFor(model);
   return nodesToString("guards.ts", tgg.getGuards());
 }
 
 export function generateAll(models: TypeModel[]): string {
   const tgg = new TypeGuardGenerator();
   for (const model of models) {
-    tgg.addRootTypeGuardFor(model);
+    tgg.addRootTypePredicateFor(model);
   }
   return nodesToString(
     "./guards.ts",

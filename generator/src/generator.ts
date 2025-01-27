@@ -110,7 +110,7 @@ export class TypeGuardGenerator {
       return {
         hoist: [
           typeAliasForArrayElement(nestedTypeName, typePath),
-          this.createTypeGuardFor(
+          this.createTypePredicateFor(
             guardName,
             nestedTypeName,
             type.element
@@ -219,7 +219,7 @@ export class TypeGuardGenerator {
           return {
             hoist: [
               typeAliasForObjectAttribute(nestedTypeName, typePath),
-              this.createTypeGuardFor(
+              this.createTypePredicateFor(
                 guardName,
                 nestedTypeName,
                 unsafeType
@@ -339,7 +339,7 @@ export class TypeGuardGenerator {
   /**
    * It's a method because it's suppored to call itself for referenced types.
    */
-  addRootTypeGuardFor(type: TypeModel): void {
+  addRootTypePredicateFor(type: TypeModel): void {
     this.ctx = {};
     const typeName = type.options.aliasName;
     this.ctx.rootTypeName = typeName;
@@ -384,8 +384,8 @@ export class TypeGuardGenerator {
     this.ctx = {};
   }
 
-  private createTypeGuardFor(
-    guardName: string,
+  private createTypePredicateFor(
+    predicateName: string,
     typeName: string,
     type: TypeModel
   ): ts.Statement {
@@ -400,7 +400,7 @@ export class TypeGuardGenerator {
       type
     );
 
-    return predicateFunction(root, guardName, typeName, [
+    return predicateFunction(root, predicateName, typeName, [
       // hoist to the top what's returned as hoist
       ...hoist,
       // then follow with the body statements

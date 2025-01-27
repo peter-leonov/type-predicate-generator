@@ -73,7 +73,7 @@ function processFile(typesPath: string, flags: Flags) {
 
     {
       for (const model of models) {
-        generator.addRootTypeGuardFor(model);
+        generator.addRootTypePredicateFor(model);
       }
 
       const predicateFileBody =
