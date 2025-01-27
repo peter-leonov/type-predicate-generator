@@ -63,7 +63,8 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(target.local_name, type),
+          ` check that \`${target.local_name}\` is of type ${type}`
         ),
       };
     } else if (type instanceof ArrayType) {
@@ -83,7 +84,11 @@ export class TypeGuardGenerator {
           ),
         ],
         body: ifNotReturnFalse(
-          assertionConditionForArrayType(target.local_name, guardName)
+          assertionConditionForArrayType(
+            target.local_name,
+            guardName
+          ),
+          ` check that \`${target.local_name}\` is an array of nested type ${nestedTypeName}`
         ),
       };
     } else if (type instanceof ObjectType) {
@@ -127,14 +132,18 @@ export class TypeGuardGenerator {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(target.local_name, type),
+          ` check that \`${target.local_name}\` is of primitive type \`${type}\``
         ),
       };
     } else if (type instanceof LiteralType) {
       return {
         hoist: [],
         body: ifNotReturnFalse(
-          this.assertionConditionForType(target.local_name, type)
+          this.assertionConditionForType(target.local_name, type),
+          ` check that \`${
+            target.local_name
+          }\` is of literal type ${JSON.stringify(type.value)}`
         ),
       };
     } else if (type instanceof UnionType) {
@@ -177,11 +186,11 @@ export class TypeGuardGenerator {
               ),
             ],
             body: ifNotReturnFalse(
-              // assertionConditionForArrayType(target.local_name, guardName)
               this.assertionConditionForUnionTypes(
                 target.local_name,
                 [...safeUnionTypes, referenceType]
-              )
+              ),
+              ` check that \`${target.local_name}\` is of nested type ${nestedTypeName}`
             ),
           };
         } else {
@@ -195,7 +204,10 @@ export class TypeGuardGenerator {
           this.assertionConditionForUnionTypes(
             target.local_name,
             type.types
-          )
+          ),
+          ` check that \`${target.local_name}\` is in the union of ${
+            type.types.length
+          } trivial type${type.types.length ? "s" : ""}`
         ),
       };
     }
@@ -571,21 +583,29 @@ function assertionConditionForArrayType(
 }
 
 function ifNotReturnFalse(
-  negatedCondition: ts.Expression
+  negatedCondition: ts.Expression,
+  comment: string
 ): ts.Statement[] {
-  return [
-    factory.createIfStatement(
-      factory.createPrefixUnaryExpression(
-        ts.SyntaxKind.ExclamationToken,
-        factory.createParenthesizedExpression(negatedCondition)
-      ),
-      factory.createBlock(
-        [factory.createReturnStatement(factory.createFalse())],
-        true
-      ),
-      undefined
+  const stmt = factory.createIfStatement(
+    factory.createPrefixUnaryExpression(
+      ts.SyntaxKind.ExclamationToken,
+      factory.createParenthesizedExpression(negatedCondition)
     ),
-  ];
+    factory.createBlock(
+      [factory.createReturnStatement(factory.createFalse())],
+      true
+    ),
+    undefined
+  );
+
+  ts.addSyntheticLeadingComment(
+    stmt,
+    ts.SyntaxKind.SingleLineCommentTrivia,
+    comment,
+    true
+  );
+
+  return [stmt];
 }
 
 function or(
@@ -892,14 +912,14 @@ function assertAreNotNever(targets: string[]): ts.Statement[] {
   if (first) {
     prependComment(
       first,
-      `
+      newMultiLineComment(`
   In TypeScript the \`never\` type is assignable to any other type,
   effectively turning it into an unsafe \`any\` type at assignment.
   The following ${
     targets.length ? "checks ensure" : "check ensures"
   } that none of the checked values got
   narrowed down to \`never\`.
-`
+`)
     );
   }
 
@@ -909,13 +929,16 @@ function assertAreNotNever(targets: string[]): ts.Statement[] {
 /**
  * A missing TS API method that prepends a new comment to a statement.
  */
-function prependComment(stmt: ts.Statement, comment: string) {
+function prependComment(
+  stmt: ts.Statement,
+  comment: ts.SynthesizedComment
+) {
   const comments = ts.getSyntheticLeadingComments(stmt) || [];
-  comments.unshift(newMultiLineComment(comment));
+  comments.unshift(comment);
   ts.setSyntheticLeadingComments(stmt, comments);
 }
 
-function newSynthesizedComment(text: string): ts.SynthesizedComment {
+function newSingleLineComment(text: string): ts.SynthesizedComment {
   return {
     kind: ts.SyntaxKind.SingleLineCommentTrivia,
     text,
