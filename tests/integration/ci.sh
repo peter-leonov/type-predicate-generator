@@ -2,10 +2,10 @@
 
 set -eux -o pipefail
 
-(
-  cd ../../generator
-  npm run build
-)
+# (
+#   cd ../../generator
+#   npm run build
+# )
 
 npm i --no-audit
 
