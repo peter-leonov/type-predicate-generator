@@ -18,6 +18,11 @@ export function isX(root: unknown): root is X {
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }

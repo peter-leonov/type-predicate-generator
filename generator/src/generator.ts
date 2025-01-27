@@ -919,17 +919,28 @@ function typeSafeCheckAssembly(
     value = factory.createIdentifier(target);
   }
 
-  return [
-    factory.createExpressionStatement(
-      factory.createSatisfiesExpression(
-        factory.createParenthesizedExpression(value),
-        factory.createTypeReferenceNode(
-          factory.createIdentifier(typeName),
-          undefined
-        )
+  const expr = factory.createExpressionStatement(
+    factory.createSatisfiesExpression(
+      factory.createParenthesizedExpression(value),
+      factory.createTypeReferenceNode(
+        factory.createIdentifier(typeName),
+        undefined
       )
-    ),
-  ];
+    )
+  );
+
+  ts.addSyntheticLeadingComment(
+    expr,
+    ts.SyntaxKind.MultiLineCommentTrivia,
+    `
+  Verify that all the predicates above narrowed all the types
+  down to the root type that is being checked by the predicate.
+  This is the key check that makes the whole type predicate safe.
+`,
+    true
+  );
+
+  return [expr];
 }
 
 function assertIsNotNever(target: string): ts.Statement {

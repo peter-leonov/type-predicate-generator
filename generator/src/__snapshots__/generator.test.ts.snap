@@ -16,6 +16,11 @@ exports[`array of a primitive type 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies XElement;
         return true;
     }
@@ -35,6 +40,11 @@ exports[`array of a primitive type 1`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -57,6 +67,11 @@ exports[`array of a primitive type union 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies XElement;
         return true;
     }
@@ -76,6 +91,11 @@ exports[`array of a primitive type union 1`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -113,6 +133,11 @@ exports[`array of an object type 1`] = `
         (a) satisfies never;
         // @ts-expect-error: should not be \`never\`
         (b) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         ({
             a,
             b
@@ -135,6 +160,11 @@ exports[`array of an object type 1`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -160,6 +190,11 @@ export function isX(root: unknown): root is X {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         ({}) satisfies XElement;
         return true;
     }
@@ -179,6 +214,11 @@ export function isX(root: unknown): root is X {
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -202,6 +242,11 @@ exports[`empty object 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({}) satisfies X;
     return true;
 }
@@ -226,6 +271,11 @@ export function isA(root: unknown): root is A {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies AElement;
         return true;
     }
@@ -245,6 +295,11 @@ export function isA(root: unknown): root is A {
     (isA) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isAElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies A;
     return true;
 }
@@ -263,6 +318,11 @@ export function isB(root: unknown): root is B {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies BElement;
         return true;
     }
@@ -282,6 +342,11 @@ export function isB(root: unknown): root is B {
     (isB) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isBElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies B;
     return true;
 }
@@ -300,6 +365,11 @@ export function isC(root: unknown): root is C {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies CElement;
         return true;
     }
@@ -319,6 +389,11 @@ export function isC(root: unknown): root is C {
     (isC) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isCElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies C;
     return true;
 }
@@ -337,6 +412,11 @@ export function isD(root: unknown): root is D {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies DElement;
         return true;
     }
@@ -356,6 +436,11 @@ export function isD(root: unknown): root is D {
     (isD) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isDElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies D;
     return true;
 }
@@ -382,6 +467,11 @@ exports[`nested arrays of a primitive type 1`] = `
                 */ 
                 // @ts-expect-error: should not be \`never\`
                 (root) satisfies never;
+                /*
+                  Verify that all the predicates above narrowed all the types
+                  down to the root type that is being checked by the predicate.
+                  This is the key check that makes the whole type predicate safe.
+                */
                 (root) satisfies XElementElementElement;
                 return true;
             }
@@ -399,6 +489,11 @@ exports[`nested arrays of a primitive type 1`] = `
             (root) satisfies never;
             // @ts-expect-error: should not be \`never\`
             (isXElementElementElement) satisfies never;
+            /*
+              Verify that all the predicates above narrowed all the types
+              down to the root type that is being checked by the predicate.
+              This is the key check that makes the whole type predicate safe.
+            */
             (root) satisfies XElementElement;
             return true;
         }
@@ -416,6 +511,11 @@ exports[`nested arrays of a primitive type 1`] = `
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
         (isXElementElement) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies XElement;
         return true;
     }
@@ -435,6 +535,11 @@ exports[`nested arrays of a primitive type 1`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -484,6 +589,11 @@ exports[`nested object 1`] = `
     (b) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (c) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         a: {
             b: {
@@ -517,6 +627,11 @@ exports[`null 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -560,6 +675,11 @@ exports[`object attributes should not collide on root 1`] = `
     (root__) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (__2) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         "€": _,
         "£": root__,
@@ -637,6 +757,11 @@ exports[`object nested attributes should not collide on root 1`] = `
     (a_b__) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (root_a_b__) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         "€": _,
         a: {
@@ -678,6 +803,11 @@ exports[`object with non-identificator-like names 1`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (with_two_spaces) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         "with two spaces": with_two_spaces
     }) satisfies X;
@@ -711,6 +841,11 @@ exports[`object with non-identificator-like names 2`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (_1starts_with_a_number) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         "1starts_with_a_number": _1starts_with_a_number
     }) satisfies X;
@@ -744,6 +879,11 @@ exports[`object with non-identificator-like names 3`] = `
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (__starts_with_a_unicode) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         "∞_starts_with_a_unicode": __starts_with_a_unicode
     }) satisfies X;
@@ -789,6 +929,11 @@ exports[`object with primitive types 1`] = `
     (b) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (c) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         a,
         b,
@@ -817,6 +962,11 @@ export function isX(root: unknown): root is X {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies XElement;
         return true;
     }
@@ -836,6 +986,11 @@ export function isX(root: unknown): root is X {
     (isX) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isXElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -860,6 +1015,11 @@ export function isX(root: unknown): root is X {
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({}) satisfies X;
     return true;
 }
@@ -882,6 +1042,11 @@ exports[`reference type in a union 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -919,6 +1084,11 @@ exports[`reference type in an object 1`] = `
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (b) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         a,
         b
@@ -950,6 +1120,11 @@ export function isX(root: unknown): root is X {
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies AElement;
         return true;
     }
@@ -978,6 +1153,11 @@ export function isX(root: unknown): root is X {
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isAElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         a
     }) satisfies X;
@@ -1016,6 +1196,11 @@ export function isX(root: unknown): root is X {
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
         (b) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         ({
             b
         }) satisfies ObjectInA;
@@ -1046,6 +1231,11 @@ export function isX(root: unknown): root is X {
     (a) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isObjectInA) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         a
     }) satisfies X;
@@ -1072,6 +1262,11 @@ export function isX(root: unknown): root is X {
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({}) satisfies X;
     return true;
 }
@@ -1094,6 +1289,11 @@ exports[`two arrays of a primitive type 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies AElement;
         return true;
     }
@@ -1111,6 +1311,11 @@ exports[`two arrays of a primitive type 1`] = `
         */ 
         // @ts-expect-error: should not be \`never\`
         (root) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         (root) satisfies BElement;
         return true;
     }
@@ -1147,6 +1352,11 @@ exports[`two arrays of a primitive type 1`] = `
     (isAElement) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isBElement) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     ({
         a,
         b
@@ -1172,6 +1382,11 @@ exports[`undefined 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -1194,6 +1409,11 @@ exports[`union of literal types 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -1216,6 +1436,11 @@ exports[`union of mixed safe types 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies X;
     return true;
 }
@@ -1247,6 +1472,11 @@ exports[`union of object and safe union types 1`] = `
         (root) satisfies never;
         // @ts-expect-error: should not be \`never\`
         (a) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
         ({
             a
         }) satisfies ObjectInUnion;
@@ -1268,6 +1498,11 @@ exports[`union of object and safe union types 1`] = `
     (isUnion) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isObjectInUnion) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies Union;
     return true;
 }
@@ -1290,6 +1525,11 @@ exports[`union of primitive and literal types 1`] = `
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isUnion) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
     (root) satisfies Union;
     return true;
 }
