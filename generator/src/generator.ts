@@ -113,7 +113,10 @@ export class TypeGuardGenerator {
       const attrs = entries.map(([local, _]) => local);
       const hoists: ts.Statement[] = [];
       const bodies: ts.Statement[] = [
-        ...assertIsObject(target.local_name),
+        ...ifNotReturnFalse(
+          assertIsObject(target.local_name),
+          ` check that \`${targetPathStr}\` is an object`
+        ),
         ...objectSpread(
           target.local_name,
           attrs,
@@ -652,42 +655,22 @@ function parens(e: ts.Expression): ts.Expression {
   return factory.createParenthesizedExpression(e);
 }
 
-function assertIsObject(target: string): ts.Statement[] {
-  return [
-    factory.createIfStatement(
-      factory.createPrefixUnaryExpression(
-        ts.SyntaxKind.ExclamationToken,
-        factory.createParenthesizedExpression(
-          factory.createBinaryExpression(
-            factory.createBinaryExpression(
-              factory.createTypeOfExpression(
-                factory.createIdentifier(target)
-              ),
-              factory.createToken(
-                ts.SyntaxKind.EqualsEqualsEqualsToken
-              ),
-              factory.createStringLiteral("object")
-            ),
-            factory.createToken(
-              ts.SyntaxKind.AmpersandAmpersandToken
-            ),
-            factory.createBinaryExpression(
-              factory.createIdentifier(target),
-              factory.createToken(
-                ts.SyntaxKind.ExclamationEqualsEqualsToken
-              ),
-              factory.createNull()
-            )
-          )
-        )
+function assertIsObject(target: string): ts.Expression {
+  return factory.createBinaryExpression(
+    factory.createBinaryExpression(
+      factory.createTypeOfExpression(
+        factory.createIdentifier(target)
       ),
-      factory.createBlock(
-        [factory.createReturnStatement(factory.createFalse())],
-        true
-      ),
-      undefined
+      factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+      factory.createStringLiteral("object")
     ),
-  ];
+    factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+    factory.createBinaryExpression(
+      factory.createIdentifier(target),
+      factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+      factory.createNull()
+    )
+  );
 }
 
 function objectSpread(

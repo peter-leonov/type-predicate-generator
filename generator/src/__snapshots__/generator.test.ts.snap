@@ -86,6 +86,7 @@ exports[`array of an object type 1`] = `
 "export function isX(root: unknown): root is X {
     type XElement = X[number];
     function isXElement(root: unknown): root is XElement {
+        // check that \`root\` is an object
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
@@ -145,6 +146,7 @@ const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isX(root: unknown): root is X {
     type XElement = X[number];
     function isXElement(root: unknown): root is XElement {
+        // check that \`root\` is an object
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
@@ -184,6 +186,7 @@ export function isX(root: unknown): root is X {
 
 exports[`empty object 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -439,16 +442,19 @@ exports[`nested arrays of a primitive type 1`] = `
 
 exports[`nested object 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
     (root) satisfies {};
     const { a }: SafeShallowShape<X> = root;
+    // check that \`root.a\` is an object
     if (!(typeof a === "object" && a !== null)) {
         return false;
     }
     (a) satisfies {};
     const { b }: SafeShallowShape<X["a"]> = a;
+    // check that \`root.a.b\` is an object
     if (!(typeof b === "object" && b !== null)) {
         return false;
     }
@@ -515,6 +521,7 @@ exports[`null 1`] = `
 
 exports[`object attributes should not collide on root 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -560,6 +567,7 @@ exports[`object attributes should not collide on root 1`] = `
 
 exports[`object nested attributes should not collide on root 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -569,6 +577,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(_ === 1)) {
         return false;
     }
+    // check that \`root.a\` is an object
     if (!(typeof a === "object" && a !== null)) {
         return false;
     }
@@ -578,6 +587,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(a__ === 2)) {
         return false;
     }
+    // check that \`root.a.b\` is an object
     if (!(typeof b === "object" && b !== null)) {
         return false;
     }
@@ -637,6 +647,7 @@ exports[`object nested attributes should not collide on root 1`] = `
 
 exports[`object with non-identificator-like names 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -668,6 +679,7 @@ exports[`object with non-identificator-like names 1`] = `
 
 exports[`object with non-identificator-like names 2`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -699,6 +711,7 @@ exports[`object with non-identificator-like names 2`] = `
 
 exports[`object with non-identificator-like names 3`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -730,6 +743,7 @@ exports[`object with non-identificator-like names 3`] = `
 
 exports[`object with primitive types 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -819,6 +833,7 @@ export function isX(root: unknown): root is X {
 exports[`only object 1`] = `
 "import { type X } from "./guards.ts";
 export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -863,6 +878,7 @@ exports[`reference type in a union 1`] = `
 
 exports[`reference type in an object 1`] = `
 "export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -923,6 +939,7 @@ export function isX(root: unknown): root is X {
         (root) satisfies AElement;
         return true;
     }
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -962,6 +979,7 @@ type SafeShallowShape<Type extends {}> = {
 export function isX(root: unknown): root is X {
     type ObjectInA = Extract<X["a"], object>;
     function isObjectInA(root: unknown): root is ObjectInA {
+        // check that \`root\` is an object
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
@@ -986,6 +1004,7 @@ export function isX(root: unknown): root is X {
         }) satisfies ObjectInA;
         return true;
     }
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -1020,6 +1039,7 @@ export function isX(root: unknown): root is X {
 exports[`regression: empty object does not use SafeShallowShape 1`] = `
 "import { type X } from "./guards.ts";
 export function isX(root: unknown): root is X {
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -1076,6 +1096,7 @@ exports[`two arrays of a primitive type 1`] = `
         (root) satisfies BElement;
         return true;
     }
+    // check that \`root\` is an object
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
@@ -1186,6 +1207,7 @@ exports[`union of object and safe union types 1`] = `
 "export function isUnion(root: unknown): root is Union {
     type ObjectInUnion = Extract<Union, object>;
     function isObjectInUnion(root: unknown): root is ObjectInUnion {
+        // check that \`root\` is an object
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
