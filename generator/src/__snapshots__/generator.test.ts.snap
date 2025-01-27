@@ -1228,6 +1228,79 @@ export function isX(root: unknown): root is X {
 "
 `;
 
+exports[`regression: object with a nested type of the same name 1`] = `
+"export function isObjectInX(root: unknown): root is ObjectInX {
+    type ObjectInX_ObjectInX = Extract<ObjectInX["X"], object>;
+    function isObjectInX_ObjectInX(root: unknown): root is ObjectInX_ObjectInX {
+        // check that \`root\` is an object
+        if (!(typeof root === "object" && root !== null)) {
+            return false;
+        }
+        (root) satisfies {};
+        // safely get all the attributes from \`root\` as \`unknown\`s
+        const { self }: SafeShallowShape<ObjectInX_ObjectInX> = root;
+        // check that \`root.self\` is of type ObjectInX
+        if (!(isObjectInX(self))) {
+            return false;
+        }
+        /*
+          In TypeScript the \`never\` type is assignable to any other type,
+          effectively turning it into an unsafe \`any\` type at assignment.
+          The following checks ensure that none of the checked values got
+          narrowed down to \`never\`.
+        */ 
+        // @ts-expect-error: should not be \`never\`
+        (root) satisfies never;
+        // @ts-expect-error: should not be \`never\`
+        (self) satisfies never;
+        /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
+        ({
+            self
+        }) satisfies ObjectInX_ObjectInX;
+        return true;
+    }
+    // check that \`root\` is an object
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    // safely get all the attributes from \`root\` as \`unknown\`s
+    const { X }: SafeShallowShape<ObjectInX> = root;
+    // check that \`root.X\` is of nested type ObjectInX_ObjectInX
+    if (!((X === 1) || (isObjectInX_ObjectInX(X)))) {
+        return false;
+    }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isObjectInX) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (X) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isObjectInX_ObjectInX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
+    ({
+        X
+    }) satisfies ObjectInX;
+    return true;
+}
+"
+`;
+
 exports[`two arrays of a primitive type 1`] = `
 "export function isX(root: unknown): root is X {
     type AElement = X["a"][number];

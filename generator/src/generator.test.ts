@@ -212,6 +212,25 @@ test("object with non-identificator-like names", () => {
   ).toMatchSnapshot();
 });
 
+test("regression: object with a nested type of the same name", () => {
+  expect(
+    generate(
+      new ObjectType(
+        { aliasName: "ObjectInX" },
+        {
+          X: new UnionType({}, [
+            new LiteralType({}, 1),
+            new ObjectType(
+              {},
+              { self: new AliasType({}, "ObjectInX") }
+            ),
+          ]),
+        }
+      )
+    )
+  ).toMatchSnapshot();
+});
+
 test("object attributes should not collide on root", () => {
   expect(
     generate(

@@ -344,11 +344,15 @@ export class TypeGuardGenerator {
     const typeName = type.options.aliasName;
     this.ctx.rootTypeName = typeName;
     assert(typeName, "the root type must have an alias name");
+    this.typeScope.addTypeName(typeName);
 
     const root = "root";
     const scope = new Scope();
     const rootLocal = scope.createAttribute([], root);
 
+    // The root predicate has to be in its own scope to allow
+    // for a recursive type to reference itself and not some
+    // other same named nested type.
     const predicateName = scope.newLocalName([], `is${typeName}`);
 
     const { hoist, body } = this.getAssertionsForLocalVar(

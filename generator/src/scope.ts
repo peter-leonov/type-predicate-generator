@@ -1,3 +1,5 @@
+import { assert } from "./helpers";
+
 export class AttributeLocal {
   readonly local_name: string;
   readonly attribute_name: string;
@@ -111,6 +113,19 @@ export class TypeScope {
   constructor() {
     this.id = ++scopeID;
     this.#type_names = new Set();
+  }
+
+  /**
+   * Add a name that is known to exist in the type scope.
+   * This is mostly the imported types we're making predicates
+   * for.
+   */
+  addTypeName(typeName: string) {
+    assert(
+      !this.#type_names.has(typeName),
+      "adding the same type name twice is a logic error"
+    );
+    this.#type_names.add(typeName);
   }
 
   newTypeName(path: string[], proposal: string): string {
