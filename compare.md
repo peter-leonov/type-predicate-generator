@@ -2,7 +2,7 @@
 
 tl;dr; it's as type safe at it gets, generates static files with code for maximum compatibility, fast in many ways because it's AOT and tiny, and comes with a handy unit test generator to be ~100% sure the produced predicates work as expected.
 
-This document goes into a rather deep comparison of Generator to other runtime type checkers, giving also a broader overview of the related topics. It's turning into a more analytical than "hey, my X is cooler than Y" article with each interation.
+This document goes into a rather deep comparison of Generator to other runtime type checkers, giving also a broader overview of the related topics. It's turning into a more analytical than "hey, my X is cooler than Y" article with each iteration.
 
 ## Preamble
 
@@ -44,9 +44,9 @@ First and foremost, my sincere respect to all the tool makers, and especially to
 
 ## Comparing to the pure runtime checkers
 
-The most popular library in this category is the infamous [zod](https://zod.dev).
+The most popular library in this category is the infamous [Zod](https://zod.dev).
 
-Type checkers in this category use only the code that the JavaScript engine runs within an application. No type information is used inside of this class of libraries. Some of them use `eval` to turn a schema into JS code at runtime, some like `zod` use pure function composition.
+Type checkers in this category use only the code that the JavaScript engine runs within an application. No type information is used inside of this class of libraries. Some of them use `eval` to turn a schema into JS code at runtime, some like Zod use pure function composition.
 
 The main benefits of this approach is ease of use and flexibility of expressible rules (it's built with turing complete JS after all). It is also relatively easier to evolve as it's just JS/TS without the heavylifting of interfacing with the TypeScript API.
 
@@ -58,13 +58,13 @@ Check out the [benchmark results](https://github.com/peter-leonov/type-predicate
 
 The main reason is that Generator produces specialized code that is easy for all the modern JS engines to optimize. Each type predicate function consists of trivial instructions (like `typeof x === "string"` and `x === "constant"`) that in most cases don't even call any other functions and never any external or shared functions. JIT JavaScript engines like when code types are local and when for each distinct type there is a separate small function. This helps JS engines to specialize these small functions in runtime. See [this amazing article](https://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html#:~:text=stands%20in%20the%20way%20of%20inlining) for more details on how V8 deals with polymorphic functions.
 
-Pure runtime checkers like `zod` instead use function composition. In this case, basic building block functions (like `hasProperty(object, propertyName)`) get reused with values of different types and thus different [hidden classes](https://v8.dev/docs/hidden-classes). This leads to frequent [deoptimizations](https://github.com/P0lip/v8-deoptimize-reasons) (falling back to the slower non-optimized byte code instead of the faster native code). In the most severe cases, the JIT compiler might [oscillate between optimizing and then deoptimizing](https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/#:~:text=If%20you%20have%20code%20that%20keeps%20getting%20optimized%20and%20then%20deoptimized%2C%20it%20ends%20up%20being%20slower%20than%20just%20executing%20the%20baseline%20compiled%20version.) a code path for one type and then another, spending a lot of cycles in just compiling the code instead of actually running it.
+Pure runtime checkers like Zod instead use function composition. In this case, basic building block functions (like `hasProperty(object, propertyName)`) get reused with values of different types and thus different [hidden classes](https://v8.dev/docs/hidden-classes). This leads to frequent [deoptimizations](https://github.com/P0lip/v8-deoptimize-reasons) (falling back to the slower non-optimized byte code instead of the faster native code). In the most severe cases, the JIT compiler might [oscillate between optimizing and then deoptimizing](https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/#:~:text=If%20you%20have%20code%20that%20keeps%20getting%20optimized%20and%20then%20deoptimized%2C%20it%20ends%20up%20being%20slower%20than%20just%20executing%20the%20baseline%20compiled%20version.) a code path for one type and then another, spending a lot of cycles in just compiling the code instead of actually running it.
 
 ### Generator does not have any runtime dependencies
 
 The code that gets into the bundle is the exact code you see in the `git diff` output in your project after generating the type predicates. The only other code the predicate uses is the built-ins like `Array.isArray()` ([safely wrapped](https://github.com/peter-leonov/type-predicate-generator/blob/42d725c113cc778b9b742e5f2736cba4c52ca866/generator/src/generator.ts#L461)!). This means that the bundle real estate Generator uses for the predicates stays minimal. It grows linearly with the size of types. The net amount of code used to define a Zod type is comparable to the size of an average predicate after minification.
 
-Purely runtime type checkers by design are a runtime dependency. They require the runtime library of matchers to be included in the resulting bundle. Most of the libraries use handy constructors that are flexible enough to allow most of the checks a general API would need. This is great, but also affects the bundle size ([60+ KB](https://bundlephobia.com/package/zod@3.24.1) for `zod`) because the more generalized matchers cannot be tree-shaked statically (here is [an interesting attempt](https://dev.to/mizchi/lizod-spiritual-successor-of-zod-less-than-1kb-4i67) on dealing with the bundle size).
+Purely runtime type checkers by design are a runtime dependency. They require the runtime library of matchers to be included in the resulting bundle. Most of the libraries use handy constructors that are flexible enough to allow most of the checks a general API would need. This is great, but also affects the bundle size ([60+ KB](https://bundlephobia.com/package/zod@3.24.1) for Zod) because the more generalized matchers cannot be tree-shaked statically (here is [an interesting attempt](https://dev.to/mizchi/lizod-spiritual-successor-of-zod-less-than-1kb-4i67) on dealing with the bundle size).
 
 Another emerging issue with the runtime-only complex libraries that are used in performance and availability-critical parts of the application is compile-time compatibility with the [WinterCG](https://wintercg.org) runtimes. Heavy runtime libraries tend to target feature-rich runtimes like Node and throw in runtime for corner cases like error message generation, requiring more testing. This is not an issue if you're on a widely supported platform like Node or the latest browsers, but if you're investing in, say, [Wasmer Edge](https://www.secondstate.io/articles/run-javascript-in-webassembly-with-wasmedge/), adding a seemingly trivial dependency might turn into turmoil.
 
@@ -95,7 +95,7 @@ const isNumberOK: (x: unknown) => x is number = (x) => {
 
 Test it for yourself in [TS Playground](https://www.typescriptlang.org/play/?ts=5.7.3#code/MYewdgzgLgBAlhAcgVwLYCMCmAnAot7EbALhgAoAPU5MAazBAHcwBKGAXgD4YL4IYwaLNg7kKbLjADeAKBjyY2TFGTYwMKNmSYZAXxkzQkWAhQYcAeQDSpStToNmE7rwQChOUZWfS5CpSpqGgCeAA6YIABmPBzs7DAARILm2Al6MkA). This is a step in the right direction, but don't expect TS to soon turn into a [theory proving engine](https://en.wikipedia.org/wiki/Automated_theorem_proving) to just cover the type predicate strictness. It's way easier to prove that a predicate is valid for a smaller subset of operators, this is sort of what Generator is internally, so maybe one day.
 
-Of course, the production-ready libraries like `zod` use TypeScript internally to check the library's code correctness and provide utility functions to infer types from the runtime building blocks. This helps with improving the code reliability by far compared to some purely JavaScript libraries. But even this still does not let the `tsc` of your project verify the final code correctness on its own. There is always some wrapping/linking/helping code that cannot be verified.
+Of course, the production-ready libraries like Zod use TypeScript internally to check the library's code correctness and provide utility functions to infer types from the runtime building blocks. This helps with improving the code reliability by far compared to some purely JavaScript libraries. But even this still does not let the `tsc` of your project verify the final code correctness on its own. There is always some wrapping/linking/helping code that cannot be verified.
 
 ### Generator produces code that is readable and modifiable
 
@@ -135,7 +135,7 @@ A runtime library in most cases would produce a stack trace with minified symbol
 
 Generator's code is trivial to navigate to through every IDE's "goto definition" feature. The hover types are also just the exact types used in your application, no added wrappers or renaming. Plus, the actual code of the type predicate is available a click away in case you'd need to modify it.
 
-In the case of `zod`, you'd see the inferred types that cannot have other neat features like type-level JSDoc (property-level JSDoc [works though](https://github.com/colinhacks/zod/issues/200#issuecomment-1198922371)) or type-level generics (runtime workaround [exists](https://spin.atomicobject.com/typed-generic-validator/) but requires some effort).
+In the case of Zod, you'd see the inferred types that cannot have other neat features like type-level JSDoc (property-level JSDoc [works though](https://github.com/colinhacks/zod/issues/200#issuecomment-1198922371)) or type-level generics (runtime workaround [exists](https://spin.atomicobject.com/typed-generic-validator/) but requires some effort).
 
 ### Generator produces code that is easy to review
 
