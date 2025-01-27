@@ -1,5 +1,5 @@
 import { expect, describe, it } from "vitest";
-import { isUser } from "./example_guards";
+import { isUser } from "./types_guards";
 const invalidValue: any = Symbol("invalidValue");
 const valid_User = [
   { id: 0, login: "", email: undefined, address: undefined },

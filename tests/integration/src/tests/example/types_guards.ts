@@ -1,4 +1,4 @@
-import { type User } from "./example";
+import { type User } from "./types";
 // used to safely get all the object attributes as `unknown`s
 type SafeShallowShape<Type extends {}> = {
   [_ in keyof Type]?: unknown;
