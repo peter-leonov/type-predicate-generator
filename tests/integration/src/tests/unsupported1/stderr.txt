@@ -1,4 +1,4 @@
-While processing file: ./src/unsupported1.ts
+While processing file: src/tests/unsupported1/types.ts
 Generation error
 
 The Generator stumbled upon something that does not fit.
