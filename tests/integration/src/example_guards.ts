@@ -5,6 +5,7 @@ type SafeShallowShape<Type extends {}> = {
 export function isUser(root: unknown): root is User {
   type ObjectInAddress = Extract<User["address"], object>;
   function isObjectInAddress(root: unknown): root is ObjectInAddress {
+    // check that `root` is an object
     if (!(typeof root === "object" && root !== null)) {
       return false;
     }
@@ -36,6 +37,7 @@ export function isUser(root: unknown): root is User {
     }) satisfies ObjectInAddress;
     return true;
   }
+  // check that `root` is an object
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }

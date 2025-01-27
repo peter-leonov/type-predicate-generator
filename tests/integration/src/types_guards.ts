@@ -9,6 +9,7 @@ type SafeShallowShape<Type extends {}> = {
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isExternalType(root: unknown): root is ExternalType {
+  // check that `root` is an object
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
@@ -43,6 +44,7 @@ export function isExternalType(root: unknown): root is ExternalType {
   return true;
 }
 export function isUser(root: unknown): root is User {
+  // check that `root` is an object
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
@@ -56,6 +58,7 @@ export function isUser(root: unknown): root is User {
   if (!(typeof login === "string")) {
     return false;
   }
+  // check that `root.bio` is an object
   if (!(typeof bio === "object" && bio !== null)) {
     return false;
   }
@@ -107,8 +110,8 @@ export function isUser(root: unknown): root is User {
   return true;
 }
 export function isPost(root: unknown): root is Post {
-  type Element = Post["more"][number];
-  function isElement(root: unknown): root is Element {
+  type MoreElement = Post["more"][number];
+  function isMoreElement(root: unknown): root is MoreElement {
     // check that `root` is in the union of 2 trivial types
     if (!(typeof root === "string" || typeof root === "number")) {
       return false;
@@ -121,9 +124,10 @@ export function isPost(root: unknown): root is Post {
         */
     // @ts-expect-error: should not be `never`
     root satisfies never;
-    root satisfies Element;
+    root satisfies MoreElement;
     return true;
   }
+  // check that `root` is an object
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
@@ -150,8 +154,8 @@ export function isPost(root: unknown): root is Post {
   if (!isUser(author)) {
     return false;
   }
-  // check that `root.more` is an array of nested type `Element` (`Post["more"]`)
-  if (!(safeIsArray(more) && more.every(isElement))) {
+  // check that `root.more` is an array of nested type `MoreElement` (`Post["more"]`)
+  if (!(safeIsArray(more) && more.every(isMoreElement))) {
     return false;
   }
   /*
@@ -177,7 +181,7 @@ export function isPost(root: unknown): root is Post {
   // @ts-expect-error: should not be `never`
   more satisfies never;
   // @ts-expect-error: should not be `never`
-  isElement satisfies never;
+  isMoreElement satisfies never;
   ({
     title,
     text,
@@ -191,6 +195,7 @@ export function isPost(root: unknown): root is Post {
 export function isHugeOnCombinations(
   root: unknown,
 ): root is HugeOnCombinations {
+  // check that `root` is an object
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
