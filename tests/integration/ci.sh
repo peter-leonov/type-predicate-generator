@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "to update unit tests that might require manual fixing run with --unitTests"
+
 set -eux -o pipefail
 
 # (
@@ -15,8 +17,7 @@ for test in src/tests/*; do
   echo "running $test"
   rm -rf "${test}/types_guards.ts" "${test}/types_guards.min.js" "${test}/status.ts" "${test}/stdout.txt" "${test}/stderr.txt"
 
-  # to update unit tests that might require manual fixing add --unitTests
-  if npx type-predicate-generator "${test}/types.ts" 1>"${test}/stdout.txt" 2>"${test}/stderr.txt"; then
+  if npx type-predicate-generator "$@" "${test}/types.ts" 1>"${test}/stdout.txt" 2>"${test}/stderr.txt"; then
     echo "$?" > "${test}/status.ts"
   else
     echo "$?" > "${test}/status.ts"
