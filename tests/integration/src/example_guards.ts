@@ -1,4 +1,5 @@
 import { type User } from "./example";
+// used to safely get all the object attributes as `unknown`s
 type SafeShallowShape<Type extends {}> = {
   [_ in keyof Type]?: unknown;
 };
@@ -10,6 +11,7 @@ export function isUser(root: unknown): root is User {
       return false;
     }
     root satisfies {};
+    // safely get all the attributes from `root` as `unknown`s
     const { street, house }: SafeShallowShape<ObjectInAddress> = root;
     // check that `root.street` is of primitive type `string`
     if (!(typeof street === "string")) {
@@ -42,6 +44,7 @@ export function isUser(root: unknown): root is User {
     return false;
   }
   root satisfies {};
+  // safely get all the attributes from `root` as `unknown`s
   const { id, login, email, address }: SafeShallowShape<User> = root;
   // check that `root.id` is of primitive type `number`
   if (!(typeof id === "number")) {

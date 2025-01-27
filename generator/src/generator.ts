@@ -539,39 +539,46 @@ function getSafeIsArray(): ts.Statement {
  * ```
  */
 function getTypeSafeShallowShape(): ts.Statement[] {
-  return [
-    factory.createTypeAliasDeclaration(
-      undefined,
-      factory.createIdentifier(SafeShallowShape),
-      [
-        factory.createTypeParameterDeclaration(
-          undefined,
-          factory.createIdentifier("Type"),
-          factory.createTypeLiteralNode([]),
-          undefined
-        ),
-      ],
-      factory.createMappedTypeNode(
+  const stmt = factory.createTypeAliasDeclaration(
+    undefined,
+    factory.createIdentifier(SafeShallowShape),
+    [
+      factory.createTypeParameterDeclaration(
         undefined,
-        factory.createTypeParameterDeclaration(
-          undefined,
-          factory.createIdentifier("_"),
-          factory.createTypeOperatorNode(
-            ts.SyntaxKind.KeyOfKeyword,
-            factory.createTypeReferenceNode(
-              factory.createIdentifier("Type"),
-              undefined
-            )
-          ),
-          undefined
-        ),
-        undefined,
-        factory.createToken(ts.SyntaxKind.QuestionToken),
-        factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+        factory.createIdentifier("Type"),
+        factory.createTypeLiteralNode([]),
         undefined
-      )
-    ),
-  ];
+      ),
+    ],
+    factory.createMappedTypeNode(
+      undefined,
+      factory.createTypeParameterDeclaration(
+        undefined,
+        factory.createIdentifier("_"),
+        factory.createTypeOperatorNode(
+          ts.SyntaxKind.KeyOfKeyword,
+          factory.createTypeReferenceNode(
+            factory.createIdentifier("Type"),
+            undefined
+          )
+        ),
+        undefined
+      ),
+      undefined,
+      factory.createToken(ts.SyntaxKind.QuestionToken),
+      factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+      undefined
+    )
+  );
+
+  ts.addSyntheticLeadingComment(
+    stmt,
+    ts.SyntaxKind.SingleLineCommentTrivia,
+    " used to safely get all the object attributes as `unknown`s",
+    true
+  );
+
+  return [stmt];
 }
 
 function assertionConditionForArrayType(
@@ -728,7 +735,7 @@ function objectSpread(
   ts.addSyntheticLeadingComment(
     stmt,
     ts.SyntaxKind.SingleLineCommentTrivia,
-    ` safely get all the attributes from \`${pathStr}\``,
+    ` safely get all the attributes from \`${pathStr}\` as \`unknown\`s`,
     true
   );
 
