@@ -102,6 +102,33 @@ exports[`array of a primitive type union 1`] = `
 "
 `;
 
+exports[`array of an alias type 1`] = `
+"export function isX(root: unknown): root is X {
+    // check that \`root\` is an array of type \`Y\`
+    if (!(safeIsArray(root) && root.every(isY))) {
+        return false;
+    }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (isX) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
+    (root) satisfies X;
+    return true;
+}
+"
+`;
+
 exports[`array of an object type 1`] = `
 "export function isX(root: unknown): root is X {
     type XElement = X[number];
@@ -257,30 +284,8 @@ exports[`multiple reference types 1`] = `
 "import { type A, type B, type C, type D } from "./guards.ts";
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
 export function isA(root: unknown): root is A {
-    type AElement = A[number];
-    function isAElement(root: unknown): root is AElement {
-        // check that \`root\` is of type B
-        if (!(isB(root))) {
-            return false;
-        }
-        /*
-          In TypeScript the \`never\` type is assignable to any other type,
-          effectively turning it into an unsafe \`any\` type at assignment.
-          The following checks ensure that none of the checked values got
-          narrowed down to \`never\`.
-        */ 
-        // @ts-expect-error: should not be \`never\`
-        (root) satisfies never;
-        /*
-          Verify that all the predicates above narrowed all the types
-          down to the root type that is being checked by the predicate.
-          This is the key check that makes the whole type predicate safe.
-        */
-        (root) satisfies AElement;
-        return true;
-    }
-    // check that \`root\` is an array of nested type \`AElement\` (\`A\`)
-    if (!(safeIsArray(root) && root.every(isAElement))) {
+    // check that \`root\` is an array of type \`B\`
+    if (!(safeIsArray(root) && root.every(isB))) {
         return false;
     }
     /*
@@ -293,8 +298,6 @@ export function isA(root: unknown): root is A {
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isA) satisfies never;
-    // @ts-expect-error: should not be \`never\`
-    (isAElement) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -304,30 +307,8 @@ export function isA(root: unknown): root is A {
     return true;
 }
 export function isB(root: unknown): root is B {
-    type BElement = B[number];
-    function isBElement(root: unknown): root is BElement {
-        // check that \`root\` is of type C
-        if (!(isC(root))) {
-            return false;
-        }
-        /*
-          In TypeScript the \`never\` type is assignable to any other type,
-          effectively turning it into an unsafe \`any\` type at assignment.
-          The following checks ensure that none of the checked values got
-          narrowed down to \`never\`.
-        */ 
-        // @ts-expect-error: should not be \`never\`
-        (root) satisfies never;
-        /*
-          Verify that all the predicates above narrowed all the types
-          down to the root type that is being checked by the predicate.
-          This is the key check that makes the whole type predicate safe.
-        */
-        (root) satisfies BElement;
-        return true;
-    }
-    // check that \`root\` is an array of nested type \`BElement\` (\`B\`)
-    if (!(safeIsArray(root) && root.every(isBElement))) {
+    // check that \`root\` is an array of type \`C\`
+    if (!(safeIsArray(root) && root.every(isC))) {
         return false;
     }
     /*
@@ -340,8 +321,6 @@ export function isB(root: unknown): root is B {
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isB) satisfies never;
-    // @ts-expect-error: should not be \`never\`
-    (isBElement) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.
@@ -351,30 +330,8 @@ export function isB(root: unknown): root is B {
     return true;
 }
 export function isC(root: unknown): root is C {
-    type CElement = C[number];
-    function isCElement(root: unknown): root is CElement {
-        // check that \`root\` is of type D
-        if (!(isD(root))) {
-            return false;
-        }
-        /*
-          In TypeScript the \`never\` type is assignable to any other type,
-          effectively turning it into an unsafe \`any\` type at assignment.
-          The following checks ensure that none of the checked values got
-          narrowed down to \`never\`.
-        */ 
-        // @ts-expect-error: should not be \`never\`
-        (root) satisfies never;
-        /*
-          Verify that all the predicates above narrowed all the types
-          down to the root type that is being checked by the predicate.
-          This is the key check that makes the whole type predicate safe.
-        */
-        (root) satisfies CElement;
-        return true;
-    }
-    // check that \`root\` is an array of nested type \`CElement\` (\`C\`)
-    if (!(safeIsArray(root) && root.every(isCElement))) {
+    // check that \`root\` is an array of type \`D\`
+    if (!(safeIsArray(root) && root.every(isD))) {
         return false;
     }
     /*
@@ -387,8 +344,6 @@ export function isC(root: unknown): root is C {
     (root) satisfies never;
     // @ts-expect-error: should not be \`never\`
     (isC) satisfies never;
-    // @ts-expect-error: should not be \`never\`
-    (isCElement) satisfies never;
     /*
       Verify that all the predicates above narrowed all the types
       down to the root type that is being checked by the predicate.

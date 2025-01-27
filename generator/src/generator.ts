@@ -76,6 +76,32 @@ export class TypeGuardGenerator {
       };
     } else if (type instanceof ArrayType) {
       this.needsSafeIsArray = true;
+
+      const elementType = type.element;
+      // Special case when the array element is of a type that is
+      // going to have it's own dedicated predicate. This removes
+      // the unneeded extra indirection and makes the resulting
+      // code faster and clearer.
+      if (elementType instanceof AliasType) {
+        const rootTypeName = this.ctx.rootTypeName;
+        assert(rootTypeName, "the root type name is always known");
+        this.referencedTypes.push({
+          referencedFrom: rootTypeName,
+          referencedTypeName: elementType.name,
+        });
+
+        return {
+          hoist: [],
+          body: ifNotReturnFalse(
+            assertionConditionForArrayType(
+              target.local_name,
+              `is${elementType.name}`
+            ),
+            ` check that \`${targetPathStr}\` is an array of type \`${elementType.name}\``
+          ),
+        };
+      }
+
       const nestedTypeName = this.typeScope.newTypeName(
         typePath.map(capitalize),
         `${capitalize(typePath.at(-1) || "")}Element`

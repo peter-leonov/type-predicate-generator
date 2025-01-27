@@ -324,6 +324,14 @@ test("nested arrays of a primitive type", () => {
   ).toMatchSnapshot();
 });
 
+test("array of an alias type", () => {
+  expect(
+    generate(
+      new ArrayType({ aliasName: "X" }, new AliasType({}, "Y"))
+    )
+  ).toMatchSnapshot();
+});
+
 test("no models", () => {
   expect(generateAll([])).toMatchSnapshot();
 });
