@@ -91,6 +91,7 @@ exports[`array of an object type 1`] = `
             return false;
         }
         (root) satisfies {};
+        // safely get all the attributes from \`root\`
         const { a, b }: SafeShallowShape<XElement> = root;
         // check that \`root.a\` is of primitive type \`number\`
         if (!(typeof a === "number")) {
@@ -447,18 +448,21 @@ exports[`nested object 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { a }: SafeShallowShape<X> = root;
     // check that \`root.a\` is an object
     if (!(typeof a === "object" && a !== null)) {
         return false;
     }
     (a) satisfies {};
+    // safely get all the attributes from \`root.a\`
     const { b }: SafeShallowShape<X["a"]> = a;
     // check that \`root.a.b\` is an object
     if (!(typeof b === "object" && b !== null)) {
         return false;
     }
     (b) satisfies {};
+    // safely get all the attributes from \`root.a.b\`
     const { c }: SafeShallowShape<X["a"]["b"]> = b;
     // check that \`root.a.b.c\` is of primitive type \`string\`
     if (!(typeof c === "string")) {
@@ -526,6 +530,7 @@ exports[`object attributes should not collide on root 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { "€": _, "£": root__, "∂": __2 }: SafeShallowShape<X> = root;
     // check that \`root["€"]\` is of literal type 1
     if (!(_ === 1)) {
@@ -572,6 +577,7 @@ exports[`object nested attributes should not collide on root 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { "€": _, a }: SafeShallowShape<X> = root;
     // check that \`root["€"]\` is of literal type 1
     if (!(_ === 1)) {
@@ -582,6 +588,7 @@ exports[`object nested attributes should not collide on root 1`] = `
         return false;
     }
     (a) satisfies {};
+    // safely get all the attributes from \`root.a\`
     const { "€": a__, b }: SafeShallowShape<X["a"]> = a;
     // check that \`root.a["€"]\` is of literal type 2
     if (!(a__ === 2)) {
@@ -592,6 +599,7 @@ exports[`object nested attributes should not collide on root 1`] = `
         return false;
     }
     (b) satisfies {};
+    // safely get all the attributes from \`root.a.b\`
     const { "€": b__, "£": a_b__, "∂": root_a_b__ }: SafeShallowShape<X["a"]["b"]> = b;
     // check that \`root.a.b["€"]\` is of literal type 3
     if (!(b__ === 3)) {
@@ -652,6 +660,7 @@ exports[`object with non-identificator-like names 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { "with two spaces": with_two_spaces }: SafeShallowShape<X> = root;
     // check that \`root["with two spaces"]\` is of literal type 1
     if (!(with_two_spaces === 1)) {
@@ -684,6 +693,7 @@ exports[`object with non-identificator-like names 2`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { "1starts_with_a_number": _1starts_with_a_number }: SafeShallowShape<X> = root;
     // check that \`root["1starts_with_a_number"]\` is of literal type 1
     if (!(_1starts_with_a_number === 1)) {
@@ -716,6 +726,7 @@ exports[`object with non-identificator-like names 3`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { "∞_starts_with_a_unicode": __starts_with_a_unicode }: SafeShallowShape<X> = root;
     // check that \`root["∞_starts_with_a_unicode"]\` is of literal type 1
     if (!(__starts_with_a_unicode === 1)) {
@@ -748,6 +759,7 @@ exports[`object with primitive types 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { a, b, c }: SafeShallowShape<X> = root;
     // check that \`root.a\` is of primitive type \`number\`
     if (!(typeof a === "number")) {
@@ -883,6 +895,7 @@ exports[`reference type in an object 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { a, b }: SafeShallowShape<X> = root;
     // check that \`root.a\` is of type A
     if (!(isA(a))) {
@@ -944,6 +957,7 @@ export function isX(root: unknown): root is X {
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { a }: SafeShallowShape<X> = root;
     // check that \`root.a\` is an array of nested type \`AElement\` (\`X["a"]\`)
     if (!(safeIsArray(a) && a.every(isAElement))) {
@@ -984,6 +998,7 @@ export function isX(root: unknown): root is X {
             return false;
         }
         (root) satisfies {};
+        // safely get all the attributes from \`root\`
         const { b }: SafeShallowShape<ObjectInA> = root;
         // check that \`root.b\` is of literal type "B"
         if (!(b === "B")) {
@@ -1009,6 +1024,7 @@ export function isX(root: unknown): root is X {
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { a }: SafeShallowShape<X> = root;
     // check that \`root.a\` is of nested type ObjectInA
     if (!((a === "undefined") || (isObjectInA(a)))) {
@@ -1101,6 +1117,7 @@ exports[`two arrays of a primitive type 1`] = `
         return false;
     }
     (root) satisfies {};
+    // safely get all the attributes from \`root\`
     const { a, b }: SafeShallowShape<X> = root;
     // check that \`root.a\` is an array of nested type \`AElement\` (\`X["a"]\`)
     if (!(safeIsArray(a) && a.every(isAElement))) {
@@ -1212,6 +1229,7 @@ exports[`union of object and safe union types 1`] = `
             return false;
         }
         (root) satisfies {};
+        // safely get all the attributes from \`root\`
         const { a }: SafeShallowShape<ObjectInUnion> = root;
         // check that \`root.a\` is of primitive type \`number\`
         if (!(typeof a === "number")) {

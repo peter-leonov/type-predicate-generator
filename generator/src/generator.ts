@@ -117,10 +117,12 @@ export class TypeGuardGenerator {
           assertIsObject(target.local_name),
           ` check that \`${targetPathStr}\` is an object`
         ),
+        satisfiesObject(target.local_name),
         ...objectSpread(
           target.local_name,
           attrs,
-          typePathToTypeSelector(typePath)
+          typePathToTypeSelector(typePath),
+          targetPathStr
         ),
       ];
 
@@ -673,12 +675,8 @@ function assertIsObject(target: string): ts.Expression {
   );
 }
 
-function objectSpread(
-  target: string,
-  properties: AttributeLocal[],
-  type: ts.TypeNode
-): ts.Statement[] {
-  const satisfiesObject = factory.createExpressionStatement(
+function satisfiesObject(target: string): ts.Statement {
+  return factory.createExpressionStatement(
     factory.createSatisfiesExpression(
       factory.createParenthesizedExpression(
         factory.createIdentifier(target)
@@ -686,41 +684,55 @@ function objectSpread(
       factory.createTypeLiteralNode([])
     )
   );
+}
 
+function objectSpread(
+  target: string,
+  properties: AttributeLocal[],
+  type: ts.TypeNode,
+  pathStr: string
+): ts.Statement[] {
   if (properties.length == 0) {
-    return [satisfiesObject];
+    return [];
   }
-  return [
-    satisfiesObject,
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createObjectBindingPattern(
-              properties.map((id) =>
-                factory.createBindingElement(
-                  undefined,
-                  id.isShorthand()
-                    ? undefined
-                    : JSON.stringify(id.attribute_name),
-                  id.local_name,
-                  undefined
-                )
+
+  const stmt = factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createObjectBindingPattern(
+            properties.map((id) =>
+              factory.createBindingElement(
+                undefined,
+                id.isShorthand()
+                  ? undefined
+                  : JSON.stringify(id.attribute_name),
+                id.local_name,
+                undefined
               )
-            ),
-            undefined,
-            factory.createTypeReferenceNode(
-              factory.createIdentifier(SafeShallowShape),
-              [type]
-            ),
-            factory.createIdentifier(target)
+            )
           ),
-        ],
-        ts.NodeFlags.Const
-      )
-    ),
-  ];
+          undefined,
+          factory.createTypeReferenceNode(
+            factory.createIdentifier(SafeShallowShape),
+            [type]
+          ),
+          factory.createIdentifier(target)
+        ),
+      ],
+      ts.NodeFlags.Const
+    )
+  );
+
+  ts.addSyntheticLeadingComment(
+    stmt,
+    ts.SyntaxKind.SingleLineCommentTrivia,
+    ` safely get all the attributes from \`${pathStr}\``,
+    true
+  );
+
+  return [stmt];
 }
 
 type LiteralValue =
