@@ -25,6 +25,10 @@ npx type-predicate-generator ./src/unsupported1.ts 1>src/unsupported1.stdout.txt
 rm src/unsupported2.stdout.txt src/unsupported2.stderr.txt
 npx type-predicate-generator ./src/unsupported2.ts 1>src/unsupported2.stdout.txt 2>src/unsupported2.stderr.txt || true
 
+./tests.sh
+# to update unit tests that might require manual fixing:
+# ./tests.sh --unitTests
+
 npm run typecheck
 CI=true npm test
 
