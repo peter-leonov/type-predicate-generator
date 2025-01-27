@@ -1053,7 +1053,7 @@ exports[`reference type in an object 1`] = `
 "
 `;
 
-exports[`regression: don't mask other imported types with nested type names  1`] = `
+exports[`regression: don't mask other imported types with nested type names 1`] = `
 "import { type X, type ObjectInY } from "./guards.ts";
 // used to safely get all the object attributes as \`unknown\`s
 type SafeShallowShape<Type extends {}> = {

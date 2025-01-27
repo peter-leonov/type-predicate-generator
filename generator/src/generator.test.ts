@@ -443,7 +443,7 @@ test("regression: don't require top level predicates for nested predicate types 
   ).toMatchSnapshot();
 });
 
-test("regression: don't mask other imported types with nested type names ", () => {
+test("regression: don't mask other imported types with nested type names", () => {
   expect(
     generateAll([
       new ObjectType(
