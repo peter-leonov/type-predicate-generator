@@ -33,6 +33,11 @@ export function isUser(root: unknown): root is User {
     street satisfies never;
     // @ts-expect-error: should not be `never`
     house satisfies never;
+    /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
     ({
       street,
       house,
@@ -82,6 +87,11 @@ export function isUser(root: unknown): root is User {
   address satisfies never;
   // @ts-expect-error: should not be `never`
   isObjectInAddress satisfies never;
+  /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
   ({
     id,
     login,

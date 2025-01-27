@@ -39,6 +39,11 @@ export function isExternalType(root: unknown): root is ExternalType {
   id satisfies never;
   // @ts-expect-error: should not be `never`
   body satisfies never;
+  /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
   ({
     id,
     body,
@@ -102,6 +107,11 @@ export function isUser(root: unknown): root is User {
   first satisfies never;
   // @ts-expect-error: should not be `never`
   last satisfies never;
+  /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
   ({
     id,
     login,
@@ -128,6 +138,11 @@ export function isPost(root: unknown): root is Post {
         */
     // @ts-expect-error: should not be `never`
     root satisfies never;
+    /*
+          Verify that all the predicates above narrowed all the types
+          down to the root type that is being checked by the predicate.
+          This is the key check that makes the whole type predicate safe.
+        */
     root satisfies MoreElement;
     return true;
   }
@@ -187,6 +202,11 @@ export function isPost(root: unknown): root is Post {
   more satisfies never;
   // @ts-expect-error: should not be `never`
   isMoreElement satisfies never;
+  /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
   ({
     title,
     text,
@@ -337,6 +357,11 @@ export function isHugeOnCombinations(
   p satisfies never;
   // @ts-expect-error: should not be `never`
   q satisfies never;
+  /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
   ({
     a,
     b,
