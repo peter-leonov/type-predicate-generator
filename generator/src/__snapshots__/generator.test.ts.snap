@@ -847,6 +847,90 @@ exports[`object with non-identificator-like names 3`] = `
 "
 `;
 
+exports[`object with optional properties 1`] = `
+"export function isUserProfile(root: unknown): root is UserProfile {
+    // check that \`root\` is an object
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    // safely get all the attributes from \`root\` as \`unknown\`s
+    const { id, name, email, phone, address }: SafeShallowShape<UserProfile> = root;
+    // check that \`root.id\` is of primitive type \`number\`
+    if (!(typeof id === "number")) {
+        return false;
+    }
+    // check that \`root.name\` is of primitive type \`string\`
+    if (!(typeof name === "string")) {
+        return false;
+    }
+    // check that \`root.email\` is of primitive type \`string\`
+    if (!(typeof email === "string")) {
+        return false;
+    }
+    // check that \`root.phone\` is of primitive type \`string\`
+    if (!(typeof phone === "string")) {
+        return false;
+    }
+    // check that \`root.address\` is an object
+    if (!(typeof address === "object" && address !== null)) {
+        return false;
+    }
+    (address) satisfies {};
+    // safely get all the attributes from \`root.address\` as \`unknown\`s
+    const { street, city }: SafeShallowShape<UserProfile["address"]> = address;
+    // check that \`root.address.street\` is of primitive type \`string\`
+    if (!(typeof street === "string")) {
+        return false;
+    }
+    // check that \`root.address.city\` is of primitive type \`string\`
+    if (!(typeof city === "string")) {
+        return false;
+    }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (isUserProfile) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (id) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (name) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (email) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (phone) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (address) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (street) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (city) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
+    ({
+        id,
+        name,
+        email,
+        phone,
+        address: {
+            street,
+            city
+        }
+    }) satisfies UserProfile;
+    return true;
+}
+"
+`;
+
 exports[`object with primitive types 1`] = `
 "export function isX(root: unknown): root is X {
     // check that \`root\` is an object
@@ -976,6 +1060,56 @@ export function isX(root: unknown): root is X {
       This is the key check that makes the whole type predicate safe.
     */
     ({}) satisfies X;
+    return true;
+}
+"
+`;
+
+exports[`recursive type reference 1`] = `
+"import { type Node } from "./guards.ts";
+// used to safely get all the object attributes as \`unknown\`s
+type SafeShallowShape<Type extends {}> = {
+    [_ in keyof Type]?: unknown;
+};
+export function isNode(root: unknown): root is Node {
+    // check that \`root\` is an object
+    if (!(typeof root === "object" && root !== null)) {
+        return false;
+    }
+    (root) satisfies {};
+    // safely get all the attributes from \`root\` as \`unknown\`s
+    const { value, next }: SafeShallowShape<Node> = root;
+    // check that \`root.value\` is of primitive type \`string\`
+    if (!(typeof value === "string")) {
+        return false;
+    }
+    // check that \`root.next\` is in the union of 2 trivial types
+    if (!((isNode(next)) || (next === null))) {
+        return false;
+    }
+    /*
+      In TypeScript the \`never\` type is assignable to any other type,
+      effectively turning it into an unsafe \`any\` type at assignment.
+      The following checks ensure that none of the checked values got
+      narrowed down to \`never\`.
+    */ 
+    // @ts-expect-error: should not be \`never\`
+    (isNode) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (root) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (value) satisfies never;
+    // @ts-expect-error: should not be \`never\`
+    (next) satisfies never;
+    /*
+      Verify that all the predicates above narrowed all the types
+      down to the root type that is being checked by the predicate.
+      This is the key check that makes the whole type predicate safe.
+    */
+    ({
+        value,
+        next
+    }) satisfies Node;
     return true;
 }
 "

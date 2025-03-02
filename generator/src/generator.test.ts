@@ -465,3 +465,41 @@ test("regression: empty object does not use SafeShallowShape", () => {
     generateAll([new ObjectType({ aliasName: "X" }, {})])
   ).toMatchSnapshot();
 });
+
+test("recursive type reference", () => {
+  // A type that references itself, like a linked list or tree node
+  const recursiveType = new ObjectType(
+    { aliasName: "Node" },
+    {
+      value: new PrimitiveType({}, "string"),
+      next: new UnionType({}, [
+        new AliasType({}, "Node"),
+        new LiteralType({}, null),
+      ]),
+    }
+  );
+
+  expect(generateAll([recursiveType])).toMatchSnapshot();
+});
+
+test("object with optional properties", () => {
+  const objectWithOptionals = new ObjectType(
+    { aliasName: "UserProfile" },
+    {
+      id: new PrimitiveType({}, "number"),
+      name: new PrimitiveType({}, "string"),
+      email: new PrimitiveType({ isOptional: true }, "string"),
+      phone: new PrimitiveType({ isOptional: true }, "string"),
+      address: new ObjectType(
+        { isOptional: true },
+        {
+          street: new PrimitiveType({}, "string"),
+          city: new PrimitiveType({}, "string"),
+        }
+      ),
+    },
+    new Set(["email", "phone", "address"])
+  );
+
+  expect(generate(objectWithOptionals)).toMatchSnapshot();
+});
