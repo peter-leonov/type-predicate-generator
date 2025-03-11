@@ -19,7 +19,7 @@ A TypeScript [type predicates](https://www.typescriptlang.org/docs/handbook/2/na
 ## How to use
 
 ```bash
-npm i -D generate-type-guards
+npm i -D type-predicate-generator
 npx type-predicate-generator --unitTests src/types.ts
 ```
 
