@@ -5,7 +5,7 @@ import {
   type HugeOnCombinations,
 } from "./types";
 // used to safely get all the object attributes as `unknown`s
-type SafeShallowShape<Type extends {}> = {
+type SafeShallowShape<Type extends object> = {
   [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
@@ -14,7 +14,7 @@ export function isExternalType(root: unknown): root is ExternalType {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  root satisfies {};
+  root satisfies object;
   // safely get all the attributes from `root` as `unknown`s
   const { id, body }: SafeShallowShape<ExternalType> = root;
   // check that `root.id` is of primitive type `string`
@@ -55,7 +55,7 @@ export function isUser(root: unknown): root is User {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  root satisfies {};
+  root satisfies object;
   // safely get all the attributes from `root` as `unknown`s
   const { id, login, bio, external }: SafeShallowShape<User> = root;
   // check that `root.id` is of primitive type `number`
@@ -70,7 +70,7 @@ export function isUser(root: unknown): root is User {
   if (!(typeof bio === "object" && bio !== null)) {
     return false;
   }
-  bio satisfies {};
+  bio satisfies object;
   // safely get all the attributes from `root.bio` as `unknown`s
   const { first, last }: SafeShallowShape<User["bio"]> = bio;
   // check that `root.bio.first` is of primitive type `string`
@@ -150,7 +150,7 @@ export function isPost(root: unknown): root is Post {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  root satisfies {};
+  root satisfies object;
   // safely get all the attributes from `root` as `unknown`s
   const { title, text, link, published, author, more }: SafeShallowShape<Post> =
     root;
@@ -224,7 +224,7 @@ export function isHugeOnCombinations(
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  root satisfies {};
+  root satisfies object;
   // safely get all the attributes from `root` as `unknown`s
   const {
     a,

@@ -137,7 +137,7 @@ exports[`array of an object type 1`] = `
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
-        (root) satisfies {};
+        (root) satisfies object;
         // safely get all the attributes from \`root\` as \`unknown\`s
         const { a, b }: SafeShallowShape<XElement> = root;
         // check that \`root.a\` is of primitive type \`number\`
@@ -208,7 +208,7 @@ export function isX(root: unknown): root is X {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
-        (root) satisfies {};
+        (root) satisfies object;
         /*
           In TypeScript the \`never\` type is assignable to any other type,
           effectively turning it into an unsafe \`any\` type at assignment.
@@ -258,7 +258,7 @@ exports[`empty object 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     /*
       In TypeScript the \`never\` type is assignable to any other type,
       effectively turning it into an unsafe \`any\` type at assignment.
@@ -507,21 +507,21 @@ exports[`nested object 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { a }: SafeShallowShape<X> = root;
     // check that \`root.a\` is an object
     if (!(typeof a === "object" && a !== null)) {
         return false;
     }
-    (a) satisfies {};
+    (a) satisfies object;
     // safely get all the attributes from \`root.a\` as \`unknown\`s
     const { b }: SafeShallowShape<X["a"]> = a;
     // check that \`root.a.b\` is an object
     if (!(typeof b === "object" && b !== null)) {
         return false;
     }
-    (b) satisfies {};
+    (b) satisfies object;
     // safely get all the attributes from \`root.a.b\` as \`unknown\`s
     const { c }: SafeShallowShape<X["a"]["b"]> = b;
     // check that \`root.a.b.c\` is of primitive type \`string\`
@@ -599,7 +599,7 @@ exports[`object attributes should not collide on root 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { "€": _, "£": root__, "∂": __2 }: SafeShallowShape<X> = root;
     // check that \`root["€"]\` is of literal type 1
@@ -651,7 +651,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { "€": _, a }: SafeShallowShape<X> = root;
     // check that \`root["€"]\` is of literal type 1
@@ -662,7 +662,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(typeof a === "object" && a !== null)) {
         return false;
     }
-    (a) satisfies {};
+    (a) satisfies object;
     // safely get all the attributes from \`root.a\` as \`unknown\`s
     const { "€": a__, b }: SafeShallowShape<X["a"]> = a;
     // check that \`root.a["€"]\` is of literal type 2
@@ -673,7 +673,7 @@ exports[`object nested attributes should not collide on root 1`] = `
     if (!(typeof b === "object" && b !== null)) {
         return false;
     }
-    (b) satisfies {};
+    (b) satisfies object;
     // safely get all the attributes from \`root.a.b\` as \`unknown\`s
     const { "€": b__, "£": a_b__, "∂": root_a_b__ }: SafeShallowShape<X["a"]["b"]> = b;
     // check that \`root.a.b["€"]\` is of literal type 3
@@ -739,7 +739,7 @@ exports[`object with non-identificator-like names 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { "with two spaces": with_two_spaces }: SafeShallowShape<X> = root;
     // check that \`root["with two spaces"]\` is of literal type 1
@@ -777,7 +777,7 @@ exports[`object with non-identificator-like names 2`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { "1starts_with_a_number": _1starts_with_a_number }: SafeShallowShape<X> = root;
     // check that \`root["1starts_with_a_number"]\` is of literal type 1
@@ -815,7 +815,7 @@ exports[`object with non-identificator-like names 3`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { "∞_starts_with_a_unicode": __starts_with_a_unicode }: SafeShallowShape<X> = root;
     // check that \`root["∞_starts_with_a_unicode"]\` is of literal type 1
@@ -853,7 +853,7 @@ exports[`object with optional properties 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { id, name, email, phone, address }: SafeShallowShape<UserProfile> = root;
     // check that \`root.id\` is of primitive type \`number\`
@@ -876,7 +876,7 @@ exports[`object with optional properties 1`] = `
     if (!(typeof address === "object" && address !== null)) {
         return false;
     }
-    (address) satisfies {};
+    (address) satisfies object;
     // safely get all the attributes from \`root.address\` as \`unknown\`s
     const { street, city }: SafeShallowShape<UserProfile["address"]> = address;
     // check that \`root.address.street\` is of primitive type \`string\`
@@ -937,7 +937,7 @@ exports[`object with primitive types 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { a, b, c }: SafeShallowShape<X> = root;
     // check that \`root.a\` is of primitive type \`number\`
@@ -1043,7 +1043,7 @@ export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     /*
       In TypeScript the \`never\` type is assignable to any other type,
       effectively turning it into an unsafe \`any\` type at assignment.
@@ -1068,7 +1068,7 @@ export function isX(root: unknown): root is X {
 exports[`recursive type reference 1`] = `
 "import { type Node } from "./guards.ts";
 // used to safely get all the object attributes as \`unknown\`s
-type SafeShallowShape<Type extends {}> = {
+type SafeShallowShape<Type extends object> = {
     [_ in keyof Type]?: unknown;
 };
 export function isNode(root: unknown): root is Node {
@@ -1076,7 +1076,7 @@ export function isNode(root: unknown): root is Node {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { value, next }: SafeShallowShape<Node> = root;
     // check that \`root.value\` is of primitive type \`string\`
@@ -1148,7 +1148,7 @@ exports[`reference type in an object 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { a, b }: SafeShallowShape<X> = root;
     // check that \`root.a\` is of type A
@@ -1190,7 +1190,7 @@ exports[`reference type in an object 1`] = `
 exports[`regression: don't mask other imported types with nested type names 1`] = `
 "import { type X, type ObjectInY } from "./guards.ts";
 // used to safely get all the object attributes as \`unknown\`s
-type SafeShallowShape<Type extends {}> = {
+type SafeShallowShape<Type extends object> = {
     [_ in keyof Type]?: unknown;
 };
 export function isX(root: unknown): root is X {
@@ -1200,7 +1200,7 @@ export function isX(root: unknown): root is X {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
-        (root) satisfies {};
+        (root) satisfies object;
         // safely get all the attributes from \`root\` as \`unknown\`s
         const { b }: SafeShallowShape<X_ObjectInY> = root;
         // check that \`root.b\` is of literal type "B"
@@ -1231,7 +1231,7 @@ export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { Y }: SafeShallowShape<X> = root;
     // check that \`root.Y\` is of nested type X_ObjectInY
@@ -1291,7 +1291,7 @@ export function isObjectInY(root: unknown): root is ObjectInY {
 exports[`regression: don't require top level predicates for nested predicate types  1`] = `
 "import { type X } from "./guards.ts";
 // used to safely get all the object attributes as \`unknown\`s
-type SafeShallowShape<Type extends {}> = {
+type SafeShallowShape<Type extends object> = {
     [_ in keyof Type]?: unknown;
 };
 const safeIsArray: (v: unknown) => v is unknown[] = Array.isArray;
@@ -1322,7 +1322,7 @@ export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { a }: SafeShallowShape<X> = root;
     // check that \`root.a\` is an array of nested type \`AElement\` (\`X["a"]\`)
@@ -1359,7 +1359,7 @@ export function isX(root: unknown): root is X {
 exports[`regression: don't require top level predicates for nested predicate types  2`] = `
 "import { type X } from "./guards.ts";
 // used to safely get all the object attributes as \`unknown\`s
-type SafeShallowShape<Type extends {}> = {
+type SafeShallowShape<Type extends object> = {
     [_ in keyof Type]?: unknown;
 };
 export function isX(root: unknown): root is X {
@@ -1369,7 +1369,7 @@ export function isX(root: unknown): root is X {
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
-        (root) satisfies {};
+        (root) satisfies object;
         // safely get all the attributes from \`root\` as \`unknown\`s
         const { b }: SafeShallowShape<ObjectInA> = root;
         // check that \`root.b\` is of literal type "B"
@@ -1400,7 +1400,7 @@ export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { a }: SafeShallowShape<X> = root;
     // check that \`root.a\` is of nested type ObjectInA
@@ -1441,7 +1441,7 @@ export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     /*
       In TypeScript the \`never\` type is assignable to any other type,
       effectively turning it into an unsafe \`any\` type at assignment.
@@ -1471,7 +1471,7 @@ exports[`regression: object with a nested type of the same name 1`] = `
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
-        (root) satisfies {};
+        (root) satisfies object;
         // safely get all the attributes from \`root\` as \`unknown\`s
         const { self }: SafeShallowShape<ObjectInX_ObjectInX> = root;
         // check that \`root.self\` is of type ObjectInX
@@ -1502,7 +1502,7 @@ exports[`regression: object with a nested type of the same name 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { X }: SafeShallowShape<ObjectInX> = root;
     // check that \`root.X\` is of nested type ObjectInX_ObjectInX
@@ -1586,7 +1586,7 @@ exports[`two arrays of a primitive type 1`] = `
     if (!(typeof root === "object" && root !== null)) {
         return false;
     }
-    (root) satisfies {};
+    (root) satisfies object;
     // safely get all the attributes from \`root\` as \`unknown\`s
     const { a, b }: SafeShallowShape<X> = root;
     // check that \`root.a\` is an array of nested type \`AElement\` (\`X["a"]\`)
@@ -1718,7 +1718,7 @@ exports[`union of object and safe union types 1`] = `
         if (!(typeof root === "object" && root !== null)) {
             return false;
         }
-        (root) satisfies {};
+        (root) satisfies object;
         // safely get all the attributes from \`root\` as \`unknown\`s
         const { a }: SafeShallowShape<ObjectInUnion> = root;
         // check that \`root.a\` is of primitive type \`number\`

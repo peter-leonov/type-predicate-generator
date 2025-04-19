@@ -1,6 +1,6 @@
 import { type X, type ObjectInY } from "./types";
 // used to safely get all the object attributes as `unknown`s
-type SafeShallowShape<Type extends {}> = {
+type SafeShallowShape<Type extends object> = {
   [_ in keyof Type]?: unknown;
 };
 export function isX(root: unknown): root is X {
@@ -10,7 +10,7 @@ export function isX(root: unknown): root is X {
     if (!(typeof root === "object" && root !== null)) {
       return false;
     }
-    root satisfies {};
+    root satisfies object;
     // safely get all the attributes from `root` as `unknown`s
     const { a }: SafeShallowShape<X_ObjectInY> = root;
     // check that `root.a` is of type ObjectInY
@@ -41,7 +41,7 @@ export function isX(root: unknown): root is X {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  root satisfies {};
+  root satisfies object;
   // safely get all the attributes from `root` as `unknown`s
   const { Y }: SafeShallowShape<X> = root;
   // check that `root.Y` is of nested type X_ObjectInY
@@ -77,7 +77,7 @@ export function isObjectInY(root: unknown): root is ObjectInY {
   if (!(typeof root === "object" && root !== null)) {
     return false;
   }
-  root satisfies {};
+  root satisfies object;
   // safely get all the attributes from `root` as `unknown`s
   const { b }: SafeShallowShape<ObjectInY> = root;
   // check that `root.b` is of primitive type `string`
