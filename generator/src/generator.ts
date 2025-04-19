@@ -593,7 +593,7 @@ function getTypeSafeShallowShape(): ts.Statement[] {
       factory.createTypeParameterDeclaration(
         undefined,
         factory.createIdentifier("Type"),
-        factory.createTypeLiteralNode([]),
+        factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword),
         undefined
       ),
     ],
@@ -735,7 +735,7 @@ function satisfiesObject(target: string): ts.Statement {
       factory.createParenthesizedExpression(
         factory.createIdentifier(target)
       ),
-      factory.createTypeLiteralNode([])
+      factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)
     )
   );
 }
